@@ -11,11 +11,13 @@ import {
   READ_ONLY_QS_VIEW,
   PICK_PEER_TO_READ_VIEW,
   READ_PEERS_REVIEWS_VIEW,
+  PICK_SESSION_VIEW,
 
-  REVIEWER_LABEL,
   VIEW_ANSWERS_VIEW,
   CREATE_SESSION_VIEW,
   ANSWER_QUESTIONS_VIEW,
+
+  REVIEWER_LABEL,
   PICK_SESSION_LABEL,
   SESSION_LABEL,
   EDITABLE_QS_LABEL,
@@ -33,6 +35,16 @@ class SiteContainer extends MUIBaseTheme {
     this.toSession = this.toSession.bind(this);
     this.toReviewed = this.toReviewed.bind(this);
     this.toQuestions = this.toQuestions.bind(this);
+    this.ifCreatorElseReviewer = this.ifCreatorElseReviewer.bind(this);
+
+
+    this.subViewToElementHandler = {
+      [PICK_SESSION_VIEW]: this.toSession,
+      [PICK_PEER_TO_REVIEW_VIEW]: this.toQuestions,
+      [PICK_PEER_TO_READ_VIEW]: this.toReviewed,
+      [READ_PEERS_REVIEWS_VIEW]: this.toQuestions,
+    };
+
   }
 
   /**
@@ -111,11 +123,20 @@ class SiteContainer extends MUIBaseTheme {
           REVIEWER_LABEL,
           VIEW_ONLY_QS_LABEL,
         ]}
-        elementClickHandlers={[
-          this.toSession,
-          this.toReviewed,
-          this.toQuestions,
+        elementClickHandlers={ this.subViewToElementHandler }
+      />
+    );
+  }
+
+  getAnswerQuestionsView() {
+    return (
+      <ReviewSessions
+        headers={[
+          PICK_SESSION_LABEL,
+          SESSION_LABEL,
+          EDITABLE_QS_LABEL,
         ]}
+        elementClickHandlers={ this.subViewToElementHandler }
       />
     );
   }
@@ -131,7 +152,7 @@ class SiteContainer extends MUIBaseTheme {
       case CREATE_SESSION_VIEW:
         return <CreateReviewSession/>;
       case ANSWER_QUESTIONS_VIEW:
-        return <ReviewSessions type={ ANSWER_QUESTIONS_VIEW }/>;
+        return this.getAnswerQuestionsView();
       default:
         return <CreateReviewSession/>;
     }
