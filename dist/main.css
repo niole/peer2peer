@@ -1,0 +1,214 @@
+body {
+  margin: 0;
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  color: rgba(0, 0, 0, 0.952941);
+  height: 100%;
+}
+
+#update-pos {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+}
+
+#login-link {
+  width: 245px;
+  display: block;
+  margin: auto;
+}
+
+a {
+  border: 1px solid;
+  padding: 5px;
+  border-radius: 3px;
+  color: deepskyblue;
+}
+
+a:hover {
+  color: lightblue;
+  background: midnightblue;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:active {
+    text-decoration: none;
+}
+
+#logout-link:hover {
+  background: midnightblue;
+}
+
+#logout-link {
+  top: 10px;
+  position: absolute;
+  z-index: 2;
+  right: 10px;
+  background: white;
+  font-size: .9em;
+}
+
+#login-container {
+  padding: 15%;
+  width: 310px;
+  margin: auto;
+  border-radius: 3px;
+}
+
+#q-container {
+  width: 307px;
+  margin: auto;
+  padding-top: 65px;
+}
+
+.dot {
+  background: red;
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+  display: inline-block;
+  position: relative;
+  -webkit-animation: mymove 5s infinite; /* Safari 4.0 - 8.0 */
+  animation: mymove 5s infinite;
+}
+
+#one {
+  -webkit-animation: one 3s infinite;
+  animation: one 3s infinite;
+}
+
+#two {
+  -webkit-animation: two 2s infinite;
+  animation: two 2s infinite;
+  -webkit-animation-delay: 1s; /* Safari 4.0 - 8.0 */
+  animation-delay: 1s;
+  background: lightblue;
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes one {
+    from {left: 50px;}
+    to {left: 300px;}
+}
+
+@keyframes two {
+    from {left: 0px;}
+    to {left: 250px;}
+}
+
+#map {
+  height: 100vh;
+}
+
+#login-header {
+  width: 307px;
+  font-size: 3em;
+}
+
+.messages {
+  left: 135px;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.timers {
+  right: 75px;
+}
+
+.toolbar-box {
+  width: 36%;
+  top: 10px;
+  position: absolute;
+  overflow: auto;
+  height: 100px;
+}
+
+.gmaps-infowindow {
+  position: absolute;
+  left: 15px;
+  top: 4px;
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('./flag_icon.svg');
+}
+
+.gm-style-iw ~ div {
+  display: none;
+}
+
+.gm-style-iw {
+  position: static ! important;
+}
+
+.hourglass {
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 0px 5px 0px -5px;
+}
+
+.full-hourglass {
+  background-image: url('./full_hourglass.svg');
+}
+
+.empty-hourglass {
+  background-image: url('./empty_hourglass.svg');
+}
+
+.toilet-header {
+  display: inline-block;
+}
+
+.no-line-placeholder {
+  top: -8px;
+  position: absolute;
+  left: 45px;
+}
+
+.line {
+  width: 90%;
+  height: 35px;
+  top: -9px;
+  display: inline-block;
+  position: relative;
+}
+
+.line-member {
+  height: 100%;
+  border: 1px solid;
+  display: inline-block;
+}
+
+.enter-leave-container {
+  display: inline-block;
+}
+
+.message-icon-container {
+  text-align: center;
+  padding: 25px 20px;
+  border-radius: 3px;
+  display: inline-block;
+  border: 1px solid;
+  margin: 10px;
+  color: deepskyblue;
+}
+
+.message-icon {
+  background-image: url('./message_icon.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+}
