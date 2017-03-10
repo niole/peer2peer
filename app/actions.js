@@ -5,7 +5,15 @@ export const REPLACE_ANSWERS = "replaceAnswers";
 export const ADD_QUESTIONS = "addQuestions";
 export const ADD_ANSWERS = "addAnswers";
 export const UPDATE_SESSION_DEADLINE = "updateSessionDeadline";
+export const SWITCH_MAIN_VIEW = "switchMainView";
 
+
+export function switchMainView(view) {
+  return {
+    type: SWITCH_MAIN_VIEW,
+    data: view,
+  };
+}
 
 export function updateSessionDeadline(newDeadLine) {
   return {

@@ -6,7 +6,12 @@ import {
   ADD_QUESTIONS,
   ADD_ANSWERS,
   UPDATE_SESSION_DEADLINE,
+  SWITCH_MAIN_VIEW,
 } from './actions.js';
+import {
+  CREATE_SESSION_VIEW,
+} from './constants.js'
+
 
 const initialState = {
   userId: "",
@@ -16,10 +21,17 @@ const initialState = {
   currentSessionDeadline: new Date(),
   questions: [],
   answers: [],
+  mainView: CREATE_SESSION_VIEW, //enum, VIEW_ANSWERS_VIEW, CREATE_SESSION_VIEW, ANSWER_QUESTIONS_VIEW
 };
+
 
 export default function appReducer(state = initialState, action) {
   switch (action.type) {
+    case SWITCH_MAIN_VIEW:
+      return Object.assign({}, state, {
+        mainView: action.data,
+      });
+
     case UPDATE_SESSION_DEADLINE:
       return Object.assign({}, state, {
         currentSessionDeadline: action.data,
