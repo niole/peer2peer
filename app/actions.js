@@ -6,29 +6,23 @@ export const ADD_QUESTIONS = "addQuestions";
 export const ADD_ANSWERS = "addAnswers";
 export const UPDATE_SESSION_DEADLINE = "updateSessionDeadline";
 export const SWITCH_MAIN_VIEW = "switchMainView";
-export const SET_EDITING = "setEditing";
-export const SET_SESSION_INDEX = "setSessionIndex";
-export const SET_ALL_PEERS = "setAllPeers";
+export const SET_CURRENT_SESSION = "setCurrentSession";
+export const SET_SESSION_SUB_VIEW = "setSessionSubView";
 
-
-export function setAllPeers(isAllPeers) {
+export function setSessionSubView(view) {
   return {
-    type: SET_ALL_PEERS,
-    data: isAllPeers,
+    type: SET_SESSION_SUB_VIEW,
+    data: view
   };
 }
 
-export function setEditing(nextIndex) {
+export function setCurrentSession(id, view) {
   return {
-    type: SET_SESSION_INDEX,
-    data: nextIndex,
-  };
-}
-
-export function setEditing(isEditing) {
-  return {
-    type: SET_EDITING,
-    data: isEditing,
+    type: SET_CURRENT_SESSION,
+    data: {
+      id,
+      view,
+    }
   };
 }
 

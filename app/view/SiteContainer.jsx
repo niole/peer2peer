@@ -2,6 +2,16 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
 import {
+  setCurrentSession,
+  setSessionSubView,
+} from '../actions.js';
+import {
+  PICK_PEER_TO_REVIEW_VIEW,
+  EDITABLE_QS_VIEW,
+  READ_ONLY_QS_VIEW,
+  PICK_PEER_TO_READ_VIEW,
+  READ_PEERS_REVIEWS_VIEW,
+
   REVIEWER_LABEL,
   VIEW_ANSWERS_VIEW,
   CREATE_SESSION_VIEW,
@@ -17,21 +27,60 @@ import ReviewSessions from './ReviewSessions.jsx';
 
 
 class SiteContainer extends MUIBaseTheme {
+  constructor() {
+    super();
+
+    this.toSession = this.toSession.bind(this);
+    this.toReviewed = this.toReviewed.bind(this);
+    this.toQuestions = this.toQuestions.bind(this);
+  }
+
   /**
    * depending on main view type
    * sends user to a view with all peers in session
    * or sends user to view with all peers in session
    * except self
    */
-  toSession() {
+  toSession(sessionId) {
+    const {
+      setCurrentSession,
+    } = this.props;
+
+    this.ifCreatorElseReviewer(
+      setCurrentSession(sessionId, PICK_PEER_TO_READ_VIEW),
+      setCurrentSession(sessionId, PICK_PEER_TO_REVIEW_VIEW)
+    );
   }
 
   /**
-   * only used when session creator views reviews from peers in
-   * session, which user created
+   * review session creator can look at peers reviewed by
+   * selected peer
    */
   toReviewed() {
+    const {
+      setSessionSubView,
+    } = this.props;
+
+    this.ifCreatorElseReviewer(
+      () => setSessionSubView(READ_PEERS_REVIEWS_VIEW),
+      () => {},
+    );
+
   }
+
+  ifCreatorElseReviewer(isReadable, isEditable) {
+    const {
+      mainView,
+    } = this.props;
+
+    if (mainView === VIEW_ANSWERS_VIEW) {
+      isReadable();
+    }
+    else if (mainView === ANSWER_QUESTIONS_VIEW) {
+      isEditable();
+    }
+  }
+
 
   /**
    * sends user to Q/A view, where answers are
@@ -39,12 +88,23 @@ class SiteContainer extends MUIBaseTheme {
    * and are not editable if user is session creator
    */
   toQuestions() {
+    const {
+      setSessionSubView,
+    } = this.props;
+
+    this.ifCreatorElseReviewer(
+      () => setSessionSubView(READ_ONLY_QS_VIEW),
+      () => setSessionSubView(EDITABLE_QS_VIEW)
+    );
   }
 
+  /**
+   * for viewing answered questions
+   * for session creator
+   */
   getViewAnswersView() {
     return (
       <ReviewSessions
-        type={ VIEW_ANSWERS_VIEW }
         headers={[
           PICK_SESSION_LABEL,
           SESSION_LABEL,
@@ -92,7 +152,7 @@ class SiteContainer extends MUIBaseTheme {
   }
 }
 
-const stateToProps = state => {
+const mapStateToProps = state => {
   const {
     mainView,
   } = state;
@@ -102,4 +162,15 @@ const stateToProps = state => {
   };
 };
 
-export default connect()(SiteContainer)
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    setSessionSubView: view => dispatch(setSessionSubView(view)),
+    setCurrentSession: (id, view) => dispatch(setCurrentSession(id, view)),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SiteContainer)
