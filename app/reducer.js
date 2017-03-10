@@ -1,4 +1,5 @@
 import {
+  SET_ALL_PEERS,
   REPLACE_QUESTIONS,
   UPDATE_PEERS_IN_SESSION,
   UPDATE_USERID,
@@ -7,6 +8,8 @@ import {
   ADD_ANSWERS,
   UPDATE_SESSION_DEADLINE,
   SWITCH_MAIN_VIEW,
+  SET_EDITING,
+  SET_SESSION_INDEX,
 } from './actions.js';
 import {
   CREATE_SESSION_VIEW,
@@ -22,11 +25,29 @@ const initialState = {
   questions: [],
   answers: [],
   mainView: CREATE_SESSION_VIEW, //enum, VIEW_ANSWERS_VIEW, CREATE_SESSION_VIEW, ANSWER_QUESTIONS_VIEW
+  editing: false,
+  reviewSessionIndex: 0,
+  allPeers: true,
 };
 
 
 export default function appReducer(state = initialState, action) {
   switch (action.type) {
+    case SET_ALL_PEERS:
+      return Object.assign({}, state, {
+        allPeers: action.data,
+      });
+
+    case SET_SESSION_INDEX:
+      return Object.assign({}, state, {
+        reviewSessionIndex: action.data,
+      });
+
+    case SET_EDITING:
+      return Object.assign({}, state, {
+        editing: action.data,
+      });
+
     case SWITCH_MAIN_VIEW:
       return Object.assign({}, state, {
         mainView: action.data,

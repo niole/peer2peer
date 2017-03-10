@@ -6,7 +6,31 @@ export const ADD_QUESTIONS = "addQuestions";
 export const ADD_ANSWERS = "addAnswers";
 export const UPDATE_SESSION_DEADLINE = "updateSessionDeadline";
 export const SWITCH_MAIN_VIEW = "switchMainView";
+export const SET_EDITING = "setEditing";
+export const SET_SESSION_INDEX = "setSessionIndex";
+export const SET_ALL_PEERS = "setAllPeers";
 
+
+export function setAllPeers(isAllPeers) {
+  return {
+    type: SET_ALL_PEERS,
+    data: isAllPeers,
+  };
+}
+
+export function setEditing(nextIndex) {
+  return {
+    type: SET_SESSION_INDEX,
+    data: nextIndex,
+  };
+}
+
+export function setEditing(isEditing) {
+  return {
+    type: SET_EDITING,
+    data: isEditing,
+  };
+}
 
 export function switchMainView(view) {
   return {
