@@ -38,18 +38,19 @@ class CreateReviewSession extends MUIBaseTheme {
   render() {
     const {
       peers,
+      questions,
     } = this.props;
 
     return (
       <div>
         <div>
           <div>peers</div>
-          <div>{ peers.map(p => <div onClick={ () => this.addPeer(p) }>{ p }</div>) }</div>
+          <div>{ peers.map(p => <div key={ p.id } onClick={ () => this.addPeer(p) }>{ p }</div>) }</div>
         </div>
         <div>
             <div>questions</div>
             <div>
-              { questions.map(q => <div>{ q }</div>) }
+              { questions.map((q, i) => <div key={ i } >{ q }</div>) }
               <input
                 ref={(ref) => this.questioninput = ref }
                 placeholder="add a question"/>
@@ -89,4 +90,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 export default connect(
+  mapStateToProps,
+  mapDispatchToProps
 )(CreateReviewSession)

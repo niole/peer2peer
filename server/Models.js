@@ -1,4 +1,3 @@
-const fixtures = require('./ModelFixtures.json');
 const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize('mysql', 'root', 'root', {
@@ -18,7 +17,7 @@ const ReviewSession = sequelize.define(
       type: Sequelize.STRING,
       field: 'createdby'
     }
-  }
+  },
   {
     freezeTableName: true // Model tableName will be the same as the model name
   }
@@ -37,7 +36,7 @@ const Reviewer = sequelize.define(
       type: Sequelize.STRING,
       field: 'userid'
     },
-  }
+  },
   {
     freezeTableName: true
   }
