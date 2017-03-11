@@ -10,7 +10,58 @@ import MUIBaseTheme from './MUIBaseTheme.jsx';
 
 
 class CreateReviewSession extends MUIBaseTheme {
+  constructor() {
+    super();
+    this.questioninput = null;
+    this.saveQuestion = this.saveQuestion.bind(this);
+  }
+
+  saveQuestion() {
+    const {
+      addQuestions,
+    }= this.props;
+
+    const question = this.questioninput.value;
+    this.questioninput.value = "";
+
+    addQuestions([question]);
+  }
+
+  addPeer(selectedPeer) {
+    const {
+      updateSessionPeers,
+    }= this.props;
+
+    updateSessionPeers([selectedPeer]);
+  }
+
   render() {
+    const {
+      peers,
+    } = this.props;
+
+    return (
+      <div>
+        <div>
+          <div>peers</div>
+          <div>{ peers.map(p => <div onClick={ () => this.addPeer(p) }>{ p }</div>) }</div>
+        </div>
+        <div>
+            <div>questions</div>
+            <div>
+              { questions.map(q => <div>{ q }</div>) }
+              <input
+                ref={(ref) => this.questioninput = ref }
+                placeholder="add a question"/>
+              <button
+                onClick={ this.saveQuestion }
+              >
+                Save
+              </button>
+            </div>
+        </div>
+      </div>
+    );
   }
 }
 

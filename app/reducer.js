@@ -80,12 +80,7 @@ export default function appReducer(state = initialState, action) {
 
     case UPDATE_PEERS_IN_SESSION:
       return Object.assign({}, state, {
-        sessions: state.sessions.map(nextSession => {
-          if (nextSession.id === action.data.sessionId) {
-            nextSession.reviewers = nextSession.reviewers.concat(action.data.peers);
-          }
-          return nextSession;
-        })
+        peers: action.data.concat(state.peers),
       });
 
     default:

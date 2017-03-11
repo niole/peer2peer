@@ -76,12 +76,9 @@ export function updateUserId(userId) {
   };
 }
 
-export function updateSessionPeers(peers, sessionId) {
+export function updateSessionPeers(peers) {
   return {
     type: UPDATE_PEERS_IN_SESSION,
-    data: {
-      peers,
-      sessionId,
-    }
+    data: peers,
   };
 }
