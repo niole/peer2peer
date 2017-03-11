@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react';
+import $ from 'jquery';
 import { connect } from 'react-redux';
 import {
   addQuestions,
   updateSessionPeers,
   updateSessionDeadline,
+  updateAvailablePeers,
 } from '../actions.js';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
 
@@ -14,6 +16,24 @@ class CreateReviewSession extends MUIBaseTheme {
     super();
     this.questioninput = null;
     this.saveQuestion = this.saveQuestion.bind(this);
+  }
+
+  componentDidMount() {
+    const {
+      userId,
+      updateAvailablePeers,
+    } = this.props;
+
+    $.ajax({
+      url: 'routes/peers/all/$userId',
+      success: peers => {
+        console.log('success');
+        updateAvailablePeers(peers)
+      },
+      error: e => {
+        console.error(e);
+      }
+    });
   }
 
   saveQuestion() {
@@ -45,7 +65,7 @@ class CreateReviewSession extends MUIBaseTheme {
       <div>
         <div>
           <div>peers</div>
-          <div>{ peers.map(p => <div key={ p.id } onClick={ () => this.addPeer(p) }>{ p }</div>) }</div>
+          <div>{ peers.map(p => <div key={ p.id } onClick={ () => this.addPeer(p) }>{ p.name }</div>) }</div>
         </div>
         <div>
             <div>questions</div>
@@ -71,9 +91,11 @@ const mapStateToProps = state => {
     questions,
     peers,
     userId,
+    sessionPeers,
   } = state;
 
   return {
+    sessionPeers,
     questions,
     peers,
     userId,
@@ -83,6 +105,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    updateAvailablePeers: peers => dispatch(updateAvailablePeers(peers)),
     addQuestions: qs => dispatch(addQuestions(qs)),
     updateSessionPeers: peers => dispatch(updateSessionPeers(peers)),
     updateSessionDeadline: deadline => dispatch(updateSessionDeadline(deadline)),

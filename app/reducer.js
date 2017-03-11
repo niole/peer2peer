@@ -1,4 +1,5 @@
 import {
+  UPDATE_AVAILABLE_PEERS,
   SET_SESSION_SUB_VIEW,
   REPLACE_QUESTIONS,
   UPDATE_PEERS_IN_SESSION,
@@ -20,6 +21,7 @@ const initialState = {
   userId: "",
   reviewerId: "",
   peers: [],
+  sessionPeers: [],
   sessions: [],
   currentSessionDeadline: new Date(),
   currentSessionId: "",
@@ -32,6 +34,11 @@ const initialState = {
 
 export default function appReducer(state = initialState, action) {
   switch (action.type) {
+    case UPDATE_AVAILABLE_PEERS:
+      return Object.assign({}, state, {
+        peers: action.data.concat(state.peers),
+      });
+
     case SET_SESSION_SUB_VIEW:
       return Object.assign({}, state, {
         sessionView: action.data,
@@ -80,7 +87,7 @@ export default function appReducer(state = initialState, action) {
 
     case UPDATE_PEERS_IN_SESSION:
       return Object.assign({}, state, {
-        peers: action.data.concat(state.peers),
+        sessionPeers: action.data.concat(state.sessionPeers), //TODO no duplicate peers
       });
 
     default:

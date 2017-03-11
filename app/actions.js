@@ -8,7 +8,15 @@ export const UPDATE_SESSION_DEADLINE = "updateSessionDeadline";
 export const SWITCH_MAIN_VIEW = "switchMainView";
 export const SET_CURRENT_SESSION = "setCurrentSession";
 export const SET_SESSION_SUB_VIEW = "setSessionSubView";
+export const UPDATE_AVAILABLE_PEERS = "updateAvailablePeers";
 
+
+export function updateAvailablePeers(peers) {
+  return {
+    type: UPDATE_AVAILABLE_PEERS,
+    data: peers,
+  };
+}
 
 export function setSessionSubView(view) {
   return {

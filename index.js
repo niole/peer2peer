@@ -66,8 +66,9 @@ passport.use(new FacebookStrategy({
   }
 ));
 
-s.app.use(express.static('dist'));
 s.app.use("/routes", routes);
+
+s.app.use(express.static('dist'));
 
 s.server.listen(3000, function() {
   console.log('listening to port 3000');
@@ -99,6 +100,6 @@ s.app.get('/login', function(req, res) {
   res.sendFile(path.join(__dirname, 'dist/login.html'));
 });
 
-s.app.get('^/[0-9]+$', function response(req, res) { //if you hit this with 2, 3, 4, it will work with data base
+s.app.get('^/[0-9]+$', function response(req, res) {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
