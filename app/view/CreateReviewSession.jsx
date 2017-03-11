@@ -14,5 +14,28 @@ class CreateReviewSession extends MUIBaseTheme {
   }
 }
 
+const mapStateToProps = state => {
+  const {
+    questions,
+    peers,
+    userId,
+  } = state;
+
+  return {
+    questions,
+    peers,
+    userId,
+  };
+};
+
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    addQuestions: qs => dispatch(addQuestions(qs)),
+    updateSessionPeers: peers => dispatch(updateSessionPeers(peers)),
+    updateSessionDeadline: deadline => dispatch(updateSessionDeadline(deadline)),
+  };
+}
+
 export default connect(
 )(CreateReviewSession)

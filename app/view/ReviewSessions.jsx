@@ -51,13 +51,19 @@ class ReviewSessions extends MUIBaseTheme {
     });
   }
 
+  getBlocks(data) {
+    return data.map(d => <div>{ JSON.stringify(d) }</div>);
+  }
+
   getContents() {
     const {
       sessionView,
+      sessions,
     } = this.props;
 
     switch (sessionView) {
       case PICK_SESSION_VIEW:
+        return this.getBlocks(sessions);
       case PICK_PEER_TO_REVIEW_VIEW:
       case EDITABLE_QS_VIEW:
       case READ_ONLY_QS_VIEW:
@@ -83,10 +89,23 @@ ReviewSessions.propTypes = propTypes;
 const mapStateToProps = state => {
   const {
     sessionView,
+    questions,
+    answers,
+    peers,
+    userId,
+    reviewerId,
+    sessions,
   } = state;
 
   return {
+    reviewerId,
     sessionView,
+    questions,
+    answers,
+    allPeers: peers,
+    peersNoReviewer: peers.filter(p => p.id !== reviewerId),
+    userId,
+    sessions,
   };
 };
 

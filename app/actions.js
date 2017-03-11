@@ -9,6 +9,7 @@ export const SWITCH_MAIN_VIEW = "switchMainView";
 export const SET_CURRENT_SESSION = "setCurrentSession";
 export const SET_SESSION_SUB_VIEW = "setSessionSubView";
 
+
 export function setSessionSubView(view) {
   return {
     type: SET_SESSION_SUB_VIEW,
