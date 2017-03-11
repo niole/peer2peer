@@ -14,4 +14,5 @@ class CreateReviewSession extends MUIBaseTheme {
   }
 }
 
-export default connect()(CreateReviewSession)
+export default connect(
+)(CreateReviewSession)

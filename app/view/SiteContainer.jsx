@@ -17,10 +17,11 @@ import {
   CREATE_SESSION_VIEW,
   ANSWER_QUESTIONS_VIEW,
 
-  REVIEWER_LABEL,
   PICK_SESSION_LABEL,
-  SESSION_LABEL,
+  PICK_PEER_LABEL,
   EDITABLE_QS_LABEL,
+  PICK_PEER_TO_READ_VIEW,
+  READ_PEERS_REVIEWS_LABEL,
   VIEW_ONLY_QS_LABEL,
 } from '../constants.js';
 import CreateReviewSession from './CreateReviewSession.jsx';
@@ -43,6 +44,8 @@ class SiteContainer extends MUIBaseTheme {
       [PICK_PEER_TO_REVIEW_VIEW]: this.toQuestions,
       [PICK_PEER_TO_READ_VIEW]: this.toReviewed,
       [READ_PEERS_REVIEWS_VIEW]: this.toQuestions,
+      [EDITABLE_QS_VIEW]: () => {},
+      [READ_ONLY_QS_VIEW]: () => {},
     };
 
   }
@@ -119,8 +122,8 @@ class SiteContainer extends MUIBaseTheme {
       <ReviewSessions
         headers={[
           PICK_SESSION_LABEL,
-          SESSION_LABEL,
-          REVIEWER_LABEL,
+          PICK_PEER_TO_READ_VIEW,
+          READ_PEERS_REVIEWS_LABEL,
           VIEW_ONLY_QS_LABEL,
         ]}
         elementClickHandlers={ this.subViewToElementHandler }
@@ -133,7 +136,7 @@ class SiteContainer extends MUIBaseTheme {
       <ReviewSessions
         headers={[
           PICK_SESSION_LABEL,
-          SESSION_LABEL,
+          PICK_PEER_LABEL,
           EDITABLE_QS_LABEL,
         ]}
         elementClickHandlers={ this.subViewToElementHandler }

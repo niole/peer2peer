@@ -5,10 +5,11 @@ export const ANSWER_QUESTIONS_VIEW = "answerQuestionsView";
 
 /* header labels */
 export const PICK_SESSION_LABEL = "Pick a Session";
-export const SESSION_LABEL = "Session";
+export const PICK_PEER_TO_REVIEW_LABEL = "Pick Peer To Review";
+export const PICK_PEER_LABEL = "Pick Peer";
 export const EDITABLE_QS_LABEL = "Answer Questions";
 export const VIEW_ONLY_QS_LABEL = "View Answers";
-export const REVIEWER_LABEL = "Reviewer";
+export const READ_PEERS_REVIEWS_LABEL = "Read Peer's Reviews";
 
 /* review session views */
 export const PICK_SESSION_VIEW = "pickSession";
@@ -17,3 +18,22 @@ export const EDITABLE_QS_VIEW = "editQuestionsView";
 export const READ_ONLY_QS_VIEW = "readOnlyQsView";
 export const PICK_PEER_TO_READ_VIEW = "pickPeerAndReadTheirReviews";
 export const READ_PEERS_REVIEWS_VIEW = "readPeersReviewsView";
+
+export const VIEW_TO_HEADER_MAP = {
+  [EDITABLE_QS_VIEW]: EDITABLE_QS_LABEL,
+  [PICK_SESSION_VIEW]: PICK_SESSION_LABEL,
+  [PICK_PEER_TO_REVIEW_VIEW]: PICK_PEER_LABEL,
+  [PICK_PEER_TO_READ_VIEW]: READ_PEERS_REVIEWS_LABEL,
+  [READ_PEERS_REVIEWS_VIEW]: VIEW_ONLY_QS_LABEL,
+  [READ_ONLY_QS_VIEW]: VIEW_ONLY_QS_LABEL,
+};
+
+export const HEADER_TO_VIEW_MAP = {
+  [EDITABLE_QS_LABEL]: EDITABLE_QS_VIEW,
+  [PICK_SESSION_LABEL]: PICK_SESSION_VIEW,
+  [PICK_PEER_LABEL]: PICK_PEER_TO_REVIEW_VIEW,
+  [READ_PEERS_REVIEWS_LABEL]: PICK_PEER_TO_READ_VIEW,
+  [VIEW_ONLY_QS_LABEL]: READ_PEERS_REVIEWS_VIEW,
+  [VIEW_ONLY_QS_LABEL]: READ_ONLY_QS_VIEW,
+};
+
