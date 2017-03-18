@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
+import CreateSessionButton from './CreateSessionButton.jsx';
 import {
   setCurrentSession,
   setSessionSubView,
@@ -168,6 +169,7 @@ class SiteContainer extends MUIBaseTheme {
         </header>
           { this.getCurrentView() }
         <footer>
+          <CreateSessionButton/>
         </footer>
       </div>
 

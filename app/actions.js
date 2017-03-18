@@ -11,7 +11,15 @@ export const SET_SESSION_SUB_VIEW = "setSessionSubView";
 export const UPDATE_AVAILABLE_PEERS = "updateAvailablePeers";
 export const REMOVE_PEER_FROM_SESSION = "removePeerFromSession";
 export const REMOVE_QUESTION = "removeQuestion";
+export const SUBMIT_NEW_SESSION = "submitNewSession";
 
+
+export function submitNewSession() {
+  return {
+    type: SUBMIT_NEW_SESSION,
+    data: null,
+  };
+}
 
 export function removeQuestion(qId) {
   return {

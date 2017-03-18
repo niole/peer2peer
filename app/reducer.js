@@ -12,6 +12,7 @@ import {
   SET_CURRENT_SESSION,
   REMOVE_PEER_FROM_SESSION,
   REMOVE_QUESTION,
+  SUBMIT_NEW_SESSION,
 } from './actions.js';
 import {
   CREATE_SESSION_VIEW,
@@ -36,6 +37,13 @@ const initialState = {
 
 export default function appReducer(state = initialState, action) {
   switch (action.type) {
+    case SUBMIT_NEW_SESSION:
+      return Object.assign({}, state, {
+        questions: [],
+        sessionPeers: [],
+        currentSessionDeadline: new Date(),
+      });
+
     case REMOVE_QUESTION:
       return Object.assign({}, state, {
         questions: state.questions.filter(q => q.id !== action.data),

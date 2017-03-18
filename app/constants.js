@@ -1,3 +1,6 @@
+/* button labels */
+export const CREATE_SESSION_BTN_LABEL = "Create Peer2Peer Session";
+
 /* main view enum */
 export const VIEW_ANSWERS_VIEW = "viewAnswersView";
 export const CREATE_SESSION_VIEW = "createReviewSessionView";
