@@ -100,7 +100,7 @@ class CreateReviewSession extends MUIBaseTheme {
         <div>
             <div>questions</div>
             <div>
-              <ul>{ this.renderQuestions() }</ul>
+              <ol>{ this.renderQuestions() }</ol>
               <input
                 ref={(ref) => this.questioninput = ref }
                 placeholder="add a question"/>

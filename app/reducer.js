@@ -68,7 +68,7 @@ export default function appReducer(state = initialState, action) {
 
     case ADD_QUESTIONS:
       return Object.assign({}, state, {
-        questions: action.data.concat(state.questions),
+        questions: state.questions.concat(action.data),
       });
 
     case REPLACE_ANSWERS:
