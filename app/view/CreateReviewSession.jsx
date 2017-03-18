@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import {
+  removePeer,
   addQuestions,
   updateSessionPeers,
   updateSessionDeadline,
@@ -55,22 +56,51 @@ class CreateReviewSession extends MUIBaseTheme {
     updateSessionPeers([selectedPeer]);
   }
 
-  render() {
+  renderPeers() {
     const {
+      removePeer,
       peers,
+      sessionPeers,
+    } = this.props;
+
+    return peers.map(p => {
+        const isInSession = !!sessionPeers.find(sp => sp.id === p.id);
+        return (
+          <li
+            style={{ color: isInSession ? "green" : "black" }}
+            key={ p.id }
+            onClick={
+              isInSession ?
+              () => removePeer(p.id) :
+              () => this.addPeer(p)
+            }>
+              { p.name }
+          </li>
+        );
+      }
+    );
+  }
+
+  renderQuestions() {
+    const {
       questions,
     } = this.props;
+
+    return questions.map((q, i) => <li key={ i } >{ q }</li>);
+  }
+
+  render() {
 
     return (
       <div>
         <div>
           <div>peers</div>
-          <div>{ peers.map(p => <div key={ p.id } onClick={ () => this.addPeer(p) }>{ p.name }</div>) }</div>
+          <ul>{ this.renderPeers() }</ul>
         </div>
         <div>
             <div>questions</div>
             <div>
-              { questions.map((q, i) => <div key={ i } >{ q }</div>) }
+              <ul>{ this.renderQuestions() }</ul>
               <input
                 ref={(ref) => this.questioninput = ref }
                 placeholder="add a question"/>
@@ -105,6 +135,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    removePeer: peerId => dispatch(removePeer(peerId)),
     updateAvailablePeers: peers => dispatch(updateAvailablePeers(peers)),
     addQuestions: qs => dispatch(addQuestions(qs)),
     updateSessionPeers: peers => dispatch(updateSessionPeers(peers)),

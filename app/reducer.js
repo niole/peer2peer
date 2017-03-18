@@ -10,6 +10,7 @@ import {
   UPDATE_SESSION_DEADLINE,
   SWITCH_MAIN_VIEW,
   SET_CURRENT_SESSION,
+  REMOVE_PEER_FROM_SESSION,
 } from './actions.js';
 import {
   CREATE_SESSION_VIEW,
@@ -83,6 +84,11 @@ export default function appReducer(state = initialState, action) {
     case UPDATE_USERID:
       return Object.assign({}, state, {
         userId: action.data,
+      });
+
+    case REMOVE_PEER_FROM_SESSION:
+      return Object.assign({}, state, {
+        sessionPeers: state.sessionPeers.filter(sp => sp.id !==  action.data),
       });
 
     case UPDATE_PEERS_IN_SESSION:
