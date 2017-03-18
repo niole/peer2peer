@@ -11,6 +11,7 @@ import {
   SWITCH_MAIN_VIEW,
   SET_CURRENT_SESSION,
   REMOVE_PEER_FROM_SESSION,
+  REMOVE_QUESTION,
 } from './actions.js';
 import {
   CREATE_SESSION_VIEW,
@@ -35,6 +36,11 @@ const initialState = {
 
 export default function appReducer(state = initialState, action) {
   switch (action.type) {
+    case REMOVE_QUESTION:
+      return Object.assign({}, state, {
+        questions: state.questions.filter(q => q.id !== action.data),
+      });
+
     case UPDATE_AVAILABLE_PEERS:
       return Object.assign({}, state, {
         peers: action.data.concat(state.peers),

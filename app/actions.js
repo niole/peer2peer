@@ -10,7 +10,15 @@ export const SET_CURRENT_SESSION = "setCurrentSession";
 export const SET_SESSION_SUB_VIEW = "setSessionSubView";
 export const UPDATE_AVAILABLE_PEERS = "updateAvailablePeers";
 export const REMOVE_PEER_FROM_SESSION = "removePeerFromSession";
+export const REMOVE_QUESTION = "removeQuestion";
 
+
+export function removeQuestion(qId) {
+  return {
+    type: REMOVE_QUESTION,
+    data: qId,
+  };
+}
 
 export function removePeer(peerId) {
   return {

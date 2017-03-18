@@ -7,6 +7,7 @@ import {
   updateSessionPeers,
   updateSessionDeadline,
   updateAvailablePeers,
+  removeQuestion,
 } from '../actions.js';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
 
@@ -45,7 +46,10 @@ class CreateReviewSession extends MUIBaseTheme {
     const question = this.questioninput.value;
     this.questioninput.value = "";
 
-    addQuestions([question]);
+    addQuestions([{
+      content: question,
+      id: Math.random(),
+    }]);
   }
 
   addPeer(selectedPeer) {
@@ -84,9 +88,18 @@ class CreateReviewSession extends MUIBaseTheme {
   renderQuestions() {
     const {
       questions,
+      removeQuestion,
     } = this.props;
 
-    return questions.map((q, i) => <li key={ i } >{ q }</li>);
+    return questions.map((q, i) => (
+      <li
+        onClick={ () => removeQuestion(q.id) }
+        title="click to remove"
+        key={ i } >
+        { q.content }
+      </li>
+      )
+    );
   }
 
   render() {
@@ -135,6 +148,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    removeQuestion: qId => dispatch(removeQuestion(qId)),
     removePeer: peerId => dispatch(removePeer(peerId)),
     updateAvailablePeers: peers => dispatch(updateAvailablePeers(peers)),
     addQuestions: qs => dispatch(addQuestions(qs)),
