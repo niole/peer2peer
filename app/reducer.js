@@ -7,7 +7,7 @@ import {
   UPDATE_USERID,
   REPLACE_ANSWERS,
   ADD_QUESTIONS,
-  ADD_ANSWERS,
+  ADD_ANSWER,
   UPDATE_SESSION_DEADLINE,
   SWITCH_MAIN_VIEW,
   SET_CURRENT_SESSION,
@@ -28,6 +28,7 @@ import {
 const initialState = {
   userId: getUserId(),
   reviewerId: "",
+  reviewedId: "",
   peers: [],
   sessionPeers: [],
   sessions: [],
@@ -46,6 +47,7 @@ export default function appReducer(state = initialState, action) {
       return Object.assign({}, state, {
         sessionView: action.data.questionType,
         questions: action.data.questions,
+        reviewedId: action.data.peerId,
       });
 
     case SET_AVAILABLE_SESSIONS:
@@ -92,9 +94,11 @@ export default function appReducer(state = initialState, action) {
         currentSessionDeadline: action.data,
       });
 
-    case ADD_ANSWERS:
+    case ADD_ANSWER:
       return Object.assign({}, state, {
-        answers: action.data.concat(state.answers),
+        answers: state.answers.find(a => a.questionId === action.data.questionId) ?
+          state.answers.map(a => a.questionId === action.data.questionId ? action.data : a) :
+          [action.data].concat(state.answers),
       });
 
     case ADD_QUESTIONS:

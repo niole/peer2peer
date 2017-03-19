@@ -6,6 +6,7 @@ import {
   setAvailableSessions,
   setCurrentSession,
   setQuestionSubview,
+  addAnswer,
 } from '../actions.js';
 import {
   ANSWER_QUESTIONS_VIEW,
@@ -38,6 +39,7 @@ class ReviewSessions extends MUIBaseTheme {
     this.toSession = this.toSession.bind(this);
     this.toReviewed = this.toReviewed.bind(this);
     this.toQuestions = this.toQuestions.bind(this);
+    this.addAnswer = this.addAnswer.bind(this);
   }
 
   componentDidMount() {
@@ -122,7 +124,7 @@ class ReviewSessions extends MUIBaseTheme {
    * editable if user is not session creator
    * and are not editable if user is session creator
    */
-  toQuestions() {
+  toQuestions(peerId) {
     const {
       setQuestionSubview,
       currentSessionId,
@@ -133,8 +135,8 @@ class ReviewSessions extends MUIBaseTheme {
       url,
       success: qs => {
         this.ifCreatorElseReviewer(
-          () => setQuestionSubview(READ_ONLY_QS_VIEW, qs),
-          () => setQuestionSubview(EDITABLE_QS_VIEW, qs)
+          () => setQuestionSubview(READ_ONLY_QS_VIEW, qs, peerId),
+          () => setQuestionSubview(EDITABLE_QS_VIEW, qs, peerId)
         );
       },
       error: err => {
@@ -176,13 +178,13 @@ class ReviewSessions extends MUIBaseTheme {
     } = this.props;
 
     return sessions.map(d => (
-        <div
+        <li
           title="click to start reviewing your peers"
           onClick={ () => this.toSession(d.id) }
           key={ d.id }>
           session: { d.id }
           deadline: { d.deadline }
-        </div>
+        </li>
       )
     );
   }
@@ -197,7 +199,7 @@ class ReviewSessions extends MUIBaseTheme {
       return peers.map(d => (
           <li
             title={ `click to review ${d.name}` }
-            onClick={ this.toQuestions }
+            onClick={ () => this.toQuestions(d.id) }
             key={ d.id }>
             peer: { d.name }
           </li>
@@ -220,16 +222,43 @@ class ReviewSessions extends MUIBaseTheme {
 
   }
 
+  addAnswer(index) {
+    const {
+      questions,
+      addAnswer,
+      userId,
+      reviewedId,
+      currentSessionId,
+    } = this.props;
+
+    const answer = {
+      questionId: questions[index].id,
+      reviewSessionId: currentSessionId,
+      content: this[`answer-${index}`].value,
+      reviewerId: userId,
+      peerId: reviewedId,
+    };
+
+    addAnswer(answer);
+  }
+
   renderEditableQs() {
     const {
       questions,
     } = this.props;
 
-    return questions.map(q => (
+    return questions.map((q, i) => (
       <li>
         question: { q.content }
         answer:
-        <input placeholder="answer the question"/>
+        <input
+          ref={ ref => this[`answer-${i}`] = ref }
+          placeholder="answer the question"/>
+        <button
+          onClick={() => this.addAnswer(i) }
+        >
+          Save
+        </button>
       </li>
     ));
   }
@@ -280,9 +309,11 @@ const mapStateToProps = state => {
     sessions,
     mainView,
     currentSessionId,
+    reviewedId,
   } = state;
 
   return {
+    reviewedId,
     currentSessionId,
     mainView,
     reviewerId,
@@ -298,7 +329,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    setQuestionSubview: (viewType, qs) => dispatch(setQuestionSubview(viewType, qs)),
+    addAnswer: ans => dispatch(addAnswer(ans)),
+    setQuestionSubview: (viewType, qs, peerId) => dispatch(setQuestionSubview(viewType, qs, peerId)),
     setAvailableSessions: ss => dispatch(setAvailableSessions(ss)),
     setCurrentSession: (sessionId, reviewers, view) => dispatch(setCurrentSession(sessionId, reviewers, view)),
     setSessionSubView: view => dispatch(setSessionSubView(view)),

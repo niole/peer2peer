@@ -3,7 +3,7 @@ export const UPDATE_USERID = "updateuserId";
 export const REPLACE_QUESTIONS = "replaceQuestions";
 export const REPLACE_ANSWERS = "replaceAnswers";
 export const ADD_QUESTIONS = "addQuestions";
-export const ADD_ANSWERS = "addAnswers";
+export const ADD_ANSWER = "addAnswer";
 export const UPDATE_SESSION_DEADLINE = "updateSessionDeadline";
 export const SWITCH_MAIN_VIEW = "switchMainView";
 export const SET_CURRENT_SESSION = "setCurrentSession";
@@ -16,10 +16,11 @@ export const SET_AVAILABLE_SESSIONS = "setAvailableSessions";
 export const SET_QS_SUBVIEW = "setQuestionsSubview";
 
 
-export function setQuestionSubview(questionType, questions) {
+export function setQuestionSubview(questionType, questions, peerId) {
   return {
     type: SET_QS_SUBVIEW,
     data: {
+      peerId,
       questionType,
       questions,
     },
@@ -93,10 +94,10 @@ export function updateSessionDeadline(newDeadline) {
   };
 }
 
-export function addAnswers(answers) {
+export function addAnswer(answer) {
   return {
-    type: ADD_ANSWERS,
-    data: answers,
+    type: ADD_ANSWER,
+    data: answer,
   };
 }
 

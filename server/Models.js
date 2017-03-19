@@ -104,10 +104,14 @@ const Answer = sequelize.define(
       type: Sequelize.STRING,
       field: 'content'
     },
-    from: {
+    reviewerId: {
       type: Sequelize.STRING,
-      field: 'from'
-    }
+      field: 'reviewerid'
+    },
+    peerId: {
+      type: Sequelize.STRING,
+      field: 'peerid'
+    },
   },
   {
     freezeTableName: true
