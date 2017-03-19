@@ -13,7 +13,18 @@ export const REMOVE_PEER_FROM_SESSION = "removePeerFromSession";
 export const REMOVE_QUESTION = "removeQuestion";
 export const SUBMIT_NEW_SESSION = "submitNewSession";
 export const SET_AVAILABLE_SESSIONS = "setAvailableSessions";
+export const SET_QS_SUBVIEW = "setQuestionsSubview";
 
+
+export function setQuestionSubview(questionType, questions) {
+  return {
+    type: SET_QS_SUBVIEW,
+    data: {
+      questionType,
+      questions,
+    },
+  };
+}
 
 export function setAvailableSessions(sessions) {
   return {
@@ -57,11 +68,12 @@ export function setSessionSubView(view) {
   };
 }
 
-export function setCurrentSession(id, view) {
+export function setCurrentSession(id, reviewers, view) {
   return {
     type: SET_CURRENT_SESSION,
     data: {
       id,
+      reviewers,
       view,
     }
   };

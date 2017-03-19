@@ -10,6 +10,18 @@ const ReviewSession = models.ReviewSession;
 const Question = models.Question;
 const sequelize = models.sequelize;
 
+router.get('/questions/:sessionId/', function(req, res) {
+  const sessionId = req.params.sessionId;
+
+  Question.findAll({
+    where: {
+      reviewSessionId: sessionId,
+    }
+  }).then(function(qs) {
+    res.send(qs.map(q => q.dataValues));
+  });
+
+});
 
 router.get('/peers/all/:userId', function(req, res) {
   User.findAll({
@@ -21,6 +33,33 @@ router.get('/peers/all/:userId', function(req, res) {
   }).then(function(users) {
     res.send(users.map(function(u) { return u.dataValues; }));
   });
+});
+
+router.get('/reviewers/:userId/:sessionId/', function(req, res) {
+  const userId = req.params.userId;
+  const sessionId = req.params.sessionId;
+
+  Reviewer.findAll({
+    where: {
+      userId: {
+        $ne: userId,
+      },
+      reviewSessionId: sessionId,
+    },
+  }).then(function(reviewers) {
+    const userIds = reviewers.map(r => r.dataValues.userId);
+
+    User.findAll({
+      where: {
+        id: {
+          $in: userIds,
+        },
+      },
+    }).then(function(users) {
+      res.send(users.map(u => u.dataValues));
+    });
+  });
+
 });
 
 router.get('/reviewsession/:userId/', function(req, res) {

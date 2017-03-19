@@ -5,8 +5,11 @@ import {
   setSessionSubView,
   setAvailableSessions,
   setCurrentSession,
+  setQuestionSubview,
 } from '../actions.js';
 import {
+  ANSWER_QUESTIONS_VIEW,
+  VIEW_ANSWERS_VIEW,
   PICK_SESSION_VIEW,
   PICK_PEER_TO_REVIEW_VIEW,
   EDITABLE_QS_VIEW,
@@ -47,7 +50,7 @@ class ReviewSessions extends MUIBaseTheme {
     $.ajax({
       url,
       success: d => {
-        console.error('success', d);
+        console.error('success');
         setAvailableSessions(d);
       },
       error: err => {
@@ -64,13 +67,24 @@ class ReviewSessions extends MUIBaseTheme {
    */
   toSession(sessionId) {
     const {
+      userId,
       setCurrentSession,
     } = this.props;
 
-    this.ifCreatorElseReviewer(
-      setCurrentSession(sessionId, PICK_PEER_TO_READ_VIEW),
-      setCurrentSession(sessionId, PICK_PEER_TO_REVIEW_VIEW)
-    );
+    //get reviewable peers
+    const url = `routes/reviewers/${userId}/${sessionId}/`;
+    $.ajax({
+      url,
+      success: reviewers => {
+        this.ifCreatorElseReviewer(
+          () => setCurrentSession(sessionId, reviewers, PICK_PEER_TO_READ_VIEW),
+          () => setCurrentSession(sessionId, reviewers, PICK_PEER_TO_REVIEW_VIEW)
+        );
+      },
+      error: err => {
+        console.error(err);
+      },
+    });
   }
 
   /**
@@ -95,10 +109,10 @@ class ReviewSessions extends MUIBaseTheme {
     } = this.props;
 
     if (mainView === VIEW_ANSWERS_VIEW) {
-      isReadable();
+      return isReadable();
     }
     else if (mainView === ANSWER_QUESTIONS_VIEW) {
-      isEditable();
+      return isEditable();
     }
   }
 
@@ -110,13 +124,23 @@ class ReviewSessions extends MUIBaseTheme {
    */
   toQuestions() {
     const {
-      setSessionSubView,
+      setQuestionSubview,
+      currentSessionId,
     } = this.props;
 
-    this.ifCreatorElseReviewer(
-      () => setSessionSubView(READ_ONLY_QS_VIEW),
-      () => setSessionSubView(EDITABLE_QS_VIEW)
-    );
+    const url = this.ifCreatorElseReviewer(() => "", () => `routes/questions/${currentSessionId}/`);
+    $.ajax({
+      url,
+      success: qs => {
+        this.ifCreatorElseReviewer(
+          () => setQuestionSubview(READ_ONLY_QS_VIEW, qs),
+          () => setQuestionSubview(EDITABLE_QS_VIEW, qs)
+        );
+      },
+      error: err => {
+        console.error(err);
+      },
+    });
   }
 
   getHeaders() {
@@ -146,21 +170,84 @@ class ReviewSessions extends MUIBaseTheme {
     });
   }
 
-  getBlocks(data) {
-    return data.map(d => <div key={ d.id }>{ JSON.stringify(d) }</div>);
+  renderSessions() {
+    const {
+      sessions,
+    } = this.props;
+
+    return sessions.map(d => (
+        <div
+          title="click to start reviewing your peers"
+          onClick={ () => this.toSession(d.id) }
+          key={ d.id }>
+          session: { d.id }
+          deadline: { d.deadline }
+        </div>
+      )
+    );
+  }
+
+  renderReviewablePeers() {
+    const {
+      mainView,
+      peers,
+    } = this.props;
+
+    if (mainView === ANSWER_QUESTIONS_VIEW) {
+      return peers.map(d => (
+          <li
+            title={ `click to review ${d.name}` }
+            onClick={ this.toQuestions }
+            key={ d.id }>
+            peer: { d.name }
+          </li>
+        )
+      );
+    }
+
+    if (mainView === VIEW_ANSWERS_VIEW) {
+      return peers.map(d => (
+          <li
+            title="click to read completed reviews"
+            onClick={ () => this.toSession(d.id) }
+            key={ d.id }>
+            session: { d.id }
+            deadline: { d.deadline }
+          </li>
+        )
+      );
+    }
+
+  }
+
+  renderEditableQs() {
+    const {
+      questions,
+    } = this.props;
+
+    return questions.map(q => (
+      <li>
+        question: { q.content }
+        answer:
+        <input placeholder="answer the question"/>
+      </li>
+    ));
   }
 
   getContents() {
     const {
       sessionView,
-      sessions,
     } = this.props;
+
+    console.log('sessionView', sessionView);
 
     switch (sessionView) {
       case PICK_SESSION_VIEW:
-        return this.getBlocks(sessions);
+        return this.renderSessions();
       case PICK_PEER_TO_REVIEW_VIEW:
+        return this.renderReviewablePeers();
       case EDITABLE_QS_VIEW:
+        return this.renderEditableQs();
       case READ_ONLY_QS_VIEW:
       case PICK_PEER_TO_READ_VIEW:
       case READ_PEERS_REVIEWS_VIEW:
@@ -174,7 +261,7 @@ class ReviewSessions extends MUIBaseTheme {
     return (
       <div>
         { this.getHeaders() }
-        { this.getContents() }
+        <ol>{ this.getContents() }</ol>
       </div>
     );
   }
@@ -191,15 +278,18 @@ const mapStateToProps = state => {
     userId,
     reviewerId,
     sessions,
+    mainView,
+    currentSessionId,
   } = state;
 
   return {
+    currentSessionId,
+    mainView,
     reviewerId,
     sessionView,
     questions,
     answers,
-    allPeers: peers,
-    peersNoReviewer: peers.filter(p => p.id !== reviewerId),
+    peers,
     userId,
     sessions,
   };
@@ -208,8 +298,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    setQuestionSubview: (viewType, qs) => dispatch(setQuestionSubview(viewType, qs)),
     setAvailableSessions: ss => dispatch(setAvailableSessions(ss)),
-    setCurrentSession: (sessionId, view) => dispatch(setCurrentSession(sessionId, view)),
+    setCurrentSession: (sessionId, reviewers, view) => dispatch(setCurrentSession(sessionId, reviewers, view)),
     setSessionSubView: view => dispatch(setSessionSubView(view)),
   };
 }

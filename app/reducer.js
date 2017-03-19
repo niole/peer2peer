@@ -1,4 +1,5 @@
 import {
+  SET_QS_SUBVIEW,
   UPDATE_AVAILABLE_PEERS,
   SET_SESSION_SUB_VIEW,
   REPLACE_QUESTIONS,
@@ -41,6 +42,12 @@ const initialState = {
 
 export default function appReducer(state = initialState, action) {
   switch (action.type) {
+    case SET_QS_SUBVIEW:
+      return Object.assign({}, state, {
+        sessionView: action.data.questionType,
+        questions: action.data.questions,
+      });
+
     case SET_AVAILABLE_SESSIONS:
       return Object.assign({}, state, {
         sessions: action.data,
@@ -70,6 +77,7 @@ export default function appReducer(state = initialState, action) {
 
     case SET_CURRENT_SESSION:
       return Object.assign({}, state, {
+        peers: action.data.reviewers,
         currentSessionId: action.data.id,
         sessionView: action.data.view,
       });
