@@ -2,11 +2,13 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
 import CreateSessionButton from './CreateSessionButton.jsx';
+import SiteHeader from './SiteHeader.jsx';
 import {
   setCurrentSession,
   setSessionSubView,
 } from '../actions.js';
 import {
+  VIEW_TO_HEADER_MAP,
   PICK_PEER_TO_REVIEW_VIEW,
   EDITABLE_QS_VIEW,
   READ_ONLY_QS_VIEW,
@@ -27,6 +29,11 @@ import {
 import CreateReviewSession from './CreateReviewSession.jsx';
 import ReviewSessions from './ReviewSessions.jsx';
 
+const allSubViews = [
+  VIEW_ANSWERS_VIEW,
+  CREATE_SESSION_VIEW,
+  ANSWER_QUESTIONS_VIEW,
+];
 
 
 class SiteContainer extends MUIBaseTheme {
@@ -144,11 +151,7 @@ class SiteContainer extends MUIBaseTheme {
     );
   }
 
-  getCurrentView() {
-    const {
-      mainView,
-    } = this.props;
-
+  getCurrentView(mainView) {
     switch (mainView) {
       case VIEW_ANSWERS_VIEW:
         return this.getViewAnswersView();
@@ -163,11 +166,17 @@ class SiteContainer extends MUIBaseTheme {
   }
 
   render() {
+    const {
+      mainView,
+    } = this.props;
+
     return (
       <div>
-        <header>
-        </header>
-          { this.getCurrentView() }
+        <SiteHeader
+          headers={ allSubViews.map(v => VIEW_TO_HEADER_MAP[v]) }
+          focused={ VIEW_TO_HEADER_MAP[mainView] }
+        />
+        { this.getCurrentView(mainView) }
         <footer>
           <CreateSessionButton/>
         </footer>

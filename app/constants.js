@@ -14,6 +14,7 @@ export const PICK_PEER_LABEL = "Pick Peer";
 export const EDITABLE_QS_LABEL = "Answer Questions";
 export const VIEW_ONLY_QS_LABEL = "View Answers";
 export const READ_PEERS_REVIEWS_LABEL = "Read Peer's Reviews";
+export const CREATE_SESSION_LABEL = "Create a Review Session";
 
 /* review session views */
 export const PICK_SESSION_VIEW = "pickSession";
@@ -25,6 +26,9 @@ export const READ_PEERS_REVIEWS_VIEW = "readPeersReviewsView";
 export const USER_ID_CAPTURE = /\/([0-9]+)$/;
 
 export const VIEW_TO_HEADER_MAP = {
+  [VIEW_ANSWERS_VIEW]: VIEW_ONLY_QS_LABEL,
+  [CREATE_SESSION_VIEW]: CREATE_SESSION_LABEL,
+  [ANSWER_QUESTIONS_VIEW]: EDITABLE_QS_LABEL,
   [EDITABLE_QS_VIEW]: EDITABLE_QS_LABEL,
   [PICK_SESSION_VIEW]: PICK_SESSION_LABEL,
   [PICK_PEER_TO_REVIEW_VIEW]: PICK_PEER_LABEL,
