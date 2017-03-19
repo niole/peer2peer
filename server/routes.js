@@ -8,6 +8,8 @@ const Answer = models.Answer;
 const User = models.User;
 const ReviewSession = models.ReviewSession;
 const Question = models.Question;
+const sequelize = models.sequelize;
+
 
 router.get('/peers/all/:userId', function(req, res) {
   User.findAll({
@@ -21,7 +23,35 @@ router.get('/peers/all/:userId', function(req, res) {
   });
 });
 
-router.post('/reviewsession/create/', function (req, res) {
+router.get('/reviewsession/:userId/', function(req, res) {
+  /**
+    gets review sessions that user is included in
+   */
+
+  const userId = req.params.userId;
+
+  Reviewer.findAll({
+    attributes: [[sequelize.fn('DISTINCT', sequelize.col('reviewsessionid')), 'reviewSessionId']],
+    where: {
+      userId: userId,
+    },
+  }).then(function(rs) {
+    const reviewSessionIds = rs.map(r => r.dataValues.reviewSessionId);
+
+    ReviewSession.findAll({
+      where: {
+        id: {
+          $in: reviewSessionIds,
+        },
+      },
+    }).then(function(reviewSessions) {
+      res.send(reviewSessions.map(r => r.dataValues));
+    });
+  });
+
+});
+
+router.post('/reviewsession/create/', function(req, res) {
   const body = req.body;
   const reviewers = body.reviewers;
   const deadline = body.deadline;

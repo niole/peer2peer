@@ -20,7 +20,6 @@ class CreateReviewSession extends MUIBaseTheme {
   constructor() {
     super();
     this.questioninput = null;
-    this.deadline = null;
     this.saveQuestion = this.saveQuestion.bind(this);
   }
 
@@ -120,7 +119,6 @@ class CreateReviewSession extends MUIBaseTheme {
     return (
       <DatePicker
         onChange={ (other, date) => updateSessionDeadline(date) }
-        ref={ ref => this.deadline = ref }
         defaultDate={ currentSessionDeadline }
         hintText={ DATEPICKER_PLACEHOLDER }
         container="inline"

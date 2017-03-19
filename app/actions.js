@@ -12,7 +12,15 @@ export const UPDATE_AVAILABLE_PEERS = "updateAvailablePeers";
 export const REMOVE_PEER_FROM_SESSION = "removePeerFromSession";
 export const REMOVE_QUESTION = "removeQuestion";
 export const SUBMIT_NEW_SESSION = "submitNewSession";
+export const SET_AVAILABLE_SESSIONS = "setAvailableSessions";
 
+
+export function setAvailableSessions(sessions) {
+  return {
+    type: SET_AVAILABLE_SESSIONS,
+    data: sessions,
+  };
+}
 
 export function submitNewSession() {
   return {

@@ -5,7 +5,6 @@ import CreateSessionButton from './CreateSessionButton.jsx';
 import SiteHeader from './SiteHeader.jsx';
 import {
   setCurrentSession,
-  setSessionSubView,
   switchMainView,
 } from '../actions.js';
 import {
@@ -41,12 +40,6 @@ class SiteContainer extends MUIBaseTheme {
     super();
 
 
-    this.toSession = this.toSession.bind(this);
-    this.toReviewed = this.toReviewed.bind(this);
-    this.toQuestions = this.toQuestions.bind(this);
-    this.ifCreatorElseReviewer = this.ifCreatorElseReviewer.bind(this);
-
-
     this.subViewToElementHandler = {
       [PICK_SESSION_VIEW]: this.toSession,
       [PICK_PEER_TO_REVIEW_VIEW]: this.toQuestions,
@@ -57,68 +50,6 @@ class SiteContainer extends MUIBaseTheme {
     };
   }
 
-  /**
-   * depending on main view type
-   * sends user to a view with all peers in session
-   * or sends user to view with all peers in session
-   * except self
-   */
-  toSession(sessionId) {
-    const {
-      setCurrentSession,
-    } = this.props;
-
-    this.ifCreatorElseReviewer(
-      setCurrentSession(sessionId, PICK_PEER_TO_READ_VIEW),
-      setCurrentSession(sessionId, PICK_PEER_TO_REVIEW_VIEW)
-    );
-  }
-
-  /**
-   * review session creator can look at peers reviewed by
-   * selected peer
-   */
-  toReviewed() {
-    const {
-      setSessionSubView,
-    } = this.props;
-
-    this.ifCreatorElseReviewer(
-      () => setSessionSubView(READ_PEERS_REVIEWS_VIEW),
-      () => {},
-    );
-
-  }
-
-  ifCreatorElseReviewer(isReadable, isEditable) {
-    const {
-      mainView,
-    } = this.props;
-
-    if (mainView === VIEW_ANSWERS_VIEW) {
-      isReadable();
-    }
-    else if (mainView === ANSWER_QUESTIONS_VIEW) {
-      isEditable();
-    }
-  }
-
-
-  /**
-   * sends user to Q/A view, where answers are
-   * editable if user is not session creator
-   * and are not editable if user is session creator
-   */
-  toQuestions() {
-    const {
-      setSessionSubView,
-    } = this.props;
-
-    this.ifCreatorElseReviewer(
-      () => setSessionSubView(READ_ONLY_QS_VIEW),
-      () => setSessionSubView(EDITABLE_QS_VIEW)
-    );
-  }
 
   /**
    * for viewing answered questions
@@ -202,7 +133,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     switchMainView: view => dispatch(switchMainView(view)),
-    setSessionSubView: view => dispatch(setSessionSubView(view)),
     setCurrentSession: (id, view) => dispatch(setCurrentSession(id, view)),
   };
 }
