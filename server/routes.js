@@ -25,7 +25,7 @@ router.post('/reviewsession/create/', function (req, res) {
   const body = req.body;
   const reviewers = body.reviewers;
   const deadline = body.deadline;
-  const creatorId = body.userId;
+  const creatorId = body.creatorId;
   const questions = body.questions;
 
   /**

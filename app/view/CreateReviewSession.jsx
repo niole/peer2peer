@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
+import DatePicker from 'material-ui/DatePicker';
 import {
   removePeer,
   addQuestions,
@@ -9,14 +10,17 @@ import {
   updateAvailablePeers,
   removeQuestion,
 } from '../actions.js';
+import {
+  DATEPICKER_PLACEHOLDER,
+} from '../constants.js';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
-
 
 
 class CreateReviewSession extends MUIBaseTheme {
   constructor() {
     super();
     this.questioninput = null;
+    this.deadline = null;
     this.saveQuestion = this.saveQuestion.bind(this);
   }
 
@@ -102,11 +106,32 @@ class CreateReviewSession extends MUIBaseTheme {
     );
   }
 
+  renderDeadline() {
+    const {
+      currentSessionDeadline,
+      updateSessionDeadline,
+    } = this.props;
+
+    const c = this;
+
+    return (
+      <DatePicker
+        onChange={ (other, date) => updateSessionDeadline(date) }
+        ref={ ref => this.deadline = ref }
+        defaultDate={ currentSessionDeadline }
+        hintText={ DATEPICKER_PLACEHOLDER }
+        container="inline"
+        mode="landscape"/>
+    );
+  }
+
   render() {
 
     return (
       <div>
         <div>
+          <div>{ DATEPICKER_PLACEHOLDER }</div>
+          <div>{ this.renderDeadline() }</div>
           <div>peers</div>
           <ul>{ this.renderPeers() }</ul>
         </div>
@@ -131,6 +156,7 @@ class CreateReviewSession extends MUIBaseTheme {
 
 const mapStateToProps = state => {
   const {
+    currentSessionDeadline,
     questions,
     peers,
     userId,
@@ -138,6 +164,7 @@ const mapStateToProps = state => {
   } = state;
 
   return {
+    currentSessionDeadline,
     sessionPeers,
     questions,
     peers,

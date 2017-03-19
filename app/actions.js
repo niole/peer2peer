@@ -66,7 +66,7 @@ export function switchMainView(view) {
   };
 }
 
-export function updateSessionDeadline(newDeadLine) {
+export function updateSessionDeadline(newDeadline) {
   return {
     type: UPDATE_SESSION_DEADLINE,
     data: newDeadline,
