@@ -6,9 +6,9 @@ import SiteHeader from './SiteHeader.jsx';
 import {
   setCurrentSession,
   setSessionSubView,
+  switchMainView,
 } from '../actions.js';
 import {
-  VIEW_TO_HEADER_MAP,
   PICK_PEER_TO_REVIEW_VIEW,
   EDITABLE_QS_VIEW,
   READ_ONLY_QS_VIEW,
@@ -40,6 +40,7 @@ class SiteContainer extends MUIBaseTheme {
   constructor() {
     super();
 
+
     this.toSession = this.toSession.bind(this);
     this.toReviewed = this.toReviewed.bind(this);
     this.toQuestions = this.toQuestions.bind(this);
@@ -54,7 +55,6 @@ class SiteContainer extends MUIBaseTheme {
       [EDITABLE_QS_VIEW]: () => {},
       [READ_ONLY_QS_VIEW]: () => {},
     };
-
   }
 
   /**
@@ -167,14 +167,16 @@ class SiteContainer extends MUIBaseTheme {
 
   render() {
     const {
+      switchMainView,
       mainView,
     } = this.props;
 
     return (
       <div>
         <SiteHeader
-          headers={ allSubViews.map(v => VIEW_TO_HEADER_MAP[v]) }
-          focused={ VIEW_TO_HEADER_MAP[mainView] }
+          headerHandler={ switchMainView }
+          headers={ allSubViews }
+          focused={ mainView }
         />
         { this.getCurrentView(mainView) }
         <footer>
@@ -199,6 +201,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    switchMainView: view => dispatch(switchMainView(view)),
     setSessionSubView: view => dispatch(setSessionSubView(view)),
     setCurrentSession: (id, view) => dispatch(setCurrentSession(id, view)),
   };

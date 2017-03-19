@@ -28,18 +28,21 @@ class CreateReviewSession extends MUIBaseTheme {
     const {
       userId,
       updateAvailablePeers,
+      peers,
     } = this.props;
 
-    $.ajax({
-      url: `routes/peers/all/${userId}`,
-      success: peers => {
-        console.log('success');
-        updateAvailablePeers(peers)
-      },
-      error: e => {
-        console.error(e);
-      }
-    });
+    if (!peers.length) {
+      $.ajax({
+        url: `routes/peers/all/${userId}`,
+        success: peers => {
+          console.log('success');
+          updateAvailablePeers(peers)
+        },
+        error: e => {
+          console.error(e);
+        }
+      });
+    }
   }
 
   saveQuestion() {

@@ -38,11 +38,12 @@ class ReviewSessions extends MUIBaseTheme {
       let title = header;
 
       if (i === headerIndex) {
-        title = `*$header*`;
+        title = `*${header}*`;
       }
 
       return (
         <div
+          key={ header }
           onClick={ () => setSessionSubView(HEADER_TO_VIEW_MAP[header]) }
         >
           { title }
@@ -52,7 +53,7 @@ class ReviewSessions extends MUIBaseTheme {
   }
 
   getBlocks(data) {
-    return data.map(d => <div>{ JSON.stringify(d) }</div>);
+    return data.map(d => <div key={ d.id }>{ JSON.stringify(d) }</div>);
   }
 
   getContents() {

@@ -1,9 +1,13 @@
 import React, { PropTypes } from 'react';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
+import {
+  VIEW_TO_HEADER_MAP,
+} from '../constants.js';
 
 
-const { arrayOf, string } = PropTypes;
+const { arrayOf, func, string } = PropTypes;
 const propTypes = {
+  headerHandler: func.isRequired,
   headers: arrayOf(string.isRequired).isRequired,
   focused: string.isRequired,
 };
@@ -18,22 +22,26 @@ class SiteHeader extends MUIBaseTheme {
 
   renderHeaders() {
     const {
+      headerHandler,
       headers,
       focused,
     } = this.props;
 
-    return headers.map(header => {
+    return headers.map((header, i) => {
       const isFocused = header === focused;
       return (
-        <div key={ header } style={{ color: isFocused ? "green" : "black" }}>
-          { header }
+        <div
+          onClick={ () => headerHandler(header) }
+          key={ header }
+          style={{ color: isFocused ? "green" : "black" }}
+          >
+          { VIEW_TO_HEADER_MAP[header] }
         </div>
       );
     });
   }
 
   render() {
-
     return (
       <header>
         { this.renderHeaders() }
