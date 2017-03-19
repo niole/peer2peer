@@ -13,6 +13,8 @@ const Models = require('./server/Models.js');
 const config = require('./webpackconfig.js');
 const routes = require('./server/routes.js');
 
+
+const FIXTURE_USERIDS_PATTERN = '^/[0-9]+$';
 const User = Models.User;
 const compiler = webpack(config);
 
@@ -100,6 +102,6 @@ s.app.get('/login', function(req, res) {
   res.sendFile(path.join(__dirname, 'dist/login.html'));
 });
 
-s.app.get('^/[0-9]+$', function response(req, res) {
+s.app.get(FIXTURE_USERIDS_PATTERN, function response(req, res) {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });

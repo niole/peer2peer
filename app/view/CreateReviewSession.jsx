@@ -27,7 +27,7 @@ class CreateReviewSession extends MUIBaseTheme {
     } = this.props;
 
     $.ajax({
-      url: 'routes/peers/all/$userId',
+      url: `routes/peers/all/${userId}`,
       success: peers => {
         console.log('success');
         updateAvailablePeers(peers)

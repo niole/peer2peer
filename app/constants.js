@@ -21,6 +21,7 @@ export const EDITABLE_QS_VIEW = "editQuestionsView";
 export const READ_ONLY_QS_VIEW = "readOnlyQsView";
 export const PICK_PEER_TO_READ_VIEW = "pickPeerAndReadTheirReviews";
 export const READ_PEERS_REVIEWS_VIEW = "readPeersReviewsView";
+export const USER_ID_CAPTURE = /\/([0-9]+)$/;
 
 export const VIEW_TO_HEADER_MAP = {
   [EDITABLE_QS_VIEW]: EDITABLE_QS_LABEL,

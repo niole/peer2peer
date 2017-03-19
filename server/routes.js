@@ -10,14 +10,19 @@ const ReviewSession = models.ReviewSession;
 const Question = models.Question;
 
 router.get('/peers/all/:userId', function(req, res) {
-  User.findAll().then(function(users) {
+  User.findAll({
+    where: {
+      id: {
+        $ne: req.params.userId,
+      },
+    },
+  }).then(function(users) {
     res.send(users.map(function(u) { return u.dataValues; }));
   });
 });
 
 router.post('/reviewsession/create/', function (req, res) {
   const body = req.body;
-  console.log('body', body);
   const reviewers = body.reviewers;
   const deadline = body.deadline;
   const creatorId = body.userId;

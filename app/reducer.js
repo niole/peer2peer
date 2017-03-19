@@ -18,10 +18,13 @@ import {
   CREATE_SESSION_VIEW,
   PICK_SESSION_VIEW,
 } from './constants.js'
+import {
+  getUserId,
+} from './util.js';
 
 
 const initialState = {
-  userId: "",
+  userId: getUserId(),
   reviewerId: "",
   peers: [],
   sessionPeers: [],

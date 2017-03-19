@@ -81,7 +81,7 @@ const User = sequelize.define(
 );
 
 User.sync({force: true}).then(function() {
-  return ["2", "3", "4"].map(function(u) {
+  return ["1", "2", "3"].map(function(u) {
     return User.create({
       name: "user"+u,
       authId: u,
