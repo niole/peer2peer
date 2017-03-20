@@ -45,9 +45,23 @@ class CreateSessionButton extends MUIBaseTheme {
     });
   }
 
+  shouldDisable() {
+    const {
+      currentSessionDeadline,
+      questions,
+      sessionPeers,
+    } = this.props;
+
+    return !currentSessionDeadline || !questions.length || sessionPeers.length < 2;
+  }
+
   render() {
     return (
-      <button onClick={ this.submitSessionData }>{ CREATE_SESSION_BTN_LABEL }</button>
+      <button
+        disabled={ this.shouldDisable() }
+        onClick={ this.submitSessionData }>
+        { CREATE_SESSION_BTN_LABEL }
+      </button>
     );
   }
 }
