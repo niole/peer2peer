@@ -20,6 +20,7 @@ import {
   CREATE_SESSION_VIEW,
   ANSWER_QUESTIONS_VIEW,
 
+  READ_REVIEWS_ABOUT_LABEL,
   PICK_SESSION_LABEL,
   PICK_PEER_LABEL,
   EDITABLE_QS_LABEL,
@@ -37,21 +38,6 @@ const allSubViews = [
 
 
 class SiteContainer extends MUIBaseTheme {
-  constructor() {
-    super();
-
-
-    this.subViewToElementHandler = {
-      [PICK_SESSION_VIEW]: this.toSession,
-      [PICK_PEER_TO_REVIEW_VIEW]: this.toQuestions,
-      [PICK_PEER_TO_READ_VIEW]: this.toReviewed,
-      [READ_PEERS_REVIEWS_VIEW]: this.toQuestions,
-      [EDITABLE_QS_VIEW]: () => {},
-      [READ_ONLY_QS_VIEW]: () => {},
-    };
-  }
-
-
   /**
    * for viewing answered questions
    * for session creator
@@ -61,11 +47,10 @@ class SiteContainer extends MUIBaseTheme {
       <ReviewSessions
         headers={[
           PICK_SESSION_LABEL,
-          PICK_PEER_TO_READ_VIEW,
           READ_PEERS_REVIEWS_LABEL,
+          READ_REVIEWS_ABOUT_LABEL,
           VIEW_ONLY_QS_LABEL,
         ]}
-        elementClickHandlers={ this.subViewToElementHandler }
       />
     );
   }
@@ -78,7 +63,6 @@ class SiteContainer extends MUIBaseTheme {
           PICK_PEER_LABEL,
           EDITABLE_QS_LABEL,
         ]}
-        elementClickHandlers={ this.subViewToElementHandler }
       />
     );
   }
@@ -103,7 +87,6 @@ class SiteContainer extends MUIBaseTheme {
         return <CreateSessionButton/>;
       case ANSWER_QUESTIONS_VIEW:
         return <SubmitAnswersButton/>;
-      case VIEW_ANSWERS_VIEW:
       default:
         return <div/>;
     }

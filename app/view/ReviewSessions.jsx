@@ -25,11 +25,10 @@ import {
 } from '../constants.js';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
 
-const { object, string, arrayOf } = PropTypes;
 
+const { string, arrayOf } = PropTypes;
 const propTypes = {
   headers: arrayOf(string.isRequired).isRequired,
-  elementClickHandlers: object.isRequired,
 };
 
 class ReviewSessions extends MUIBaseTheme {
@@ -43,6 +42,16 @@ class ReviewSessions extends MUIBaseTheme {
     this.addAnswer = this.addAnswer.bind(this);
     this.getReviewSessionToRead = this.getReviewSessionToRead.bind(this);
     this.getReviewSessionToEdit = this.getReviewSessionToEdit.bind(this);
+
+    this.elementClickHandlers = {
+      [PICK_SESSION_VIEW]: () => this.ifCreatorElseReviewer(this.getReviewSessionToRead, this.getReviewSessionToEdit),
+      [PICK_PEER_TO_REVIEW_VIEW]: this.toSession,
+      [PICK_PEER_TO_READ_VIEW]: this.toSession,
+      [READ_PEERS_REVIEWS_VIEW]: this.toReviewed,
+      [EDITABLE_QS_VIEW]: e => { e.preventDefault() },
+      [READ_ONLY_QS_VIEW]: e => { e.preventDefault() },
+    };
+
   }
 
   componentDidMount() {
@@ -59,7 +68,6 @@ class ReviewSessions extends MUIBaseTheme {
     $.ajax({
       url,
       success: d => {
-        console.error('success');
         setAvailableSessions(d);
       },
       error: err => {
@@ -78,7 +86,6 @@ class ReviewSessions extends MUIBaseTheme {
     $.ajax({
       url,
       success: d => {
-        console.log('success');
         setAvailableSessions(d);
       },
       error: err => {
@@ -93,7 +100,7 @@ class ReviewSessions extends MUIBaseTheme {
    * or sends user to view with all peers in session
    * except self
    */
-  toSession(sessionId) {
+  toSession(sessionId = this.props.currentSessionId) {
     const {
       userId,
       setCurrentSession,
@@ -119,7 +126,7 @@ class ReviewSessions extends MUIBaseTheme {
    * review session creator can look at peers reviewed by
    * selected peer
    */
-  toReviewed(peerId) {
+  toReviewed(peerId = this.props.reviewerId) {
     const {
       currentSessionId,
       setReviewer,
@@ -187,7 +194,6 @@ class ReviewSessions extends MUIBaseTheme {
     const {
       sessionView,
       headers,
-      setSessionSubView,
     } = this.props;
     const headerIndex = headers.indexOf(VIEW_TO_HEADER_MAP[sessionView])
     const usedHeaders = headers.slice(0, headerIndex+1);
@@ -203,7 +209,10 @@ class ReviewSessions extends MUIBaseTheme {
         <div
           key={ header }
           title="click to revisit this section"
-          onClick={ () => setSessionSubView(HEADER_TO_VIEW_MAP[header]) }
+          onClick={ e => {
+            e.preventDefault();
+            this.elementClickHandlers[HEADER_TO_VIEW_MAP[header]]();
+          }}
         >
           { title }
         </div>
@@ -219,7 +228,10 @@ class ReviewSessions extends MUIBaseTheme {
     return sessions.map(d => (
         <li
           title="click to start reviewing your peers"
-          onClick={ () => this.toSession(d.id) }
+          onClick={ e => {
+            e.preventDefault();
+            this.toSession(d.id)
+          }}
           key={ d.id }>
           session: { d.id }
           deadline: { d.deadline }
@@ -240,7 +252,10 @@ class ReviewSessions extends MUIBaseTheme {
       return peers.map(d => (
           <li
             title={ `click to review ${d.name}` }
-            onClick={ () => this.toQuestions(d.id) }
+            onClick={ e => {
+              e.preventDefault();
+              this.toQuestions(d.id)
+            }}
             key={ d.id }>
             peer: { d.name }
           </li>
@@ -252,7 +267,10 @@ class ReviewSessions extends MUIBaseTheme {
       return peers.map(d => (
           <li
             title="click to read peer's completed reviews"
-            onClick={ () => this.getPeerClickHandler()(d.id) }
+            onClick={ e => {
+              e.preventDefault();
+              this.getPeerClickHandler()(d.id)
+            }}
             key={ d.id }>
             name: { d.name }
           </li>
@@ -311,7 +329,10 @@ class ReviewSessions extends MUIBaseTheme {
           ref={ ref => this[`answer-${i}`] = ref }
           placeholder="answer the question"/>
         <button
-          onClick={() => this.addAnswer(i) }
+          onClick={ e => {
+            e.preventDefault();
+            this.addAnswer(i)
+          }}
         >
           Save
         </button>
@@ -324,7 +345,7 @@ class ReviewSessions extends MUIBaseTheme {
       questions,
       answers,
     } = this.props;
-    console.log('answers', answers);
+
     if (answers.length) {
       return questions.map((q, i) => (
         <li>
@@ -340,8 +361,6 @@ class ReviewSessions extends MUIBaseTheme {
     const {
       sessionView,
     } = this.props;
-
-    console.log('sessionView', sessionView);
 
     switch (sessionView) {
       case PICK_SESSION_VIEW:

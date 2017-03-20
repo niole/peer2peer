@@ -69,7 +69,11 @@ export default function appReducer(state = initialState, action) {
 
     case SET_AVAILABLE_SESSIONS:
       return Object.assign({}, state, {
-        sessions: action.data,
+        sessionView: action.data.subView,
+        sessions: action.data.sessions,
+        reviewedId: action.data.reviewedId,
+        reviewerId: action.data.reviewerId,
+        peers: action.data.peers,
       });
 
     case SUBMIT_NEW_SESSION:
@@ -104,6 +108,12 @@ export default function appReducer(state = initialState, action) {
     case SWITCH_MAIN_VIEW:
       return Object.assign({}, state, {
         mainView: action.data,
+        peers: [],
+        reviewerId: "",
+        reviewedId: "",
+        questions: [],
+        answers: [],
+        sessionView: PICK_SESSION_VIEW,
       });
 
     case UPDATE_SESSION_DEADLINE:

@@ -1,3 +1,6 @@
+import {
+  PICK_SESSION_VIEW,
+} from './constants.js';
 export const UPDATE_PEERS_IN_SESSION = "updatePeersInSession";
 export const UPDATE_USERID = "updateuserId";
 export const REPLACE_QUESTIONS = "replaceQuestions";
@@ -48,10 +51,16 @@ export function setQuestionSubview(questionType, qA, peerId) {
   };
 }
 
-export function setAvailableSessions(sessions) {
+export function setAvailableSessions(sessions, peers = [], reviewerId = "", reviewedId = "", subView = PICK_SESSION_VIEW) {
   return {
     type: SET_AVAILABLE_SESSIONS,
-    data: sessions,
+    data: {
+      subView,
+      sessions,
+      reviewedId,
+      reviewerId,
+      peers,
+    },
   };
 }
 
