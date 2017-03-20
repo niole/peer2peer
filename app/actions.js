@@ -15,7 +15,19 @@ export const SUBMIT_NEW_SESSION = "submitNewSession";
 export const SET_AVAILABLE_SESSIONS = "setAvailableSessions";
 export const SET_QS_SUBVIEW = "setQuestionsSubview";
 export const SUBMIT_ANSWERS = "submitAnswers";
+export const SET_REVIEWER = "setReviewer";
 
+
+export function setReviewer(reviewerId, reviewedUsers, view) {
+  return {
+    type: SET_REVIEWER,
+    data: {
+      reviewerId,
+      reviewedUsers,
+      view,
+    },
+  };
+}
 
 export function submitAnswers() {
   return {
@@ -24,13 +36,14 @@ export function submitAnswers() {
   };
 }
 
-export function setQuestionSubview(questionType, questions, peerId) {
+export function setQuestionSubview(questionType, qA, peerId) {
   return {
     type: SET_QS_SUBVIEW,
     data: {
       peerId,
       questionType,
-      questions,
+      questions: qA.questions,
+      answers: qA.answers || [],
     },
   };
 }

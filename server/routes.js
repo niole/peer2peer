@@ -11,6 +11,61 @@ const Question = models.Question;
 const sequelize = models.sequelize;
 
 
+router.get('/questions/answers/:reviewerId/:peerId/:sessionId', function(req, res) {
+  const currentSessionId = req.params.sessionId;
+  const peerId = req.params.peerId; //see what reviews have been created
+  const reviewerId = req.params.reviewerId;
+
+  Question.findAll({
+    where: {
+      reviewSessionId: currentSessionId,
+    },
+  }).then(function(qs) {
+    Answer.findAll({
+      where: {
+        reviewerId: reviewerId,
+        reviewSessionId: currentSessionId,
+        peerId: peerId,
+      },
+    }).then(function(as) {
+      res.send({
+        answers: as.map(a => a.dataValues),
+        questions: qs.map(q => q.dataValues),
+      });
+    });
+  });
+
+});
+
+router.get('/reviewed/:currentSessionId/:peerId/', function(req, res) {
+  //get all peers that are part of this session and have reviews by this peer
+  const currentSessionId = req.params.currentSessionId;
+  const peerId = req.params.peerId; //see what reviews have been created
+
+  Reviewer.findAll({
+    where: {
+      reviewSessionId: currentSessionId,
+      userId: {
+        $ne: peerId,
+      },
+    },
+  }).then(function(as) {
+    const reviewed = as.map(a => a.dataValues.userId);
+
+    User.findAll({
+      where: {
+        id: {
+          $in: reviewed,
+        },
+      },
+    }).then(function(us) {
+      res.send(us.map(u => u.dataValues));
+    });
+
+  });
+
+});
+
 router.post('/answers/submit/', function(req, res) {
   const answers = req.body.answers;
 
@@ -27,7 +82,7 @@ router.get('/questions/:sessionId/', function(req, res) {
       reviewSessionId: sessionId,
     }
   }).then(function(qs) {
-    res.send(qs.map(q => q.dataValues));
+    res.send({ questions: qs.map(q => q.dataValues) });
   });
 
 });
@@ -71,7 +126,20 @@ router.get('/reviewers/:userId/:sessionId/', function(req, res) {
 
 });
 
-router.get('/reviewsession/:userId/', function(req, res) {
+router.get('/reviewsession/createdby/:userId/', function(req, res) {
+  const userId = req.params.userId;
+
+  ReviewSession.findAll({
+    where: {
+      createdBy: userId,
+    },
+  }).then(function(rs) {
+    res.send(rs.map(r => r.dataValues));
+  });
+
+});
+
+router.get('/reviewsession/includes/:userId/', function(req, res) {
   /**
     gets review sessions that user is included in
    */

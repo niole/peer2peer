@@ -1,4 +1,5 @@
 import {
+  SET_REVIEWER,
   SUBMIT_ANSWERS,
   SET_QS_SUBVIEW,
   UPDATE_AVAILABLE_PEERS,
@@ -27,7 +28,7 @@ import {
 
 
 const initialState = {
-  userId: getUserId(),
+  userId: getUserId(), //TODO workaround
   reviewerId: "",
   reviewedId: "",
   peers: [],
@@ -44,6 +45,13 @@ const initialState = {
 
 export default function appReducer(state = initialState, action) {
   switch (action.type) {
+    case SET_REVIEWER:
+      return Object.assign({}, state, {
+        reviewerId: action.data.reviewerId,
+        peers: action.data.reviewedUsers,
+        sessionView: action.data.view,
+      });
+
     case SUBMIT_ANSWERS:
       return Object.assign({}, state, {
         reviewedId: "",
@@ -56,6 +64,7 @@ export default function appReducer(state = initialState, action) {
         sessionView: action.data.questionType,
         questions: action.data.questions,
         reviewedId: action.data.peerId,
+        answers: action.data.answers,
       });
 
     case SET_AVAILABLE_SESSIONS:
