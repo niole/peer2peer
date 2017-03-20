@@ -15,6 +15,7 @@ export const EDITABLE_QS_LABEL = "Answer Questions";
 export const VIEW_ONLY_QS_LABEL = "View Answers";
 export const READ_PEERS_REVIEWS_LABEL = "Read Peer's Reviews";
 export const CREATE_SESSION_LABEL = "Create a Review Session";
+export const SUBMIT_ANSWERS_LABEL = "Submit Answers";
 
 /* review session views */
 export const PICK_SESSION_VIEW = "pickSession";

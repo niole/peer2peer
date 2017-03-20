@@ -1,4 +1,5 @@
 import {
+  SUBMIT_ANSWERS,
   SET_QS_SUBVIEW,
   UPDATE_AVAILABLE_PEERS,
   SET_SESSION_SUB_VIEW,
@@ -43,6 +44,13 @@ const initialState = {
 
 export default function appReducer(state = initialState, action) {
   switch (action.type) {
+    case SUBMIT_ANSWERS:
+      return Object.assign({}, state, {
+        reviewedId: "",
+        sessionView: PICK_PEER_TO_REVIEW_VIEW,
+        answers: [],
+      });
+
     case SET_QS_SUBVIEW:
       return Object.assign({}, state, {
         sessionView: action.data.questionType,

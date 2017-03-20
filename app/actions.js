@@ -14,7 +14,15 @@ export const REMOVE_QUESTION = "removeQuestion";
 export const SUBMIT_NEW_SESSION = "submitNewSession";
 export const SET_AVAILABLE_SESSIONS = "setAvailableSessions";
 export const SET_QS_SUBVIEW = "setQuestionsSubview";
+export const SUBMIT_ANSWERS = "submitAnswers";
 
+
+export function submitAnswers() {
+  return {
+    type: SUBMIT_ANSWERS,
+    data: null,
+  };
+}
 
 export function setQuestionSubview(questionType, questions, peerId) {
   return {

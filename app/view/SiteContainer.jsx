@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
 import CreateSessionButton from './CreateSessionButton.jsx';
+import SubmitAnswersButton from './SubmitAnswersButton.jsx';
 import SiteHeader from './SiteHeader.jsx';
 import {
   setCurrentSession,
@@ -96,6 +97,18 @@ class SiteContainer extends MUIBaseTheme {
 
   }
 
+  getSubmitButton(mainView) {
+    switch (mainView) {
+      case CREATE_SESSION_VIEW:
+        return <CreateSessionButton/>;
+      case ANSWER_QUESTIONS_VIEW:
+        return <SubmitAnswersButton/>;
+      case VIEW_ANSWERS_VIEW:
+      default:
+        return <div/>;
+    }
+  }
+
   render() {
     const {
       switchMainView,
@@ -111,7 +124,7 @@ class SiteContainer extends MUIBaseTheme {
         />
         { this.getCurrentView(mainView) }
         <footer>
-          <CreateSessionButton/>
+          { this.getSubmitButton(mainView) }
         </footer>
       </div>
 

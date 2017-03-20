@@ -10,6 +10,15 @@ const ReviewSession = models.ReviewSession;
 const Question = models.Question;
 const sequelize = models.sequelize;
 
+
+router.post('/answers/submit/', function(req, res) {
+  const answers = req.body.answers;
+
+  Answer.bulkCreate(answers).then(function() {
+    res.send(true);
+  });
+});
+
 router.get('/questions/:sessionId/', function(req, res) {
   const sessionId = req.params.sessionId;
 
