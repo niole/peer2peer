@@ -43,7 +43,7 @@ class ReviewSessions extends MUIBaseTheme {
     this.getReviewSessionToRead = this.getReviewSessionToRead.bind(this);
     this.getReviewSessionToEdit = this.getReviewSessionToEdit.bind(this);
 
-    this.elementClickHandlers = {
+    this.breadcrumbClickHandlers = {
       [PICK_SESSION_VIEW]: () => this.ifCreatorElseReviewer(this.getReviewSessionToRead, this.getReviewSessionToEdit),
       [PICK_PEER_TO_REVIEW_VIEW]: this.toSession,
       [PICK_PEER_TO_READ_VIEW]: this.toSession,
@@ -211,7 +211,7 @@ class ReviewSessions extends MUIBaseTheme {
           title="click to revisit this section"
           onClick={ e => {
             e.preventDefault();
-            this.elementClickHandlers[HEADER_TO_VIEW_MAP[header]]();
+            this.breadcrumbClickHandlers[HEADER_TO_VIEW_MAP[header]]();
           }}
         >
           { title }

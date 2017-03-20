@@ -20,8 +20,6 @@ class CreateSessionButton extends MUIBaseTheme {
     const {
       answeredAll,
       answers,
-      reviewedId,
-      userId,
     } = this.props;
 
     if (answeredAll) {
@@ -43,7 +41,11 @@ class CreateSessionButton extends MUIBaseTheme {
 
   render() {
     return (
-      <button onClick={ this.submitSessionData }>{ SUBMIT_ANSWERS_LABEL }</button>
+      <button
+        disabled={ !this.props.answeredAll }
+        onClick={ this.submitSessionData }>
+        { SUBMIT_ANSWERS_LABEL }
+      </button>
     );
   }
 }
@@ -57,7 +59,7 @@ const mapStateToProps = state => {
   } = state;
 
   return {
-    answeredAll: answers.length === questions.length,
+    answeredAll: answers.length === questions.length && questions.length > 0,
     answers,
     reviewedId,
     userId,
