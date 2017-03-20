@@ -88,13 +88,7 @@ router.get('/questions/:sessionId/', function(req, res) {
 });
 
 router.get('/peers/all/:userId', function(req, res) {
-  User.findAll({
-    where: {
-      id: {
-        $ne: req.params.userId,
-      },
-    },
-  }).then(function(users) {
+  User.findAll().then(function(users) {
     res.send(users.map(function(u) { return u.dataValues; }));
   });
 });
