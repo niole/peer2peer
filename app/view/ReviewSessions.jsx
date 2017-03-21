@@ -136,7 +136,6 @@ class ReviewSessions extends MUIBaseTheme {
     $.ajax({
       url,
       success: reviewed => {
-        console.log('success');
         setReviewer(peerId, reviewed, READ_PEERS_REVIEWS_VIEW);
       },
       error: err => {

@@ -36,7 +36,6 @@ class CreateSessionButton extends MUIBaseTheme {
         url,
         data: { answers },
         success: reviewed => {
-          console.log('success');
           submitAnswers(reviewed);
         },
         error: err => {
