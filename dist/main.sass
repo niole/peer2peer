@@ -1,0 +1,113 @@
+body
+  margin: 0
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif
+  color: rgba(0, 0, 0, 0.952941)
+  height: 100%
+  cursor: default
+
+header
+  width: 100%
+  top: 0
+  height: 80px
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2)
+
+footer
+  width: 100%
+  position: absolute
+  bottom: 0
+  height: 100px
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2)
+
+#login-link
+  width: 245px
+  display: block
+  margin: auto
+
+a
+  border: 1px solid
+  padding: 5px
+  border-radius: 3px
+  color: deepskyblue
+
+  &:hover
+    color: lightblue
+    background: midnightblue
+
+  &:link
+    text-decoration: none
+
+  &:visited
+    text-decoration: none
+
+  &:active
+    text-decoration: none
+
+#logout-link
+  top: 10px
+  position: absolute
+  z-index: 2
+  right: 10px
+  background: white
+  font-size: .9em
+
+  &:hover
+    background: midnightblue
+
+#login-container
+  padding: 15%
+  width: 310px
+  margin: auto
+  border-radius: 3px
+
+#q-container
+  width: 307px
+  margin: auto
+  padding-top: 65px
+
+.dot
+  background: red
+  border-radius: 10px
+  width: 20px
+  height: 20px
+  margin: 5px
+  display: inline-block
+  position: relative
+  -webkit-animation: mymove 5s infinite /* Safari 4.0 - 8.0 */
+  animation: mymove 5s infinite
+
+#one
+  -webkit-animation: one 3s infinite
+  animation: one 3s infinite
+
+#two
+  -webkit-animation: two 2s infinite
+  animation: two 2s infinite
+  -webkit-animation-delay: 1s /* Safari 4.0 - 8.0 */
+  animation-delay: 1s
+  background: lightblue
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes one
+  from
+    left: 50px
+  to
+    left: 300px
+
+@keyframes two
+  from
+    left: 0px
+  to
+    left: 250px
+
+#login-header
+  width: 307px
+  font-size: 3em
+
+.main-view-tab
+  display: inline-block
+  width: 33%
+  text-align: center
+  padding: 1em 0 1em 0
+
+  &.focused
+    border-bottom: 1px solid

@@ -28,12 +28,12 @@ class SiteHeader extends MUIBaseTheme {
     } = this.props;
 
     return headers.map((header, i) => {
-      const isFocused = header === focused;
+      const focusedClass = header === focused ? " focused" : "";
       return (
         <div
+          className={ `main-view-tab${focusedClass}` }
           onClick={ () => headerHandler(header) }
           key={ header }
-          style={{ color: isFocused ? "green" : "black" }}
           >
           { VIEW_TO_HEADER_MAP[header] }
         </div>
