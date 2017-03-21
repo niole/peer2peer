@@ -198,14 +198,12 @@ class ReviewSessions extends MUIBaseTheme {
     const usedHeaders = headers.slice(0, headerIndex+1);
 
     return usedHeaders.map((header, i) => {
-      let title = header;
-
-      if (i === headerIndex) {
-        title = `*${header}*`;
-      }
+      const title = header;
+      const focusedClass = i === headerIndex ? " focused" : "";
 
       return (
         <div
+          className={ `bc-header${focusedClass}` }
           key={ header }
           title="click to revisit this section"
           onClick={ e => {
@@ -330,23 +328,32 @@ class ReviewSessions extends MUIBaseTheme {
       questions,
     } = this.props;
 
-    return questions.map((q, i) => (
-      <li key={ q.id }>
-        question: { q.content }
-        answer:
-        <input
-          ref={ ref => this[`answer-${i}`] = ref }
-          placeholder="answer the question"/>
-        <button
-          onClick={ e => {
-            e.preventDefault();
-            this.addAnswer(i)
-          }}
-        >
-          Save
-        </button>
-      </li>
-    ));
+    return (
+      <div>
+        <div>
+          <div className="qa-section">questions</div>
+          <div className="qa-section">answers</div>
+        </div>
+        { questions.map((q, i) => (
+          <li key={ q.id }>
+            <div className="qa-section">{ q.content }</div>
+            <div className="qa-section">
+              <input
+                ref={ ref => this[`answer-${i}`] = ref }
+                placeholder="answer the question"/>
+              <button
+                onClick={ e => {
+                  e.preventDefault();
+                  this.addAnswer(i)
+                }}
+              >
+                Save
+              </button>
+            </div>
+          </li>
+        )) }
+      </div>
+    );
   }
 
   renderReadableQs() {
@@ -356,12 +363,20 @@ class ReviewSessions extends MUIBaseTheme {
     } = this.props;
 
     if (answers.length) {
-      return questions.map((q, i) => (
-        <li key={ q.id }>
-          question: { q.content }
-          answer: { answers.find(a => a.questionId === q.id.toString()).content }
-        </li>
-      ));
+      return (
+        <div>
+          <div>
+            <div className="qa-section">questions</div>
+            <div className="qa-section">answers</div>
+          </div>
+          { questions.map((q, i) => (
+              <li key={ q.id }>
+                <div className="qa-section">{ q.content }</div>
+                <div className="qa-section">{ answers.find(a => a.questionId === q.id.toString()).content }</div>
+              </li>
+            )) }
+        </div>
+      );
     }
     return "This user has not completed this review";
   }

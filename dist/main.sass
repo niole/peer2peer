@@ -5,6 +5,9 @@ body
   height: 100%
   cursor: default
 
+li
+  list-style: none
+
 input
   padding: 1em
   border-radius: 3px
@@ -19,6 +22,9 @@ button
   border-radius: 3px
   border: 1px solid white
   background: whitesmoke
+
+  &:focus
+    outline: none
 
 header
   width: 100%
@@ -142,7 +148,6 @@ a
   margin: auto
 
 .peer-to-pick
-  list-style: none
   display: inline-block
   padding: .5em 1em
   border: 1px solid white
@@ -154,3 +159,15 @@ a
 
 .footer-submit-button
   margin: 3em
+
+.bc-header
+  display: inline-block
+  padding: 1em
+
+  &.focused
+    border-bottom: 1px solid
+
+.qa-section
+  display: inline-block
+  width: 50%
+  padding: 1em 0
