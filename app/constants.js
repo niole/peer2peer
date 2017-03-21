@@ -17,6 +17,10 @@ export const READ_PEERS_REVIEWS_LABEL = "Read Peer's Reviews";
 export const CREATE_SESSION_LABEL = "Create a Review Session";
 export const SUBMIT_ANSWERS_LABEL = "Submit Answers";
 export const READ_REVIEWS_ABOUT_LABEL = "Read Reviews By";
+export const REVIEW_SESSIONS_SUB_HEADER = "review sessions";
+export const QUESTIONS_SUB_HEADER = "questions";
+export const ANSWERS_SUB_HEADER = "answers";
+export const REVIEW_DEADLINE_SUB_HEADER = "deadline";
 
 /* review session views */
 export const PICK_SESSION_VIEW = "pickSession";
@@ -49,3 +53,10 @@ export const VIEW_TO_HEADER_MAP = (function() {
   }
   return base;
 })();
+
+export const REVISIT_SECTION_TITLE = "click to revisit this section";
+export const REVIEW_PEERS_TITLE = "click to start reviewing your peers";
+export const ANSWER_Q_PLACEHOLDER = "answer the question";
+export const READ_PEERS_REVIEWS_TITLES = "click to read peer's completed reviews";
+export const NOT_COMPLETED_REVIEW_HEADER = "This user has not completed this review";
+export const NO_SESSIONS_TO_REVIEW_HEADER = "You have no sessions to review";

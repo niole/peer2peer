@@ -10,6 +10,14 @@ import {
   addAnswer,
 } from '../actions.js';
 import {
+  REVIEW_DEADLINE_SUB_HEADER,
+  NO_SESSIONS_TO_REVIEW_HEADER,
+  NOT_COMPLETED_REVIEW_HEADER,
+  READ_PEERS_REVIEWS_TITLES,
+  ANSWER_Q_PLACEHOLDER,
+  ANSWERS_SUB_HEADER,
+  QUESTIONS_SUB_HEADER,
+  REVIEW_SESSIONS_SUB_HEADER,
   ANSWER_QUESTIONS_VIEW,
   VIEW_ANSWERS_VIEW,
   PICK_SESSION_VIEW,
@@ -18,6 +26,8 @@ import {
   READ_ONLY_QS_VIEW,
   PICK_PEER_TO_READ_VIEW,
   READ_PEERS_REVIEWS_VIEW,
+  REVISIT_SECTION_TITLE,
+  REVIEW_PEERS_TITLE,
 } from '../constants.js';
 import {
   VIEW_TO_HEADER_MAP,
@@ -221,7 +231,7 @@ class ReviewSessions extends MUIBaseTheme {
         <div
           className={ `bc-header${focusedClass}` }
           key={ header }
-          title="click to revisit this section"
+          title={ REVISIT_SECTION_TITLE }
           onClick={ e => {
             e.preventDefault();
             this.breadcrumbClickHandlers[HEADER_TO_VIEW_MAP[header]]();
@@ -241,18 +251,27 @@ class ReviewSessions extends MUIBaseTheme {
       sessions,
     } = this.props;
 
-    return sessions.map(d => (
-        <li
-          title="click to start reviewing your peers"
-          onClick={ e => {
-            e.preventDefault();
-            this.toSession(d.id)
-          }}
-          key={ d.id }>
-          session: { d.id }
-          deadline: { d.deadline }
-        </li>
-      )
+
+    return (
+      <div>
+        { this.renderSubviewHeaders(REVIEW_SESSIONS_SUB_HEADER, REVIEW_DEADLINE_SUB_HEADER) }
+        {
+          sessions.length ?
+          sessions.map(d => (
+            <li
+              title={ REVIEW_PEERS_TITLE }
+              onClick={ e => {
+                e.preventDefault();
+                this.toSession(d.id)
+              }}
+              key={ d.id }>
+              <div className="qa-section">{ d.id }</div>
+              <div className="qa-section">{ d.deadline }</div>
+            </li>
+          )) :
+          NO_SESSIONS_TO_REVIEW_HEADER
+        }
+      </div>
     );
   }
 
@@ -289,7 +308,7 @@ class ReviewSessions extends MUIBaseTheme {
               }
             }}
             key={ d.id }>
-            peer: { d.name }
+            <div className="qa-header">{ d.name }</div>
           </li>
         );
       });
@@ -298,13 +317,13 @@ class ReviewSessions extends MUIBaseTheme {
     if (mainView === VIEW_ANSWERS_VIEW) {
       return peers.map(d => (
           <li
-            title="click to read peer's completed reviews"
+            title={ READ_PEERS_REVIEWS_TITLES }
             onClick={ e => {
               e.preventDefault();
               this.getPeerClickHandler()(d.id)
             }}
             key={ d.id }>
-            name: { d.name }
+            <div className="qa-header">{ d.name }</div>
           </li>
         )
       );
@@ -355,6 +374,15 @@ class ReviewSessions extends MUIBaseTheme {
     addAnswer(answer);
   }
 
+  renderSubviewHeaders(header1, header2 = "") {
+    return (
+        <div>
+          <div className="qa-section">{ header1 }</div>
+          <div className="qa-section">{ header2 }</div>
+        </div>
+    );
+  }
+
   /**
    * renders editable answers views with questions
    */
@@ -365,17 +393,14 @@ class ReviewSessions extends MUIBaseTheme {
 
     return (
       <div>
-        <div>
-          <div className="qa-section">questions</div>
-          <div className="qa-section">answers</div>
-        </div>
+        { this.renderSubviewHeaders(QUESTIONS_SUB_HEADER, ANSWERS_SUB_HEADER) }
         { questions.map((q, i) => (
           <li key={ q.id }>
             <div className="qa-section">{ q.content }</div>
             <div className="qa-section">
               <input
                 ref={ ref => this[`answer-${i}`] = ref }
-                placeholder="answer the question"/>
+                placeholder={ ANSWER_Q_PLACEHOLDER }/>
               <button
                 onClick={ e => {
                   e.preventDefault();
@@ -403,10 +428,7 @@ class ReviewSessions extends MUIBaseTheme {
     if (answers.length) {
       return (
         <div>
-          <div>
-            <div className="qa-section">questions</div>
-            <div className="qa-section">answers</div>
-          </div>
+          { this.renderSubviewHeaders(QUESTIONS_SUB_HEADER, ANSWERS_SUB_HEADER) }
           { questions.map((q, i) => (
               <li key={ q.id }>
                 <div className="qa-section">{ q.content }</div>
@@ -416,7 +438,7 @@ class ReviewSessions extends MUIBaseTheme {
         </div>
       );
     }
-    return "This user has not completed this review";
+    return NOT_COMPLETED_REVIEW_HEADER;
   }
 
   /**
