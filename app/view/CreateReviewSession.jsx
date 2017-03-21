@@ -74,9 +74,10 @@ class CreateReviewSession extends MUIBaseTheme {
 
     return peers.map(p => {
         const isInSession = !!sessionPeers.find(sp => sp.id === p.id);
+        const inSessionClass = isInSession ? " in-session" : "";
         return (
           <li
-            style={{ color: isInSession ? "green" : "black" }}
+            className={ `peer-to-pick${inSessionClass}` }
             key={ p.id }
             onClick={
               isInSession ?
@@ -116,12 +117,14 @@ class CreateReviewSession extends MUIBaseTheme {
     const c = this;
 
     return (
-      <DatePicker
-        onChange={ (other, date) => updateSessionDeadline(date) }
-        defaultDate={ currentSessionDeadline }
-        hintText={ DATEPICKER_PLACEHOLDER }
-        container="inline"
-        mode="landscape"/>
+      <div id="date-picker">
+        <DatePicker
+          onChange={ (other, date) => updateSessionDeadline(date) }
+          defaultDate={ currentSessionDeadline }
+          hintText={ DATEPICKER_PLACEHOLDER }
+          container="inline"
+          mode="landscape"/>
+      </div>
     );
   }
 
@@ -130,24 +133,22 @@ class CreateReviewSession extends MUIBaseTheme {
     return (
       <div>
         <div>
-          <div>{ DATEPICKER_PLACEHOLDER }</div>
+          <h2 className="create-session-header">{ DATEPICKER_PLACEHOLDER }</h2>
           <div>{ this.renderDeadline() }</div>
-          <div>peers</div>
+          <h2 className="create-session-header">pick peers</h2>
           <ul>{ this.renderPeers() }</ul>
-        </div>
-        <div>
-            <div>questions</div>
-            <div>
-              <ol>{ this.renderQuestions() }</ol>
-              <input
-                ref={(ref) => this.questioninput = ref }
-                placeholder="add a question"/>
-              <button
-                onClick={ this.saveQuestion }
-              >
-                Save
-              </button>
-            </div>
+          <h2 className="create-session-header">create questions</h2>
+          <div className="create-questions-container">
+            <ol>{ this.renderQuestions() }</ol>
+            <input
+              ref={(ref) => this.questioninput = ref }
+              placeholder="add a question"/>
+            <button
+              onClick={ this.saveQuestion }
+            >
+              Save
+            </button>
+          </div>
         </div>
       </div>
     );

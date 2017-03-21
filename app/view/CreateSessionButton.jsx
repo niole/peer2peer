@@ -57,6 +57,7 @@ class CreateSessionButton extends MUIBaseTheme {
   render() {
     return (
       <button
+        className="footer-submit-button"
         disabled={ this.shouldDisable() }
         onClick={ this.submitSessionData }>
         { CREATE_SESSION_BTN_LABEL }

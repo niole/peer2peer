@@ -5,6 +5,21 @@ body
   height: 100%
   cursor: default
 
+input
+  padding: 1em
+  border-radius: 3px
+  border: 1px solid whitesmoke
+  margin: 1em
+
+  &:focus
+    outline: none
+
+button
+  padding: 1em 2em
+  border-radius: 3px
+  border: 1px solid white
+  background: whitesmoke
+
 header
   width: 100%
   top: 0
@@ -17,6 +32,7 @@ footer
   bottom: 0
   height: 100px
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2)
+  text-align: center
 
 #login-link
   width: 245px
@@ -107,7 +123,34 @@ a
   display: inline-block
   width: 33%
   text-align: center
-  padding: 1em 0 1em 0
+  padding: 1em 0
 
   &.focused
     border-bottom: 1px solid
+
+.create-session-header
+  text-align: center
+  border: 1px solid
+  padding: 1em
+
+#date-picker
+  width: 255px
+  margin: auto
+
+.create-questions-container
+  width: 75%
+  margin: auto
+
+.peer-to-pick
+  list-style: none
+  display: inline-block
+  padding: .5em 1em
+  border: 1px solid white
+  border-radius: 3px
+  box-shadow: 2px 2px 0px 0px whitesmoke
+
+  &.in-session
+    background: whitesmoke
+
+.footer-submit-button
+  margin: 3em
