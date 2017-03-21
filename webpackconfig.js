@@ -29,8 +29,6 @@ const config = {
     ],
   },
   plugins: [
-
-    //new ExtractTextPlugin({ filename: 'dist/main.css', allChunks: true }),
     new ExtractTextPlugin({ filename: path.join(__dirname, 'dist/main.css'), allChunks: true }),
   ],
 };
