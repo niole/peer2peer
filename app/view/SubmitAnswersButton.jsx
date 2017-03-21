@@ -16,12 +16,6 @@ class CreateSessionButton extends MUIBaseTheme {
     this.submitSessionData = this.submitSessionData.bind(this);
   }
 
-  componentDidMount() {
-    /**
-     * check to see if user has answered these questions already
-     */
-  }
-
   submitSessionData() {
     const {
       submitAnswers,
