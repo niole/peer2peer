@@ -120,6 +120,29 @@ const Answer = sequelize.define(
 
 Answer.sync({force: true});
 
+const Reviewed = sequelize.define(
+  'reviewed',
+  {
+    reviewerId: {
+      type: Sequelize.STRING,
+      field: 'reviewerid'
+    },
+    reviewedId: {
+      type: Sequelize.STRING,
+      field: 'reviewedid'
+    },
+    sessionId: {
+      type: Sequelize.STRING,
+      field: 'sessionid'
+    },
+  },
+  {
+    freezeTableName: true
+  }
+);
+
+Reviewed.sync({force: true});
+
 module.exports = {
   User: User,
   Answer: Answer,
@@ -127,4 +150,5 @@ module.exports = {
   Question: Question,
   sequelize: sequelize,
   Reviewer: Reviewer,
+  Reviewed: Reviewed,
 };

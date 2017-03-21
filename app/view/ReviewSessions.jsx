@@ -110,10 +110,10 @@ class ReviewSessions extends MUIBaseTheme {
     const url = `routes/reviewers/${userId}/${sessionId}/`;
     $.ajax({
       url,
-      success: reviewers => {
+      success: data => {
         this.ifCreatorElseReviewer(
-          () => setCurrentSession(sessionId, reviewers, PICK_PEER_TO_READ_VIEW),
-          () => setCurrentSession(sessionId, reviewers, PICK_PEER_TO_REVIEW_VIEW)
+          () => setCurrentSession(sessionId, data, PICK_PEER_TO_READ_VIEW),
+          () => setCurrentSession(sessionId, data, PICK_PEER_TO_REVIEW_VIEW)
         );
       },
       error: err => {
@@ -240,27 +240,37 @@ class ReviewSessions extends MUIBaseTheme {
     );
   }
 
+  hasBeenReviewed(reviewed, peer) {
+    return !!reviewed.find(r => r.reviewedId === peer.id.toString());
+  }
+
   renderReviewablePeers() {
     const {
       sessionView,
       mainView,
       peers,
       userId,
+      reviewed,
     } = this.props;
 
     if (mainView === ANSWER_QUESTIONS_VIEW) {
-      return peers.map(d => (
+      return peers.map(d => {
+        const isReviewed = this.hasBeenReviewed(reviewed, d);
+        return (
           <li
-            title={ `click to review ${d.name}` }
+            style={{ color: isReviewed ? "grey" : "black" }}
+            title={ isReviewed ? `${d.name} has already been reviewed` : `click to review ${d.name}` }
             onClick={ e => {
               e.preventDefault();
-              this.toQuestions(d.id)
+              if (!isReviewed) {
+                this.toQuestions(d.id)
+              }
             }}
             key={ d.id }>
             peer: { d.name }
           </li>
-        )
-      );
+        );
+      });
     }
 
     if (mainView === VIEW_ANSWERS_VIEW) {
@@ -322,7 +332,7 @@ class ReviewSessions extends MUIBaseTheme {
     } = this.props;
 
     return questions.map((q, i) => (
-      <li>
+      <li key={ q.id }>
         question: { q.content }
         answer:
         <input
@@ -348,7 +358,7 @@ class ReviewSessions extends MUIBaseTheme {
 
     if (answers.length) {
       return questions.map((q, i) => (
-        <li>
+        <li key={ q.id }>
           question: { q.content }
           answer: { answers.find(a => a.questionId === q.id.toString()).content }
         </li>
@@ -405,9 +415,11 @@ const mapStateToProps = state => {
     mainView,
     currentSessionId,
     reviewedId,
+    reviewed,
   } = state;
 
   return {
+    reviewed,
     reviewedId,
     currentSessionId,
     mainView,

@@ -16,8 +16,15 @@ class CreateSessionButton extends MUIBaseTheme {
     this.submitSessionData = this.submitSessionData.bind(this);
   }
 
+  componentDidMount() {
+    /**
+     * check to see if user has answered these questions already
+     */
+  }
+
   submitSessionData() {
     const {
+      submitAnswers,
       answeredAll,
       answers,
     } = this.props;
@@ -28,9 +35,9 @@ class CreateSessionButton extends MUIBaseTheme {
         type: "POST",
         url,
         data: { answers },
-        success: () => {
+        success: reviewed => {
           console.log('success');
-          submitAnswers();
+          submitAnswers(reviewed);
         },
         error: err => {
           console.error(err);
@@ -40,9 +47,13 @@ class CreateSessionButton extends MUIBaseTheme {
   }
 
   render() {
+    const {
+      answeredAll,
+    } = this.props;
+
     return (
       <button
-        disabled={ !this.props.answeredAll }
+        disabled={ !answeredAll }
         onClick={ this.submitSessionData }>
         { SUBMIT_ANSWERS_LABEL }
       </button>
@@ -52,6 +63,7 @@ class CreateSessionButton extends MUIBaseTheme {
 
 const mapStateToProps = state => {
   const {
+    currentSessionId,
     answers,
     reviewedId,
     userId,
@@ -59,6 +71,7 @@ const mapStateToProps = state => {
   } = state;
 
   return {
+    currentSessionId,
     answeredAll: answers.length === questions.length && questions.length > 0,
     answers,
     reviewedId,
@@ -69,7 +82,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    submitAnswers: () => dispatch(submitAnswers()),
+    submitAnswers: reviewed => dispatch(submitAnswers(reviewed)),
   };
 }
 

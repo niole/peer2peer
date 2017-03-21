@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const models = require('./Models.js');
 
+const Reviewed = models.Reviewed;
 const Reviewer = models.Reviewer;
 const Answer = models.Answer;
 const User = models.User;
@@ -70,7 +71,13 @@ router.post('/answers/submit/', function(req, res) {
   const answers = req.body.answers;
 
   Answer.bulkCreate(answers).then(function() {
-    res.send(true);
+    Reviewed.create({
+      sessionId: answers[0].reviewSessionId,
+      reviewerId: answers[0].reviewerId,
+      reviewedId: answers[0].peerId,
+    }).then(function(r) {
+      res.send(r.dataValues);
+    });
   });
 });
 
@@ -114,7 +121,18 @@ router.get('/reviewers/:userId/:sessionId/', function(req, res) {
         },
       },
     }).then(function(users) {
-      res.send(users.map(u => u.dataValues));
+      Reviewed.findAll({
+        where: {
+          sessionId: sessionId,
+        },
+      }).then(function(rs) {
+
+        res.send({
+          reviewers: users.map(u => u.dataValues),
+          reviewed: rs.map(r => r.dataValues),
+        });
+
+      });
     });
   });
 

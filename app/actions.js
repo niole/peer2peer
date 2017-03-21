@@ -32,10 +32,12 @@ export function setReviewer(reviewerId, reviewedUsers, view) {
   };
 }
 
-export function submitAnswers() {
+export function submitAnswers(reviewed) {
   return {
     type: SUBMIT_ANSWERS,
-    data: null,
+    data: {
+      reviewed,
+    },
   };
 }
 
@@ -99,12 +101,13 @@ export function setSessionSubView(view) {
   };
 }
 
-export function setCurrentSession(id, reviewers, view) {
+export function setCurrentSession(id, data, view) {
   return {
     type: SET_CURRENT_SESSION,
     data: {
       id,
-      reviewers,
+      reviewers: data.reviewers,
+      reviewed: data.reviewed,
       view,
     }
   };

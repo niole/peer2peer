@@ -19,6 +19,7 @@ import {
   SET_AVAILABLE_SESSIONS,
 } from './actions.js';
 import {
+  PICK_PEER_TO_REVIEW_VIEW,
   CREATE_SESSION_VIEW,
   PICK_SESSION_VIEW,
 } from './constants.js'
@@ -28,6 +29,7 @@ import {
 
 
 const initialState = {
+  reviewed: [],
   userId: getUserId(), //TODO workaround
   reviewerId: "",
   reviewedId: "",
@@ -57,6 +59,7 @@ export default function appReducer(state = initialState, action) {
         reviewedId: "",
         sessionView: PICK_PEER_TO_REVIEW_VIEW,
         answers: [],
+        reviewed: state.reviewed.concat([action.data.reviewed]),
       });
 
     case SET_QS_SUBVIEW:
@@ -95,11 +98,13 @@ export default function appReducer(state = initialState, action) {
 
     case SET_SESSION_SUB_VIEW:
       return Object.assign({}, state, {
+        reviewed: [],
         sessionView: action.data,
       });
 
     case SET_CURRENT_SESSION:
       return Object.assign({}, state, {
+        reviewed: action.data.reviewed,
         peers: action.data.reviewers,
         currentSessionId: action.data.id,
         sessionView: action.data.view,
@@ -107,6 +112,7 @@ export default function appReducer(state = initialState, action) {
 
     case SWITCH_MAIN_VIEW:
       return Object.assign({}, state, {
+        reviewed: [],
         mainView: action.data,
         peers: [],
         reviewerId: "",
