@@ -54,10 +54,16 @@ class ReviewSessions extends MUIBaseTheme {
 
   }
 
+  /**
+   * sets up basic client side state for view only or editable questions view
+   */
   componentDidMount() {
     this.ifCreatorElseReviewer(this.getReviewSessionToRead, this.getReviewSessionToEdit);
   }
 
+  /**
+   * sets up basic client side state for view only questions view
+   */
   getReviewSessionToRead() {
     const {
       userId,
@@ -76,6 +82,9 @@ class ReviewSessions extends MUIBaseTheme {
     });
   }
 
+  /**
+   * sets up basic client side state for editable questions view
+   */
   getReviewSessionToEdit() {
     const {
       userId,
@@ -144,6 +153,10 @@ class ReviewSessions extends MUIBaseTheme {
     });
   }
 
+  /**
+   * higher order function that executes arguments depending on
+   * the current main view
+   */
   ifCreatorElseReviewer(isReadable, isEditable) {
     const {
       mainView,
@@ -189,6 +202,9 @@ class ReviewSessions extends MUIBaseTheme {
     });
   }
 
+  /**
+   * breadcrumb headers for sub view
+   */
   getHeaders() {
     const {
       sessionView,
@@ -217,6 +233,9 @@ class ReviewSessions extends MUIBaseTheme {
     });
   }
 
+  /**
+   * renders sessions currently viewable
+   */
   renderSessions() {
     const {
       sessions,
@@ -237,10 +256,16 @@ class ReviewSessions extends MUIBaseTheme {
     );
   }
 
+  /**
+   * indicator function determining if this peer has been reviewed yet
+   */
   hasBeenReviewed(reviewed, peer) {
     return !!reviewed.find(r => r.reviewedId === peer.id.toString());
   }
 
+  /**
+   * renders peers that can be reviewable
+   */
   renderReviewablePeers() {
     const {
       sessionView,
@@ -287,6 +312,9 @@ class ReviewSessions extends MUIBaseTheme {
 
   }
 
+  /**
+   * gets appropriate click handler for read only peers view
+   */
   getPeerClickHandler() {
     const {
       sessionView,
@@ -303,6 +331,10 @@ class ReviewSessions extends MUIBaseTheme {
     return () => {};
   }
 
+  /**
+   * handles adding answer to client state when user saves answer
+   * in editable answers view
+   */
   addAnswer(index) {
     const {
       questions,
@@ -323,6 +355,9 @@ class ReviewSessions extends MUIBaseTheme {
     addAnswer(answer);
   }
 
+  /**
+   * renders editable answers views with questions
+   */
   renderEditableQs() {
     const {
       questions,
@@ -356,6 +391,9 @@ class ReviewSessions extends MUIBaseTheme {
     );
   }
 
+  /**
+   * renders view only questions and answers
+   */
   renderReadableQs() {
     const {
       questions,
@@ -381,6 +419,9 @@ class ReviewSessions extends MUIBaseTheme {
     return "This user has not completed this review";
   }
 
+  /**
+   * gets sub view contents
+   */
   getContents() {
     const {
       sessionView,

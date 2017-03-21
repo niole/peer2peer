@@ -145,6 +145,9 @@ router.get('/reviewers/:userId/:sessionId/', function(req, res) {
 });
 
 router.get('/reviewsession/createdby/:userId/', function(req, res) {
+  /**
+   * gets all review sesssions created by user with userId
+   */
   const userId = req.params.userId;
 
   ReviewSession.findAll({
@@ -159,7 +162,7 @@ router.get('/reviewsession/createdby/:userId/', function(req, res) {
 
 router.get('/reviewsession/includes/:userId/', function(req, res) {
   /**
-    gets review sessions that user is included in
+   * gets review sessions that user is included in
    */
 
   const userId = req.params.userId;

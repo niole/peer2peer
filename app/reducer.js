@@ -120,6 +120,7 @@ export default function appReducer(state = initialState, action) {
         questions: [],
         answers: [],
         sessionView: PICK_SESSION_VIEW,
+        sessions: [],
       });
 
     case UPDATE_SESSION_DEADLINE:
