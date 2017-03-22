@@ -148,6 +148,11 @@ a
   width: 307px
   font-size: 3em
 
+.create-session
+  &.questions
+    @extend .clickable-element
+    @extend .sec-interaction
+
 .main-view-tab
   @extend .sec-interaction
   border-radius: 3px
@@ -175,14 +180,17 @@ a
   width: 75%
   margin: auto
 
-.peer-to-pick
-  @extend .sec-interaction
-  display: inline-block
+.clickable-element
   padding: .5em 1em
   color: white
   border-radius: 3px
   background: $secondary-background
   margin: 10px
+
+.peer-to-pick
+  @extend .sec-interaction
+  @extend .clickable-element
+  display: inline-block
 
   &.in-session
     color: $secondary-background

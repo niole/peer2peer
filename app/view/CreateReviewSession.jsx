@@ -98,12 +98,13 @@ class CreateReviewSession extends MUIBaseTheme {
     } = this.props;
 
     return questions.map((q, i) => (
-      <li
+      <div
+        className="create-session questions"
         onClick={ () => removeQuestion(q.id) }
         title="click to remove"
         key={ i } >
         { q.content }
-      </li>
+      </div>
       )
     );
   }
@@ -139,7 +140,7 @@ class CreateReviewSession extends MUIBaseTheme {
           <ul>{ this.renderPeers() }</ul>
           <h2 className="create-session-header">create questions</h2>
           <div className="create-questions-container">
-            <ol>{ this.renderQuestions() }</ol>
+            <div>{ this.renderQuestions() }</div>
             <input
               ref={(ref) => this.questioninput = ref }
               placeholder="add a question"/>
