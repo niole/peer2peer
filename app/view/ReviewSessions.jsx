@@ -147,7 +147,7 @@ class ReviewSessions extends MUIBaseTheme {
    * review session creator can look at peers reviewed by
    * selected peer
    */
-  toReviewed(peerId = this.props.reviewerId, peer) {
+  toReviewed(peerId = this.props.reviewerId, peer = this.props.reviewer) {
     const {
       currentSessionId,
       setReviewer,
@@ -517,7 +517,9 @@ class ReviewSessions extends MUIBaseTheme {
     return (
       <div>
         { this.getHeaders() }
-        { this.getContents() }
+        <div id="subview-content">
+          { this.getContents() }
+        </div>
       </div>
     );
   }
