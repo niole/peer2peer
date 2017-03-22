@@ -440,7 +440,7 @@ class ReviewSessions extends MUIBaseTheme {
         { questions.map((q, i) => (
           <li key={ q.id }>
             <div className="qa-section">
-              <div className="subview-content">
+              <div className="subview-content question">
                 { q.content }
               </div>
             </div>
@@ -479,7 +479,7 @@ class ReviewSessions extends MUIBaseTheme {
           { questions.map((q, i) => (
               <li key={ q.id }>
                 <div className="qa-section">
-                  <div className="subview-content">
+                  <div className="subview-content question">
                     { q.content }
                   </div>
                 </div>
