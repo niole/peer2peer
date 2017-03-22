@@ -1,7 +1,19 @@
+$main-background: rgb(75, 191, 107)
+$main-color: #244f32
+$secondary-color: rgba(255, 255, 255, 0.298039)
+$secondary-background: #60d187
+$main-font: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif
+$main-shadow: rgba(0, 0, 0, .2)
+
+$secondary-hover-background: #67e091
+$secondary-click-background: #6ded99
+
 body
+  font-weight: bold
+  background: $main-background
   margin: 0
-  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif
-  color: rgba(0, 0, 0, 0.952941)
+  font-family: $main-font
+  color: $main-color
   height: 100%
   cursor: default
 
@@ -18,19 +30,30 @@ input
     outline: none
 
 button
+  @extend .sec-interaction
+  font-family: $main-font
   padding: 1em 2em
   border-radius: 3px
-  border: 1px solid white
-  background: whitesmoke
+  border: none
+  color: white
+  background: $secondary-background
 
   &:focus
     outline: none
+
+  &:disabled
+    &:hover
+      background: $secondary-background
+
+    &:focus
+      background: $secondary-background
 
 header
   width: 100%
   top: 0
   height: 80px
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2)
+  background: $secondary-background
 
 footer
   width: 100%
@@ -126,18 +149,23 @@ a
   font-size: 3em
 
 .main-view-tab
+  @extend .sec-interaction
+  border-radius: 3px
   display: inline-block
   width: 33%
   text-align: center
   padding: 1em 0
+  margin-top: 1em
 
   &.focused
-    border-bottom: 1px solid
+    color: white
+    background: $secondary-click-background
 
 .create-session-header
+  background: $secondary-background
   text-align: center
-  border: 1px solid
   padding: 1em
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2)
 
 #date-picker
   width: 255px
@@ -148,24 +176,40 @@ a
   margin: auto
 
 .peer-to-pick
+  @extend .sec-interaction
   display: inline-block
   padding: .5em 1em
-  border: 1px solid white
+  color: white
   border-radius: 3px
-  box-shadow: 2px 2px 0px 0px whitesmoke
+  background: $secondary-background
+  margin: 10px
 
   &.in-session
+    color: $secondary-background
     background: whitesmoke
 
 .footer-submit-button
   margin: 3em
 
 .bc-header
+  @extend .sec-interaction
   display: inline-block
   padding: 1em
+  background: $secondary-background
+  margin: 10px
+  border-radius: 3px
 
   &.focused
-    border-bottom: 1px solid
+    background: $secondary-hover-background
+
+.sec-interaction
+  &:hover
+    color: white
+    background: $secondary-hover-background
+
+  &:active
+    color: white
+    background: $secondary-click-background
 
 .qa-section
   display: inline-block
