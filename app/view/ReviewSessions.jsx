@@ -66,6 +66,12 @@ class ReviewSessions extends MUIBaseTheme {
 
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.mainView !== this.props.mainView) {
+      this.ifCreatorElseReviewer(this.getReviewSessionToRead, this.getReviewSessionToEdit, nextProps);
+    }
+  }
+
   /**
    * sets up basic client side state for view only or editable questions view
    */
@@ -169,10 +175,10 @@ class ReviewSessions extends MUIBaseTheme {
    * higher order function that executes arguments depending on
    * the current main view
    */
-  ifCreatorElseReviewer(isReadable, isEditable) {
+  ifCreatorElseReviewer(isReadable, isEditable, props = this.props) {
     const {
       mainView,
-    } = this.props;
+    } = props;
 
     if (mainView === VIEW_ANSWERS_VIEW) {
       return isReadable();
