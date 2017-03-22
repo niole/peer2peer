@@ -21,6 +21,7 @@ export const REVIEW_SESSIONS_SUB_HEADER = "review sessions";
 export const QUESTIONS_SUB_HEADER = "questions";
 export const ANSWERS_SUB_HEADER = "answers";
 export const REVIEW_DEADLINE_SUB_HEADER = "deadline";
+export const PICK_PEERS_SUB_HEADER = "peers";
 
 /* review session views */
 export const PICK_SESSION_VIEW = "pickSession";

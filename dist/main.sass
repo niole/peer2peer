@@ -199,13 +199,33 @@ a
 .footer-submit-button
   margin: 3em
 
-.bc-header
-  @extend .sec-interaction
-  display: inline-block
+.non-clickable-header
   padding: 1em
   background: $secondary-background
   margin: 10px
   border-radius: 3px
+
+.qa-header
+  margin-left: 10px
+
+.subview-content
+  @extend .non-clickable-header
+  @extend .sec-interaction
+  display: inline-block
+
+  &.reviewed-peer
+    &:hover
+      color: $main-color
+      @extend .non-clickable-header
+
+    &:active
+      color: $main-color
+      @extend .non-clickable-header
+
+.bc-header
+  @extend .sec-interaction
+  @extend .non-clickable-header
+  display: inline-block
 
   &.focused
     background: $secondary-hover-background

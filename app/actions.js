@@ -21,11 +21,11 @@ export const SUBMIT_ANSWERS = "submitAnswers";
 export const SET_REVIEWER = "setReviewer";
 
 
-export function setReviewer(reviewerId, reviewedUsers, view) {
+export function setReviewer(reviewer, reviewedUsers, view) {
   return {
     type: SET_REVIEWER,
     data: {
-      reviewerId,
+      reviewer,
       reviewedUsers,
       view,
     },

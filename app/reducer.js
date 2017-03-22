@@ -29,6 +29,7 @@ import {
 
 
 const initialState = {
+  reviewer: {},
   reviewed: [],
   userId: getUserId(), //TODO workaround
   reviewerId: "",
@@ -49,7 +50,8 @@ export default function appReducer(state = initialState, action) {
   switch (action.type) {
     case SET_REVIEWER:
       return Object.assign({}, state, {
-        reviewerId: action.data.reviewerId,
+        reviewerId: action.data.reviewer.id,
+        reviewer: action.data.reviewer,
         peers: action.data.reviewedUsers,
         sessionView: action.data.view,
       });
