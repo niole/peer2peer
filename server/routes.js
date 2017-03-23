@@ -68,16 +68,50 @@ router.get('/reviewed/:currentSessionId/:peerId/', function(req, res) {
 });
 
 router.post('/answers/submit/', function(req, res) {
+  //if previously reviewed, update, else, create
   const answers = req.body.answers;
 
-  Answer.bulkCreate(answers).then(function() {
-    Reviewed.create({
-      sessionId: answers[0].reviewSessionId,
+  Answer.findAll({
+    where: {
+      reviewSessionId: answers[0].reviewSessionId,
       reviewerId: answers[0].reviewerId,
-      reviewedId: answers[0].peerId,
-    }).then(function(r) {
-      res.send(r.dataValues);
-    });
+    },
+  }).then(function(prevAnswers) {
+    const answerData = prevAnswers.map(function(a) { return a.dataValues; });
+
+    if (!answerData.length) {
+
+      Answer.bulkCreate(answers).then(function() {
+        Reviewed.create({
+          sessionId: answers[0].reviewSessionId,
+          reviewerId: answers[0].reviewerId,
+          reviewedId: answers[0].peerId,
+        }).then(function(r) {
+          res.send(r.dataValues);
+        });
+      });
+
+    }
+    else {
+      const answersToUpdate = answers.filter(function(a) {
+        return !!answerData.find(function(otherA) {
+          return a.questionId === otherA.questionId;
+        });
+      });
+
+      answersToUpdate.forEach(function(ans) {
+
+        Answer.update(
+          ans,
+         {
+          where: {
+            questionId: ans.questionId
+          },
+        });
+
+      });
+
+    }
   });
 });
 

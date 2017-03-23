@@ -101,11 +101,12 @@ export function setSessionSubView(view) {
   };
 }
 
-export function setCurrentSession(id, data, view) {
+export function setCurrentSession(id, session, data, view) {
   return {
     type: SET_CURRENT_SESSION,
     data: {
       id,
+      session,
       reviewers: data.reviewers,
       reviewed: data.reviewed,
       view,

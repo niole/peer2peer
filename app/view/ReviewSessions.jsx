@@ -127,7 +127,7 @@ class ReviewSessions extends MUIBaseTheme {
    * or sends user to view with all peers in session
    * except self
    */
-  toSession(sessionId = this.props.currentSessionId) {
+  toSession(sessionId = this.props.currentSessionId, session = this.props.currentSession) {
     const {
       userId,
       setCurrentSession,
@@ -139,8 +139,8 @@ class ReviewSessions extends MUIBaseTheme {
       url,
       success: data => {
         this.ifCreatorElseReviewer(
-          () => setCurrentSession(sessionId, data, PICK_PEER_TO_READ_VIEW),
-          () => setCurrentSession(sessionId, data, PICK_PEER_TO_REVIEW_VIEW)
+          () => setCurrentSession(sessionId, session, data, PICK_PEER_TO_READ_VIEW),
+          () => setCurrentSession(sessionId, session, data, PICK_PEER_TO_REVIEW_VIEW)
         );
       },
       error: err => {
@@ -199,12 +199,14 @@ class ReviewSessions extends MUIBaseTheme {
       reviewerId,
       setQuestionSubview,
       currentSessionId,
+      userId,
     } = this.props;
-
-    const url = this.ifCreatorElseReviewer(
-      () => `routes/questions/answers/${reviewerId}/${peerId}/${currentSessionId}`,
-      () => `routes/questions/${currentSessionId}/`
-    );
+    const reviewer = reviewerId || userId;
+    //const url = this.ifCreatorElseReviewer(
+    //  () => `routes/questions/answers/${reviewerId}/${peerId}/${currentSessionId}`,
+    //  () => `routes/questions/${currentSessionId}/`
+    //);
+    const url = `routes/questions/answers/${reviewer}/${peerId}/${currentSessionId}`;
 
     $.ajax({
       url,
@@ -284,7 +286,7 @@ class ReviewSessions extends MUIBaseTheme {
               title={ REVIEW_PEERS_TITLE }
               onClick={ e => {
                 e.preventDefault();
-                this.toSession(d.id)
+                this.toSession(d.id, d)
               }}
               key={ d.id }>
               <div className="qa-section">
@@ -318,21 +320,26 @@ class ReviewSessions extends MUIBaseTheme {
       peers,
       userId,
       reviewed,
+      currentSession,
     } = this.props;
+
+    const currDeadline = typeof currentSession.deadline === "string" ?
+      new Date(currentSession.deadline) :
+      currentSession.deadline;
 
     if (mainView === ANSWER_QUESTIONS_VIEW) {
       return (
         <div>
           { this.renderSubviewHeaders(PICK_PEERS_SUB_HEADER) }
             { peers.map(d => {
-              const isReviewed = this.hasBeenReviewed(reviewed, d);
-              const reviewedClass = isReviewed ? " reviewed-peer" : "";
+              const canStillReview = this.hasBeenReviewed(reviewed, d) || currDeadline.getTime() > new Date().getTime();
+              const reviewedClass = !canStillReview ? " reviewed-peer" : "";
               return (
                 <div
-                  title={ isReviewed ? `${d.name} has already been reviewed` : `click to review ${d.name}` }
+                  title={ !canStillReview ? `${d.name} can no longer be reviewed` : `click to review ${d.name}` }
                   onClick={ e => {
                     e.preventDefault();
-                    if (!isReviewed) {
+                    if (canStillReview) {
                       this.toQuestions(d.id)
                     }
                   }}
@@ -403,11 +410,11 @@ class ReviewSessions extends MUIBaseTheme {
     } = this.props;
 
     const answer = {
-      questionId: questions[index].id,
-      reviewSessionId: currentSessionId,
+      questionId: questions[index].id.toString(),
+      reviewSessionId: currentSessionId.toString(),
       content: this[`answer-${index}`].value,
       reviewerId: userId,
-      peerId: reviewedId,
+      peerId: reviewedId.toString(),
     };
 
     addAnswer(answer);
@@ -432,33 +439,39 @@ class ReviewSessions extends MUIBaseTheme {
   renderEditableQs() {
     const {
       questions,
+      answers,
     } = this.props;
 
     return (
       <div>
         { this.renderSubviewHeaders(QUESTIONS_SUB_HEADER, ANSWERS_SUB_HEADER) }
-        { questions.map((q, i) => (
-          <li key={ q.id }>
-            <div className="qa-section">
-              <div className="subview-content question">
-                { q.content }
+        { questions.map((q, i) => {
+          const answer = answers.find(a => a.questionId === q.id.toString());
+
+          return (
+            <li key={ q.id }>
+              <div className="qa-section">
+                <div className="subview-content question">
+                  { q.content }
+                </div>
               </div>
-            </div>
-            <div className="qa-section">
-              <input
-                ref={ ref => this[`answer-${i}`] = ref }
-                placeholder={ ANSWER_Q_PLACEHOLDER }/>
-              <button
-                onClick={ e => {
-                  e.preventDefault();
-                  this.addAnswer(i)
-                }}
-              >
-                Save
-              </button>
-            </div>
-          </li>
-        )) }
+              <div className="qa-section">
+                <input
+                  defaultValue={ answer ? answer.content : "" }
+                  ref={ ref => this[`answer-${i}`] = ref }
+                  placeholder={ ANSWER_Q_PLACEHOLDER }/>
+                <button
+                  onClick={ e => {
+                    e.preventDefault();
+                    this.addAnswer(i)
+                  }}
+                >
+                  Save
+                </button>
+              </div>
+            </li>
+          );
+        }) }
       </div>
     );
   }
@@ -483,7 +496,9 @@ class ReviewSessions extends MUIBaseTheme {
                     { q.content }
                   </div>
                 </div>
-                <div className="qa-section">{ answers.find(a => a.questionId === q.id.toString()).content }</div>
+                <div className="qa-section">
+                  { answers.find(a => a.questionId === q.id.toString()).content }
+                </div>
               </li>
             )) }
         </div>
@@ -535,6 +550,7 @@ ReviewSessions.propTypes = propTypes;
 
 const mapStateToProps = state => {
   const {
+    currentSession,
     reviewer,
     sessionView,
     questions,
@@ -562,6 +578,7 @@ const mapStateToProps = state => {
     peers,
     userId,
     sessions,
+    currentSession,
   };
 };
 
@@ -572,7 +589,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     addAnswer: ans => dispatch(addAnswer(ans)),
     setQuestionSubview: (viewType, qs, peerId) => dispatch(setQuestionSubview(viewType, qs, peerId)),
     setAvailableSessions: ss => dispatch(setAvailableSessions(ss)),
-    setCurrentSession: (sessionId, reviewers, view) => dispatch(setCurrentSession(sessionId, reviewers, view)),
+    setCurrentSession: (sessionId, session, reviewers, view) => dispatch(setCurrentSession(sessionId, session, reviewers, view)),
     setSessionSubView: view => dispatch(setSessionSubView(view)),
   };
 }

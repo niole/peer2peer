@@ -39,6 +39,7 @@ const initialState = {
   sessions: [],
   currentSessionDeadline: new Date(),
   currentSessionId: "",
+  currentSession: {},
   questions: [],
   answers: [],
   mainView: CREATE_SESSION_VIEW, //enum, VIEW_ANSWERS_VIEW, CREATE_SESSION_VIEW, ANSWER_QUESTIONS_VIEW
@@ -106,6 +107,7 @@ export default function appReducer(state = initialState, action) {
 
     case SET_CURRENT_SESSION:
       return Object.assign({}, state, {
+        currentSession: action.data.session,
         reviewed: action.data.reviewed,
         peers: action.data.reviewers,
         currentSessionId: action.data.id,
@@ -123,6 +125,7 @@ export default function appReducer(state = initialState, action) {
         answers: [],
         sessionView: PICK_SESSION_VIEW,
         sessions: [],
+        currentSession: {},
       });
 
     case UPDATE_SESSION_DEADLINE:
