@@ -205,10 +205,6 @@ class ReviewSessions extends MUIBaseTheme {
       userId,
     } = this.props;
     const reviewer = reviewerId || userId;
-    //const url = this.ifCreatorElseReviewer(
-    //  () => `routes/questions/answers/${reviewerId}/${peerId}/${currentSessionId}`,
-    //  () => `routes/questions/${currentSessionId}/`
-    //);
     const url = `routes/questions/answers/${reviewer}/${peerId}/${currentSessionId}`;
 
     $.ajax({
@@ -411,7 +407,9 @@ class ReviewSessions extends MUIBaseTheme {
       reviewedId,
       currentSessionId,
     } = this.props;
-    console.log('addans');
+
+    this[`answer-${index}`].className = "answer-input"; //TODO this is terrible
+
     const answer = {
       questionId: questions[index].id.toString(),
       reviewSessionId: currentSessionId.toString(),
@@ -460,7 +458,10 @@ class ReviewSessions extends MUIBaseTheme {
               </div>
               <div className="qa-section">
                 <input
+                  className="answer-input"
                   onKeyPress={() => {
+                    this[`answer-${i}`].className = "answer-input active"; //TODO this is terrible
+
                     this.addAnswer(i)
                   }}
                   defaultValue={ answer ? answer.content : "" }
