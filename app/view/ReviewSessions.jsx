@@ -36,6 +36,9 @@ import {
   HEADER_TO_VIEW_MAP,
 } from '../constants.js';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
+import {
+  debouncer,
+} from '../util.js';
 
 
 const { string, arrayOf } = PropTypes;
@@ -51,7 +54,7 @@ class ReviewSessions extends MUIBaseTheme {
     this.toSession = this.toSession.bind(this);
     this.toReviewed = this.toReviewed.bind(this);
     this.toQuestions = this.toQuestions.bind(this);
-    this.addAnswer = this.addAnswer.bind(this);
+    this.addAnswer = debouncer(this.addAnswer.bind(this), this, 500);
     this.getReviewSessionToRead = this.getReviewSessionToRead.bind(this);
     this.getReviewSessionToEdit = this.getReviewSessionToEdit.bind(this);
 
@@ -408,7 +411,7 @@ class ReviewSessions extends MUIBaseTheme {
       reviewedId,
       currentSessionId,
     } = this.props;
-
+    console.log('addans');
     const answer = {
       questionId: questions[index].id.toString(),
       reviewSessionId: currentSessionId.toString(),
@@ -457,17 +460,12 @@ class ReviewSessions extends MUIBaseTheme {
               </div>
               <div className="qa-section">
                 <input
+                  onKeyPress={() => {
+                    this.addAnswer(i)
+                  }}
                   defaultValue={ answer ? answer.content : "" }
                   ref={ ref => this[`answer-${i}`] = ref }
                   placeholder={ ANSWER_Q_PLACEHOLDER }/>
-                <button
-                  onClick={ e => {
-                    e.preventDefault();
-                    this.addAnswer(i)
-                  }}
-                >
-                  Save
-                </button>
               </div>
             </li>
           );
