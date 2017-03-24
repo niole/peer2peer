@@ -32,6 +32,10 @@ ReviewSession.sync({force: true});
 const Reviewer = sequelize.define(
   'reviewer',
   {
+    email: {
+      type: Sequelize.STRING,
+      field: 'email'
+    },
     reviewSessionId: {
       type: Sequelize.STRING,
       field: 'reviewsessionid'

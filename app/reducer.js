@@ -169,12 +169,14 @@ export default function appReducer(state = initialState, action) {
 
     case REMOVE_PEER_FROM_SESSION:
       return Object.assign({}, state, {
-        sessionPeers: state.sessionPeers.filter(sp => sp.id !==  action.data),
+        sessionPeers: state.sessionPeers.filter(sp => sp.email !==  action.data),
       });
 
     case UPDATE_PEERS_IN_SESSION:
       return Object.assign({}, state, {
-        sessionPeers: action.data.concat(state.sessionPeers), //TODO no duplicate peers
+        sessionPeers: state.sessionPeers.find(p => p.email === action.data.email) ?
+          state.sessionPeers :
+          [action.data].concat(state.sessionPeers),
       });
 
     default:

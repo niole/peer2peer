@@ -23,29 +23,40 @@ class CreateReviewSession extends MUIBaseTheme {
   constructor() {
     super();
 
+    this.peerinput = null;
     this.questioninput = null;
     this.sessionName = null;
     this.saveQuestion = this.saveQuestion.bind(this);
+    this.addPeer = this.addPeer.bind(this);
   }
 
   componentDidMount() {
-    const {
-      userId,
-      updateAvailablePeers,
-      peers,
-    } = this.props;
+    //TODO don't get peers on start
+    //create input for adding reviewers,
+    // use sessionPeers for added reviewer objects
+    //be able to submit these reviewers
+    //BE: create new session with these reviewers
+    //reviewers are Reviewer instances
+    //their User objects will be created and their Reviewer instances will be updated
+    //when the Reviewer first logs in
 
-    if (!peers.length) {
-      $.ajax({
-        url: `routes/peers/all/${userId}`,
-        success: peers => {
-          updateAvailablePeers(peers)
-        },
-        error: e => {
-          console.error(e);
-        }
-      });
-    }
+//    const {
+//      userId,
+//      updateAvailablePeers,
+//      peers,
+//    } = this.props;
+//
+//    if (!peers.length) {
+//      $.ajax({
+//        url: `routes/peers/all/${userId}`,
+//        success: peers => {
+//          updateAvailablePeers(peers)
+//        },
+//        error: e => {
+//          console.error(e);
+//        }
+//      });
+//    }
   }
 
   saveQuestion() {
@@ -62,34 +73,34 @@ class CreateReviewSession extends MUIBaseTheme {
     }]);
   }
 
-  addPeer(selectedPeer) {
+  addPeer() {
     const {
       updateSessionPeers,
     }= this.props;
 
-    updateSessionPeers([selectedPeer]);
+    const peerEmail = this.peerinput.value;
+    const reviewer = {
+      email: peerEmail,
+      reviewSessionId: "",
+      userId: "",
+    };
+
+    updateSessionPeers(reviewer);
   }
 
   renderPeers() {
     const {
       removePeer,
-      peers,
       sessionPeers,
     } = this.props;
 
-    return peers.map(p => {
-        const isInSession = !!sessionPeers.find(sp => sp.id === p.id);
-        const inSessionClass = isInSession ? " in-session" : "";
+    return sessionPeers.map((p, i) => {
         return (
           <li
-            className={ `peer-to-pick${inSessionClass}` }
-            key={ p.id }
-            onClick={
-              isInSession ?
-              () => removePeer(p.id) :
-              () => this.addPeer(p)
-            }>
-              { p.name }
+            className="peer-to-pick in-session"
+            key={ p.email }
+            onClick={ () => removePeer(p.email) }>
+              { p.email }
           </li>
         );
       }
@@ -154,7 +165,19 @@ class CreateReviewSession extends MUIBaseTheme {
           <h2 className="create-session-header">{ DATEPICKER_PLACEHOLDER }</h2>
           <div>{ this.renderDeadline() }</div>
           <h2 className="create-session-header">pick peers</h2>
+
           <ul>{ this.renderPeers() }</ul>
+
+           <input
+             ref={(ref) => this.peerinput = ref }
+             placeholder="type a peer's email"/>
+           <button
+             onClick={ this.addPeer }
+           >
+             Save
+           </button>
+
+
           <h2 className="create-session-header">create questions</h2>
           <div className="create-questions-container">
             <div>{ this.renderQuestions() }</div>

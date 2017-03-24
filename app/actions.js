@@ -88,10 +88,10 @@ export function removeQuestion(qId) {
   };
 }
 
-export function removePeer(peerId) {
+export function removePeer(email) {
   return {
     type: REMOVE_PEER_FROM_SESSION,
-    data: peerId,
+    data: email,
   };
 }
 
