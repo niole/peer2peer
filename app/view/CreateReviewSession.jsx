@@ -12,7 +12,9 @@ import {
   setSessionName,
 } from '../actions.js';
 import {
+  START_STOP_CONTINUE_LABEL,
   DATEPICKER_PLACEHOLDER,
+  EMF_QUESTION_LABEL,
   NAME_SESSION_LABEL,
 } from '../constants.js';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
@@ -23,53 +25,25 @@ class CreateReviewSession extends MUIBaseTheme {
   constructor() {
     super();
 
+    this.emf = null;
+    this.startStopContinue = null;
     this.peerinput = null;
     this.questioninput = null;
     this.sessionName = null;
     this.saveQuestion = this.saveQuestion.bind(this);
     this.addPeer = this.addPeer.bind(this);
+    this.addDefaultQuestion = this.addDefaultQuestion.bind(this);
   }
 
-  componentDidMount() {
-    //TODO don't get peers on start
-    //create input for adding reviewers,
-    // use sessionPeers for added reviewer objects
-    //be able to submit these reviewers
-    //BE: create new session with these reviewers
-    //reviewers are Reviewer instances
-    //their User objects will be created and their Reviewer instances will be updated
-    //when the Reviewer first logs in
-
-//    const {
-//      userId,
-//      updateAvailablePeers,
-//      peers,
-//    } = this.props;
-//
-//    if (!peers.length) {
-//      $.ajax({
-//        url: `routes/peers/all/${userId}`,
-//        success: peers => {
-//          updateAvailablePeers(peers)
-//        },
-//        error: e => {
-//          console.error(e);
-//        }
-//      });
-//    }
-  }
-
-  saveQuestion() {
+  saveQuestion(question, questionType, id = Math.random()) {
     const {
       addQuestions,
     }= this.props;
 
-    const question = this.questioninput.value;
-    this.questioninput.value = "";
-
     addQuestions([{
+      questionType,
       content: question,
-      id: Math.random(),
+      id,
     }]);
   }
 
@@ -116,7 +90,11 @@ class CreateReviewSession extends MUIBaseTheme {
     return questions.map((q, i) => (
       <div
         className="create-session questions"
-        onClick={ () => removeQuestion(q.id) }
+        onClick={ () => {
+          if (q.questionType !== "emf" && q.questionType !== "scc") {
+            removeQuestion(q.id)
+          }
+        }}
         title="click to remove"
         key={ i } >
         { q.content }
@@ -145,7 +123,24 @@ class CreateReviewSession extends MUIBaseTheme {
     );
   }
 
+  addDefaultQuestion(type) {
+    const {
+      removeQuestion,
+    } = this.props;
+    const inputRef = type === "scc" ? this.startStopContinue : this.emf;
+    const question = type === "scc" ? START_STOP_CONTINUE_LABEL : EMF_QUESTION_LABEL;
+
+    if (inputRef.checked) {
+      this.saveQuestion(question, type, type);
+    }
+    else {
+      removeQuestion(type);
+    }
+
+  }
+
   render() {
+    const c = this;
     const {
       setSessionName,
     } = this.props;
@@ -178,14 +173,41 @@ class CreateReviewSession extends MUIBaseTheme {
            </button>
 
 
-          <h2 className="create-session-header">create questions</h2>
+          <h2 className="create-session-header">
+            create questions (optional)
+          </h2>
           <div className="create-questions-container">
-            <div>{ this.renderQuestions() }</div>
+            Default Questions to Include:
+            <input
+              ref={ ref => this.startStopContinue = ref }
+              type="checkbox"
+              onChange={ () => this.addDefaultQuestion("scc") }
+              value="ssc"/>
+
+              <label htmlFor="ssc">{ START_STOP_CONTINUE_LABEL }</label>
+
+            <input
+              ref={ ref => this.emf = ref }
+              type="checkbox"
+              onChange={ () => this.addDefaultQuestion("emf") }
+              value="emf"/>
+
+              <label htmlFor="emf">{ EMF_QUESTION_LABEL }</label>
+
+            <div>
+              { this.renderQuestions() }
+            </div>
             <input
               ref={(ref) => this.questioninput = ref }
               placeholder="add a question"/>
             <button
-              onClick={ this.saveQuestion }
+              onClick={ () => {
+                const question = this.questioninput.value;
+                if (question !== "") {
+                  this.questioninput.value = "";
+                  this.saveQuestion(question, "open");
+                }
+              }}
             >
               Save
             </button>

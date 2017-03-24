@@ -55,6 +55,10 @@ Reviewer.sync({force: true});
 const Question = sequelize.define(
   'question',
   {
+    questionType: {
+      type: Sequelize.ENUM('ssc', 'open', 'emf'),
+      field: 'questiontype'
+    },
     reviewSessionId: {
       type: Sequelize.STRING,
       field: 'reviewsessionid'
@@ -105,6 +109,10 @@ User.sync({force: true}).then(function() {
 const Answer = sequelize.define(
   'answer',
   {
+    answerType: {
+      type: Sequelize.ENUM('ssc', 'open', 'emf'),
+      field: 'answertype'
+    },
     questionId: {
       type: Sequelize.STRING,
       field: 'questionid'

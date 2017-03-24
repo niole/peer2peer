@@ -23,6 +23,8 @@ export const QUESTIONS_SUB_HEADER = "questions";
 export const ANSWERS_SUB_HEADER = "answers";
 export const REVIEW_DEADLINE_SUB_HEADER = "deadline";
 export const PICK_PEERS_SUB_HEADER = "peers";
+export const EMF_QUESTION_LABEL = "Where expectations exceeded, met, or failed to be fullfilled?";
+export const START_STOP_CONTINUE_LABEL = "Start, stop, continue?";
 
 /* review session views */
 export const PICK_SESSION_VIEW = "pickSession";
