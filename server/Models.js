@@ -9,6 +9,10 @@ const sequelize = new Sequelize('mysql', 'root', 'root', {
 const ReviewSession = sequelize.define(
   'reviewsession',
   {
+    name: {
+      type: Sequelize.STRING,
+      field: 'name'
+    },
     deadline: {
       type: Sequelize.DATE,
       field: 'deadline'

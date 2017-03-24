@@ -23,6 +23,7 @@ class CreateSessionButton extends MUIBaseTheme {
       currentSessionDeadline,
       userId,
       submitNewSession,
+      currentSessionName,
     } = this.props;
 
     const url = 'routes/reviewsession/create/';
@@ -34,6 +35,7 @@ class CreateSessionButton extends MUIBaseTheme {
         deadline: currentSessionDeadline,
         creatorId: userId,
         questions,
+        currentSessionName,
       },
       success: () => {
         submitNewSession();
@@ -46,12 +48,16 @@ class CreateSessionButton extends MUIBaseTheme {
 
   shouldDisable() {
     const {
+      currentSessionName,
       currentSessionDeadline,
       questions,
       sessionPeers,
     } = this.props;
 
-    return !currentSessionDeadline || !questions.length || sessionPeers.length < 2;
+    return !currentSessionDeadline ||
+      !questions.length ||
+      sessionPeers.length < 2 ||
+      !currentSessionName;
   }
 
   render() {
@@ -72,9 +78,11 @@ const mapStateToProps = state => {
     sessionPeers,
     currentSessionDeadline,
     userId,
+    currentSessionName,
   } = state;
 
   return {
+    currentSessionName,
     userId,
     questions,
     sessionPeers,

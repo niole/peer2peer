@@ -7,6 +7,7 @@ export const CREATE_SESSION_VIEW = "createReviewSessionView";
 export const ANSWER_QUESTIONS_VIEW = "answerQuestionsView";
 
 /* header labels */
+export const NAME_SESSION_LABEL = "Name Session";
 export const DATEPICKER_PLACEHOLDER = "set a deadline";
 export const PICK_SESSION_LABEL = "Pick a Session";
 export const PICK_PEER_TO_REVIEW_LABEL = "Pick Peer To Review";

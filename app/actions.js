@@ -19,7 +19,15 @@ export const SET_AVAILABLE_SESSIONS = "setAvailableSessions";
 export const SET_QS_SUBVIEW = "setQuestionsSubview";
 export const SUBMIT_ANSWERS = "submitAnswers";
 export const SET_REVIEWER = "setReviewer";
+export const SET_SESSION_NAME = "setSessionName";
 
+
+export function setSessionName(name) {
+  return {
+    type: SET_SESSION_NAME,
+    data: name,
+  };
+}
 
 export function setReviewer(reviewer, reviewedUsers, view) {
   return {

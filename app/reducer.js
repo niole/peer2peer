@@ -1,4 +1,5 @@
 import {
+  SET_SESSION_NAME,
   SET_REVIEWER,
   SUBMIT_ANSWERS,
   SET_QS_SUBVIEW,
@@ -40,6 +41,7 @@ const initialState = {
   currentSessionDeadline: new Date(),
   currentSessionId: "",
   currentSession: {},
+  currentSessionName: "",
   questions: [],
   answers: [],
   mainView: CREATE_SESSION_VIEW, //enum, VIEW_ANSWERS_VIEW, CREATE_SESSION_VIEW, ANSWER_QUESTIONS_VIEW
@@ -49,6 +51,11 @@ const initialState = {
 
 export default function appReducer(state = initialState, action) {
   switch (action.type) {
+    case SET_SESSION_NAME:
+      return Object.assign({}, state, {
+        currentSessionName: action.data,
+      });
+
     case SET_REVIEWER:
       return Object.assign({}, state, {
         reviewerId: action.data.reviewer.id,

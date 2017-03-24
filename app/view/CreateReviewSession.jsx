@@ -9,17 +9,22 @@ import {
   updateSessionDeadline,
   updateAvailablePeers,
   removeQuestion,
+  setSessionName,
 } from '../actions.js';
 import {
   DATEPICKER_PLACEHOLDER,
+  NAME_SESSION_LABEL,
 } from '../constants.js';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
+import DebouncedInput from './DebouncedInput.jsx';
 
 
 class CreateReviewSession extends MUIBaseTheme {
   constructor() {
     super();
+
     this.questioninput = null;
+    this.sessionName = null;
     this.saveQuestion = this.saveQuestion.bind(this);
   }
 
@@ -130,10 +135,22 @@ class CreateReviewSession extends MUIBaseTheme {
   }
 
   render() {
+    const {
+      setSessionName,
+    } = this.props;
 
     return (
       <div>
         <div>
+          <h2 className="create-session-header">{ NAME_SESSION_LABEL }</h2>
+          <div className="centered-input">
+            <DebouncedInput
+              className="answer-input"
+              boundFunction={ setSessionName }
+              activeClass="active"
+              placeholder="name your session"
+            />
+          </div>
           <h2 className="create-session-header">{ DATEPICKER_PLACEHOLDER }</h2>
           <div>{ this.renderDeadline() }</div>
           <h2 className="create-session-header">pick peers</h2>
@@ -177,6 +194,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    setSessionName: name => dispatch(setSessionName(name)),
     removeQuestion: qId => dispatch(removeQuestion(qId)),
     removePeer: peerId => dispatch(removePeer(peerId)),
     updateAvailablePeers: peers => dispatch(updateAvailablePeers(peers)),

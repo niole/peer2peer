@@ -36,9 +36,7 @@ import {
   HEADER_TO_VIEW_MAP,
 } from '../constants.js';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
-import {
-  debouncer,
-} from '../util.js';
+import DebouncedInput from './DebouncedInput.jsx';
 
 
 const { string, arrayOf } = PropTypes;
@@ -54,7 +52,6 @@ class ReviewSessions extends MUIBaseTheme {
     this.toSession = this.toSession.bind(this);
     this.toReviewed = this.toReviewed.bind(this);
     this.toQuestions = this.toQuestions.bind(this);
-    this.addAnswer = debouncer(this.addAnswer.bind(this), this, 500);
     this.getReviewSessionToRead = this.getReviewSessionToRead.bind(this);
     this.getReviewSessionToEdit = this.getReviewSessionToEdit.bind(this);
 
@@ -290,7 +287,7 @@ class ReviewSessions extends MUIBaseTheme {
               key={ d.id }>
               <div className="qa-section">
                 <div className="subview-content">
-                  { d.id }
+                  { d.name }
                 </div>
               </div>
               <div className="qa-section">{ d.deadline }</div>
@@ -399,7 +396,7 @@ class ReviewSessions extends MUIBaseTheme {
    * handles adding answer to client state when user saves answer
    * in editable answers view
    */
-  addAnswer(index) {
+  addAnswer(index, content) {
     const {
       questions,
       addAnswer,
@@ -408,12 +405,10 @@ class ReviewSessions extends MUIBaseTheme {
       currentSessionId,
     } = this.props;
 
-    this[`answer-${index}`].className = "answer-input"; //TODO this is terrible
-
     const answer = {
       questionId: questions[index].id.toString(),
       reviewSessionId: currentSessionId.toString(),
-      content: this[`answer-${index}`].value,
+      content,
       reviewerId: userId,
       peerId: reviewedId.toString(),
     };
@@ -457,16 +452,13 @@ class ReviewSessions extends MUIBaseTheme {
                 </div>
               </div>
               <div className="qa-section">
-                <input
+                <DebouncedInput
                   className="answer-input"
-                  onKeyPress={() => {
-                    this[`answer-${i}`].className = "answer-input active"; //TODO this is terrible
-
-                    this.addAnswer(i)
-                  }}
+                  boundFunction={ (inputData) => this.addAnswer(i, inputData) }
+                  activeClass="active"
                   defaultValue={ answer ? answer.content : "" }
-                  ref={ ref => this[`answer-${i}`] = ref }
-                  placeholder={ ANSWER_Q_PLACEHOLDER }/>
+                  placeholder={ ANSWER_Q_PLACEHOLDER }
+                />
               </div>
             </li>
           );

@@ -228,6 +228,7 @@ router.post('/reviewsession/create/', function(req, res) {
   const deadline = body.deadline;
   const creatorId = body.creatorId;
   const questions = body.questions;
+  const name = body.currentSessionName;
 
   /**
     create review session,
@@ -238,6 +239,7 @@ router.post('/reviewsession/create/', function(req, res) {
   ReviewSession.create({
     createdBy: creatorId,
     deadline,
+    name,
   }).then(function(s) {
     const session = s.dataValues;
     const newQuestions = questions.map(function(q) {
