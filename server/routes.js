@@ -252,6 +252,7 @@ router.post('/reviewsession/create/', function(req, res) {
     Question.bulkCreate(newQuestions).then(function() {
       const newReviewers = reviewers.map(function(r) {
         return {
+          email: r.email,
           reviewSessionId: session.id,
           userId: r.id,
         };
