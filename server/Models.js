@@ -70,6 +70,10 @@ Question.sync({force: true});
 const User = sequelize.define(
   'users',
   {
+    admin: {
+      type: Sequelize.BOOLEAN,
+      field: 'admin'
+    },
     name: {
       type: Sequelize.STRING,
       field: 'name'
@@ -88,6 +92,7 @@ User.sync({force: true}).then(function() {
   return ["1", "2", "3"].map(function(u) {
     return User.create({
       name: "user"+u,
+      admin: u === "1",
       authId: u,
     });
   });

@@ -1,31 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="main.css">
-    <title>Peer2Peer</title>
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="1061542772704-s2cc0rclp48rs0fbr41fkv0l9la22b0b.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
   </head>
   <body>
-    <div id="login-container">
-      <h1 id="login-header">Peer2Peer</h1>
-      <a id="login-link" href="/auth/facebook">
-        click to authenticate with facebook
-      </a>
-
-      <div id="q-container"/>
-    </div>
-
+    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
     <script>
-      var totalDots = 2;
-      var i=1;
-      var dot;
-      for (; i < totalDots+1; i++) {
-        dot = document.createElement('div');
-        dot.className = "dot";
-        dot.id = i === 2 ? "two" : "one";
-        document.getElementById("q-container").appendChild(dot);
-      }
+      function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+      };
     </script>
   </body>
 </html>
-
