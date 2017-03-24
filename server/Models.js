@@ -56,7 +56,7 @@ const Question = sequelize.define(
   'question',
   {
     questionType: {
-      type: Sequelize.ENUM('ssc', 'open', 'emf'),
+      type: Sequelize.STRING,
       field: 'questiontype'
     },
     reviewSessionId: {

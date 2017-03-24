@@ -244,6 +244,7 @@ router.post('/reviewsession/create/', function(req, res) {
     const session = s.dataValues;
     const newQuestions = questions.map(function(q) {
       return {
+        questionType: q.questionType,
         reviewSessionId: session.id,
         content: q.content,
       };

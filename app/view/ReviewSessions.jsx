@@ -10,6 +10,10 @@ import {
   addAnswer,
 } from '../actions.js';
 import {
+  MET_EXPECTATIONS_LABEL,
+  FAILED_EXPECTATIONS_LABEL,
+  EXCEEDED_EXPECTATIONS_LABEL,
+  START_STOP_CONTINUE_LABEL,
   PICK_PEERS_SUB_HEADER,
   REVIEW_DEADLINE_SUB_HEADER,
   NO_SESSIONS_TO_REVIEW_HEADER,
@@ -429,6 +433,62 @@ class ReviewSessions extends MUIBaseTheme {
     );
   }
 
+  getCheckbox(changeHandler, label, questionIndex, defaultValue) {
+    return (
+      <span>
+        <input
+          type="checkbox"
+          checked={ defaultValue === label ? "checked" : "" }
+          value={ label }
+          />
+        <label
+          htmlFor={ label }>
+          { label }
+        </label>
+      </span>
+    );
+  }
+
+  getEditableQInput(questionType, questionIndex, oldAnswer) {
+    switch(questionType) {
+      case "emf":
+        return [MET_EXPECTATIONS_LABEL, EXCEEDED_EXPECTATIONS_LABEL, FAILED_EXPECTATIONS_LABEL]
+          .map(label => this.getCheckbox(
+            (inputData) => this.addAnswer(questionIndex, inputData), label, questionIndex, oldAnswer)
+          );
+      case "ssc":
+        return (
+          <DebouncedInput
+            className="answer-input"
+            boundFunction={ (inputData) => this.addAnswer(questionIndex, inputData) }
+            activeClass="active"
+            defaultValue={ oldAnswer ? oldAnswer.content : "" }
+            placeholder={ START_STOP_CONTINUE_LABEL }
+          />
+        );
+      case "open":
+        return (
+          <DebouncedInput
+            className="answer-input"
+            boundFunction={ (inputData) => this.addAnswer(questionIndex, inputData) }
+            activeClass="active"
+            defaultValue={ oldAnswer ? oldAnswer.content : "" }
+            placeholder={ ANSWER_Q_PLACEHOLDER }
+          />
+        );
+      default:
+        return (
+          <DebouncedInput
+            className="answer-input"
+            boundFunction={ (inputData) => this.addAnswer(questionIndex, inputData) }
+            activeClass="active"
+            defaultValue={ oldAnswer ? oldAnswer.content : "" }
+            placeholder={ ANSWER_Q_PLACEHOLDER }
+          />
+        );
+    }
+  }
+
   /**
    * renders editable answers views with questions
    */
@@ -452,13 +512,7 @@ class ReviewSessions extends MUIBaseTheme {
                 </div>
               </div>
               <div className="qa-section">
-                <DebouncedInput
-                  className="answer-input"
-                  boundFunction={ (inputData) => this.addAnswer(i, inputData) }
-                  activeClass="active"
-                  defaultValue={ answer ? answer.content : "" }
-                  placeholder={ ANSWER_Q_PLACEHOLDER }
-                />
+                { this.getEditableQInput(q.questionType, i, answer) }
               </div>
             </li>
           );
