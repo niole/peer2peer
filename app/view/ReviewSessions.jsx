@@ -410,6 +410,7 @@ class ReviewSessions extends MUIBaseTheme {
     } = this.props;
 
     const answer = {
+      answerType: questions[index].questionType,
       questionId: questions[index].id.toString(),
       reviewSessionId: currentSessionId.toString(),
       content,
@@ -477,7 +478,7 @@ class ReviewSessions extends MUIBaseTheme {
               (inputData) => this.addAnswer(questionIndex, inputData),
               label,
               questionIndex,
-              oldAnswer,
+              oldAnswer.content,
               "emf"
             )
           );
