@@ -433,14 +433,34 @@ class ReviewSessions extends MUIBaseTheme {
     );
   }
 
-  getCheckbox(changeHandler, label, questionIndex, defaultValue) {
-    return (
-      <span>
+  getCheckbox(changeHandler, label, questionIndex, defaultValue, groupName) {
+    let checkbox = (
         <input
-          type="checkbox"
-          checked={ defaultValue === label ? "checked" : "" }
+          name={ groupName }
+          key={ label }
+          onChange={ () => changeHandler(label) }
+          type="radio"
           value={ label }
           />
+    );
+
+    if (defaultValue === label) {
+      checkbox = (
+          <input
+            name={ groupName }
+            key={ label }
+            onChange={ () => changeHandler(label) }
+            type="radio"
+            checked={ "checked" }
+            value={ label }
+          />
+      );
+
+    }
+
+    return (
+      <span key={ label }>
+        { checkbox }
         <label
           htmlFor={ label }>
           { label }
@@ -454,7 +474,12 @@ class ReviewSessions extends MUIBaseTheme {
       case "emf":
         return [MET_EXPECTATIONS_LABEL, EXCEEDED_EXPECTATIONS_LABEL, FAILED_EXPECTATIONS_LABEL]
           .map(label => this.getCheckbox(
-            (inputData) => this.addAnswer(questionIndex, inputData), label, questionIndex, oldAnswer)
+              (inputData) => this.addAnswer(questionIndex, inputData),
+              label,
+              questionIndex,
+              oldAnswer,
+              "emf"
+            )
           );
       case "ssc":
         return (
