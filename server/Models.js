@@ -117,7 +117,7 @@ const Answer = sequelize.define(
   'answer',
   {
     answerType: {
-      type: Sequelize.ENUM('ssc', 'open', 'emf'),
+      type: Sequelize.STRING,
       field: 'answertype'
     },
     questionId: {

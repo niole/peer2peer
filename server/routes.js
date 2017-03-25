@@ -117,7 +117,7 @@ router.post('/answers/submit/', function(req, res) {
           return a.questionId === otherA.questionId;
         });
       });
-
+      let updated = [];
       answersToUpdate.forEach(function(ans) {
 
         Answer.update(
@@ -126,6 +126,21 @@ router.post('/answers/submit/', function(req, res) {
           where: {
             questionId: ans.questionId
           },
+        }).then(function() {
+          updated.push(true);
+          if (updated.length === answersToUpdate.length) {
+            //get reviewed
+            Reviewed.findOne({
+              where: {
+                sessionId: answers[0].reviewSessionId,
+                reviewerId: answers[0].reviewerId,
+                reviewedId: answers[0].peerId,
+              },
+            }).then(function(r) {
+              res.send(r.dataValues);
+            });
+
+          }
         });
 
       });

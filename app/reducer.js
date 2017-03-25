@@ -67,7 +67,9 @@ export default function appReducer(state = initialState, action) {
         reviewedId: "",
         sessionView: PICK_PEER_TO_REVIEW_VIEW,
         answers: [],
-        reviewed: state.reviewed.concat([action.data.reviewed]),
+        reviewed: state.reviewed.find(r => r.id.toString() === action.data.reviewed.id.toString()) ?
+          state.reviewed.map(r => r.id.toString() === action.data.reviewed.id.toString() ? action.data.reviewed : r) :
+          state.reviewed.concat([action.data.reviewed]),
       });
 
     case SET_QS_SUBVIEW:

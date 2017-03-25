@@ -478,7 +478,7 @@ class ReviewSessions extends MUIBaseTheme {
               (inputData) => this.addAnswer(questionIndex, inputData),
               label,
               questionIndex,
-              oldAnswer.content,
+              oldAnswer ? oldAnswer.content : null,
               "emf"
             )
           );
