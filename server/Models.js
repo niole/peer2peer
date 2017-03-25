@@ -86,9 +86,9 @@ const User = sequelize.define(
       type: Sequelize.STRING,
       field: 'name'
     },
-    authId: {
+    email: {
       type: Sequelize.STRING,
-      field: 'authId'
+      field: 'email'
     }
   },
   {
@@ -96,15 +96,7 @@ const User = sequelize.define(
   }
 );
 
-User.sync({force: true}).then(function() {
-  return ["1", "2", "3"].map(function(u) {
-    return User.create({
-      name: "user"+u,
-      admin: u === "1",
-      authId: u,
-    });
-  });
-});
+User.sync({force: true});
 
 const Answer = sequelize.define(
   'answer',
