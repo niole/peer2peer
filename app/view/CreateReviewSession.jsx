@@ -172,7 +172,6 @@ class CreateReviewSession extends MUIBaseTheme {
              Save
            </button>
 
-
           <h2 className="create-session-header">
             create questions (optional)
           </h2>

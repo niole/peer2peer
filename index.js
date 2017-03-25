@@ -41,25 +41,6 @@ s.app.get('/login', function(req, res) {
   res.sendFile(path.join(__dirname, 'dist/login.html'));
 });
 
-s.app.get('/referred/:email/:sessionId', function(req, res) { //end point for users with email link
-  const email = req.params.email;
-  const sessionId = req.params.sessionId;
-
-  Reviewer.findOne({
-    where: {
-      email: email,
-      reviewSessionId: sessionId,
-    },
-  }).then(function(reviewer) {
-    if (reviewer) {
-      res.sendFile(path.join(__dirname, 'dist/answers.html'));
-    }
-    else {
-      res.send("Sorry, you are not part of any review sessions.");
-    }
-  });
-});
-
 s.app.get('/:email/:name/:id', function response(req, res) {
   const id = req.params.id;
   const name = req.params.name;
@@ -67,23 +48,22 @@ s.app.get('/:email/:name/:id', function response(req, res) {
 
   //verify id
   var options = {
-    host: 'https://www.googleapis.com',
+    host: 'googleapis.com',
     port: 80,
-    path: `/oauth2/v3/tokeninfo?id_token=${id}`,
+    path: '/oauth2/v3/tokeninfo?id_token=' + id,
   };
 
   http.get(options, function(resp) {
-
     resp.on('data', function(chunk) {
+      //TODO this is 404ing
+
       User.find({
         where: {
-          name: name,
           email: email,
         }
       }).then(function(user) {
         if (user) {
-          const userId = user.dataValues.id;
-          res.redirect(`/${userId}`);
+          res.redirect('/');
         } else {
           //create user
           User.create({
@@ -92,8 +72,7 @@ s.app.get('/:email/:name/:id', function response(req, res) {
             name: name,
           }).then(function(user) {
             if (user) {
-              const userId = user.dataValues.id;
-              res.redirect(`/${userId}`);
+              res.redirect('/');
             }
             else {
               console.error("there was an error while creating user", user);
@@ -108,6 +87,6 @@ s.app.get('/:email/:name/:id', function response(req, res) {
   });
 });
 
-s.app.get(FIXTURE_USERIDS_PATTERN, function(req, res) {
+s.app.get("/", function(req, res) {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });

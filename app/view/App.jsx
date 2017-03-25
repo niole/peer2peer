@@ -5,13 +5,25 @@ import SiteContainer from './SiteContainer.jsx';
 
 injectTapEventPlugin();
 
+const { string } = PropTypes;
+const propTypes = {
+  userEmail: string.isRequired,
+};
 
-export default class App extends Component {
+class App extends Component {
 	render() {
+    const {
+      userEmail,
+    } = this.props;
+
 		return (
       <div className="landing-page">
-        <SiteContainer/>
+        <SiteContainer
+          userEmail={ userEmail }
+         />
       </div>
 		);
 	}
 }
+App.propTypes = propTypes;
+export default App;

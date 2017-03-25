@@ -12,6 +12,25 @@ const Question = models.Question;
 const sequelize = models.sequelize;
 
 
+router.get('/admin/getid/:email/', function(req, res) {
+  const email = req.params.email;
+
+  User.findOne({
+    where: {
+      admin: true,
+      email: email,
+    },
+  }).then(function(user) {
+    if (user) {
+      res.send(user.dataValues);
+    }
+    else {
+      res.sendStatus(new Error("there is no admin with that email"));
+    }
+  });
+
+});
+
 router.get('/questions/answers/:reviewerId/:peerId/:sessionId', function(req, res) {
   const currentSessionId = req.params.sessionId;
   const peerId = req.params.peerId; //see what reviews have been created
@@ -223,18 +242,19 @@ router.get('/reviewsession/includes/:userId/', function(req, res) {
 });
 
 router.post('/reviewsession/create/', function(req, res) {
+  /**
+    creates review session,
+    create questions for review session
+    create reviewers for session
+    creates non-admin users for session if don't already exist
+   */
+
   const body = req.body;
   const reviewers = body.reviewers;
   const deadline = body.deadline;
   const creatorId = body.creatorId;
   const questions = body.questions;
   const name = body.currentSessionName;
-
-  /**
-    create review session,
-    create questions for review session
-    create reviewers for session
-   */
 
   ReviewSession.create({
     createdBy: creatorId,
@@ -251,22 +271,76 @@ router.post('/reviewsession/create/', function(req, res) {
     });
 
     Question.bulkCreate(newQuestions).then(function() {
-      const newReviewers = reviewers.map(function(r) {
-        return {
-          email: r.email,
-          reviewSessionId: session.id,
-          userId: r.id,
-        };
-      });
+      let allCreated = [];
 
-      Reviewer.bulkCreate(newReviewers).then(function() {
-        res.send(true);
+      reviewers.forEach(function(r) {
+        User.findOne({
+          where: {
+            email: r.email,
+            admin: false,
+          },
+        }).then(function(user) {
+          if (!user) {
+
+            User.create({
+              name: r.email,
+              email: r.email,
+              admin: false,
+            }).then(function(newUser) {
+              const userData = newUser.dataValues;
+
+              Reviewer.create({
+                email: r.email,
+                reviewSessionId: session.id,
+                userId: userData.id,
+              }).then(function() {
+                allCreated.push(true);
+                if (allCreated.length === reviewers.length) {
+                  res.send(true);
+                }
+              });
+            });
+
+          }
+          else {
+            //just create reviewer
+            const userData = user.dataValues;
+
+            Reviewer.create({
+              email: r.email,
+              reviewSessionId: session.id,
+              userId: userData.id,
+            }).then(function() {
+              allCreated.push(true);
+              if (allCreated.length === reviewers.length) {
+                res.send(true);
+              }
+            });
+
+          }
+        });
+
       });
 
     });
 
   });
 
+});
+
+router.get('/user/:email', function(req, res) {
+  User.findOne({
+    where: {
+      email: req.params.email,
+    },
+  }).then(function(user) {
+    if (user) {
+      res.send(user.dataValues);
+    }
+    else {
+      res.send(new Error("There is no user with that email."));
+    }
+  });
 });
 
 module.exports = router;

@@ -1,3 +1,4 @@
+/* patterns */
 /* button labels */
 export const CREATE_SESSION_BTN_LABEL = "Create Peer2Peer Session";
 
@@ -36,7 +37,6 @@ export const EDITABLE_QS_VIEW = "editQuestionsView";
 export const READ_ONLY_QS_VIEW = "readOnlyQsView";
 export const PICK_PEER_TO_READ_VIEW = "pickPeerAndReadTheirReviews";
 export const READ_PEERS_REVIEWS_VIEW = "readPeersReviewsView";
-export const USER_ID_CAPTURE = /\/([0-9]+)$/;
 
 export const HEADER_TO_VIEW_MAP = {
   [PICK_SESSION_LABEL]: PICK_SESSION_VIEW,

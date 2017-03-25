@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import $ from 'jquery';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
 import CreateSessionButton from './CreateSessionButton.jsx';
 import SubmitAnswersButton from './SubmitAnswersButton.jsx';
@@ -7,6 +8,7 @@ import SiteHeader from './SiteHeader.jsx';
 import {
   setCurrentSession,
   switchMainView,
+  updateUserInfo,
 } from '../actions.js';
 import {
   PICK_PEER_TO_REVIEW_VIEW,
@@ -36,8 +38,36 @@ const allSubViews = [
   ANSWER_QUESTIONS_VIEW,
 ];
 
+const { string } = PropTypes;
+const propTypes = {
+  userEmail: string.isRequired,
+};
 
 class SiteContainer extends MUIBaseTheme {
+  constructor(props) {
+    super(props);
+
+    const {
+      updateUserInfo,
+      userEmail,
+    } = props;
+
+    const url = `routes/user/${userEmail}/`;
+    $.ajax({
+      url,
+      success: user => {
+        if (user.admin) {
+          updateUserInfo(user, CREATE_SESSION_VIEW);
+        }
+        else {
+          updateUserInfo(user, ANSWER_QUESTIONS_VIEW);
+        }
+      },
+      error: err => console.error(err),
+    });
+
+  }
+
   /**
    * for viewing answered questions
    * for session creator
@@ -76,7 +106,7 @@ class SiteContainer extends MUIBaseTheme {
       case ANSWER_QUESTIONS_VIEW:
         return this.getAnswerQuestionsView();
       default:
-        return <CreateReviewSession/>;
+        return <div/>;
     }
 
   }
@@ -96,13 +126,16 @@ class SiteContainer extends MUIBaseTheme {
     const {
       switchMainView,
       mainView,
+      isAdmin,
     } = this.props;
 
     return (
       <div>
         <SiteHeader
           headerHandler={ switchMainView }
-          headers={ allSubViews }
+          headers={
+            allSubViews.filter(view => isAdmin ? view !== ANSWER_QUESTIONS_VIEW : view === ANSWER_QUESTIONS_VIEW)
+          }
           focused={ mainView }
         />
         { this.getCurrentView(mainView) }
@@ -115,12 +148,16 @@ class SiteContainer extends MUIBaseTheme {
   }
 }
 
+SiteContainer.propTypes = propTypes;
+
 const mapStateToProps = state => {
   const {
+    isAdmin,
     mainView,
   } = state;
 
   return {
+    isAdmin,
     mainView,
   };
 };
@@ -128,6 +165,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    updateUserInfo: (user, view) => dispatch(updateUserInfo(user, view)),
     switchMainView: view => dispatch(switchMainView(view)),
     setCurrentSession: (id, view) => dispatch(setCurrentSession(id, view)),
   };

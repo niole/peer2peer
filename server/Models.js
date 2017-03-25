@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const p2pConfig = require('../p2pConfig.json');
 
 const sequelize = new Sequelize('mysql', 'root', 'root', {
   host: "127.0.0.1",
@@ -96,7 +97,21 @@ const User = sequelize.define(
   }
 );
 
-User.sync({force: true});
+User.sync({force: true}).then(function() {
+  return p2pConfig.reviewers.map(function(r) {
+    return User.create({
+      admin: false,
+      email: r.email,
+      name: r.name,
+    });
+  }).concat([
+    User.create({
+      name: p2pConfig.admin.name,
+      email: p2pConfig.admin.email,
+      admin: true,
+    })
+  ]);
+});
 
 const Answer = sequelize.define(
   'answer',

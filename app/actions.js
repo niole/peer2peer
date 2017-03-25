@@ -2,7 +2,7 @@ import {
   PICK_SESSION_VIEW,
 } from './constants.js';
 export const UPDATE_PEERS_IN_SESSION = "updatePeersInSession";
-export const UPDATE_USERID = "updateuserId";
+export const UPDATE_USER = "updateuserId";
 export const REPLACE_QUESTIONS = "replaceQuestions";
 export const REPLACE_ANSWERS = "replaceAnswers";
 export const ADD_QUESTIONS = "addQuestions";
@@ -164,10 +164,13 @@ export function replaceQuestions(newQs) {
   };
 }
 
-export function updateUserId(userId) {
+export function updateUserInfo(user, view) {
   return {
-    type: UPDATE_USERID,
-    data: userId,
+    type: UPDATE_USER,
+    data: {
+      user,
+      view,
+    }
   };
 }
 

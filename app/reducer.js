@@ -7,7 +7,7 @@ import {
   SET_SESSION_SUB_VIEW,
   REPLACE_QUESTIONS,
   UPDATE_PEERS_IN_SESSION,
-  UPDATE_USERID,
+  UPDATE_USER,
   REPLACE_ANSWERS,
   ADD_QUESTIONS,
   ADD_ANSWER,
@@ -24,15 +24,13 @@ import {
   CREATE_SESSION_VIEW,
   PICK_SESSION_VIEW,
 } from './constants.js'
-import {
-  getUserId,
-} from './util.js';
 
 
 const initialState = {
+  isAdmin: false,
   reviewer: {},
   reviewed: [],
-  userId: getUserId(), //TODO workaround
+  userId: "",
   reviewerId: "",
   reviewedId: "",
   peers: [],
@@ -44,7 +42,7 @@ const initialState = {
   currentSessionName: "",
   questions: [],
   answers: [],
-  mainView: CREATE_SESSION_VIEW, //enum, VIEW_ANSWERS_VIEW, CREATE_SESSION_VIEW, ANSWER_QUESTIONS_VIEW
+  mainView: "", //enum, VIEW_ANSWERS_VIEW, CREATE_SESSION_VIEW, ANSWER_QUESTIONS_VIEW,
   sessionView: PICK_SESSION_VIEW, //enum
 };
 
@@ -162,9 +160,11 @@ export default function appReducer(state = initialState, action) {
         questions: action.data,
       });
 
-    case UPDATE_USERID:
+    case UPDATE_USER:
       return Object.assign({}, state, {
-        userId: action.data,
+        userId: action.data.user.id.toString(),
+        isAdmin: action.data.user.admin,
+        mainView: action.data.view,
       });
 
     case REMOVE_PEER_FROM_SESSION:
