@@ -1,15 +1,18 @@
-$main-background: rgb(75, 191, 107)
-$main-color: #244f32
-$secondary-color: rgba(255, 255, 255, 0.298039)
-$secondary-background: #60d187
-$main-font: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif
 $main-shadow: rgba(0, 0, 0, .2)
+$main-link-background: #4094ed
+$main-link-background-hover: #238be8
 
 $secondary-hover-background: #67e091
 $secondary-click-background: #6ded99
+$white: #fff
+$main-color: #244f32
+
+$main-background: $white
+$secondary-color: rgba(255, 255, 255, 0.298039)
+$secondary-background: #60d187
+$main-font: Colfax Regular,Roboto,Helvetica Neue,Arial,sans-serif
 
 body
-  font-weight: bold
   background: $main-background
   margin: 0
   font-family: $main-font
@@ -62,19 +65,38 @@ footer
   text-align: center
 
 #login-link
-  width: 245px
+  width: 158px
   display: block
   margin: auto
 
+.button
+  letter-spacing: .015rem
+  display: inline-block
+  font-weight: 400
+  line-height: 1.25
+  text-align: center
+  white-space: nowrap
+  vertical-align: middle
+
+  &.big
+    border-radius: 6px
+    padding: 1.3rem 3rem
+    font-size: 1.5rem
+    margin-top: 3rem
+
+  &.animated
+    transition: background-color .25s, border-color .25s
+
 a
+  color: $white
   border: 1px solid
   padding: 5px
   border-radius: 3px
-  color: deepskyblue
+  background: $main-link-background
+  touch-action: manipulation
 
   &:hover
-    color: lightblue
-    background: midnightblue
+    background: $main-link-background-hover
 
   &:link
     text-decoration: none
@@ -83,6 +105,7 @@ a
     text-decoration: none
 
   &:active
+    background: $main-link-background-hover
     text-decoration: none
 
 #logout-link
