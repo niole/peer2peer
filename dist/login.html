@@ -1,24 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="1061542772704-s2cc0rclp48rs0fbr41fkv0l9la22b0b.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
   </head>
   <body>
-    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-    <script>
-      function onSignIn(googleUser) {
-        // Useful data for your client-side scripts:
-        var profile = googleUser.getBasicProfile();
-        var email = profile.getEmail();
-        var name = profile.getName();
-        var res = googleUser.getAuthResponse();
-        var id_token = res.id_token;
-
-        window.sessionStorage.accessToken = res.access_token;
-        window.location = "http://localhost:3000/"+email + "/" + name + "/" + id_token;
-      };
-    </script>
+    <a href="/auth/google">Login</a>
   </body>
 </html>

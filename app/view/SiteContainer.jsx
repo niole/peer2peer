@@ -38,21 +38,15 @@ const allSubViews = [
   ANSWER_QUESTIONS_VIEW,
 ];
 
-const { string } = PropTypes;
-const propTypes = {
-  userEmail: string.isRequired,
-};
-
 class SiteContainer extends MUIBaseTheme {
   constructor(props) {
     super(props);
 
     const {
       updateUserInfo,
-      userEmail,
     } = props;
 
-    const url = `routes/user/${userEmail}/`;
+    const url = `routes/user/`;
     $.ajax({
       url,
       success: user => {
@@ -147,8 +141,6 @@ class SiteContainer extends MUIBaseTheme {
     );
   }
 }
-
-SiteContainer.propTypes = propTypes;
 
 const mapStateToProps = state => {
   const {

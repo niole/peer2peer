@@ -11,142 +11,204 @@ const ReviewSession = models.ReviewSession;
 const Question = models.Question;
 const sequelize = models.sequelize;
 
+const NO_ACCESS_ERROR = "Access denied.";
 
-router.get('/admin/getid/:email/', function(req, res) {
-  const email = req.params.email;
-
-  User.findOne({
-    where: {
-      admin: true,
-      email: email,
-    },
-  }).then(function(user) {
-    if (user) {
-      res.send(user.dataValues);
-    }
-    else {
-      res.sendStatus(new Error("there is no admin with that email"));
-    }
-  });
-
-});
+function authHandler(ifTrue, executeThis) {
+  if (ifTrue) {
+    executeThis();
+  }
+  else {
+    throw new Error(NO_ACCESS_ERROR);
+  }
+}
 
 router.get('/questions/answers/:reviewerId/:peerId/:sessionId', function(req, res) {
+  /**
+      gets all questions and answers for related readable or writable session
+      specific to a reviewer, a peer (reviewee), and a session
+      user must be reviewer
+      or session creator
+   */
   const currentSessionId = req.params.sessionId;
   const peerId = req.params.peerId; //see what reviews have been created
   const reviewerId = req.params.reviewerId;
 
-  Question.findAll({
-    where: {
-      reviewSessionId: currentSessionId,
-    },
-  }).then(function(qs) {
-    Answer.findAll({
+  if (req.user.admin) {
+    ReviewSession.findOne({
       where: {
-        reviewerId: reviewerId,
-        reviewSessionId: currentSessionId,
-        peerId: peerId,
+        createdBy: req.user.id,
+        id: currentSessionId
       },
-    }).then(function(as) {
-      res.send({
-        answers: as.map(a => a.dataValues),
-        questions: qs.map(q => q.dataValues),
-      });
+    }).then(function(rs) {
+      authHandler(
+        !!rs,
+        function() {
+          Question.findAll({
+            where: {
+              reviewSessionId: currentSessionId,
+            },
+          }).then(function(qs) {
+            Answer.findAll({
+              where: {
+                reviewerId: reviewerId,
+                reviewSessionId: currentSessionId,
+                peerId: peerId,
+              },
+            }).then(function(as) {
+              res.send({
+                answers: as.map(a => a.dataValues),
+                questions: qs.map(q => q.dataValues),
+              });
+            });
+          });
+        }
+      );
     });
-  });
+  }
+  else {
+    //user is not an admin
+    //must be reviewer
 
+    authHandler(
+      req.user.id.toString() === reviewerId,
+      function() {
+        Question.findAll({
+          where: {
+            reviewSessionId: currentSessionId,
+          },
+        }).then(function(qs) {
+          Answer.findAll({
+            where: {
+              reviewerId: reviewerId,
+              reviewSessionId: currentSessionId,
+              peerId: peerId,
+            },
+          }).then(function(as) {
+            res.send({
+              answers: as.map(a => a.dataValues),
+              questions: qs.map(q => q.dataValues),
+            });
+          });
+        });
+      }
+    );
+  }
 });
 
 router.get('/reviewed/:currentSessionId/:peerId/', function(req, res) {
-  //get all peers that are part of this session and have reviews by this peer
+  /*
+    get all peers that are part of this session and have reviews by this peer
+  */
+
   const currentSessionId = req.params.currentSessionId;
   const peerId = req.params.peerId; //see what reviews have been created
 
-  Reviewer.findAll({
-    where: {
-      reviewSessionId: currentSessionId,
-      userId: {
-        $ne: peerId,
-      },
-    },
-  }).then(function(as) {
-    const reviewed = as.map(a => a.dataValues.userId);
-
-    User.findAll({
-      where: {
-        id: {
-          $in: reviewed,
+  authHandler(
+    req.user.admin, //does short circuit check to preempt db queries if not admin
+    function() {
+      ReviewSession.findOne({
+        where: {
+          createdBy: req.user.id,
+          id: currentSessionId,
         },
-      },
-    }).then(function(us) {
-      res.send(us.map(u => u.dataValues));
+      }).then(function(adminReviewSession) {
+
+        authHandler(
+          !!adminReviewSession,
+          function() {
+            Reviewer.findAll({
+              where: {
+                reviewSessionId: currentSessionId,
+                userId: {
+                  $ne: peerId,
+                },
+              },
+            }).then(function(as) {
+              const reviewed = as.map(a => a.dataValues.userId);
+
+              User.findAll({
+                where: {
+                  id: {
+                    $in: reviewed,
+                  },
+                },
+              }).then(function(us) {
+                res.send(us.map(u => u.dataValues));
+              });
+
+            });
+          });
+
+      });
     });
-
-  });
-
 });
 
 router.post('/answers/submit/', function(req, res) {
   //if previously reviewed, update, else, create
   const answers = req.body.answers;
 
-  Answer.findAll({
-    where: {
-      reviewSessionId: answers[0].reviewSessionId,
-      reviewerId: answers[0].reviewerId,
-    },
-  }).then(function(prevAnswers) {
-    const answerData = prevAnswers.map(function(a) { return a.dataValues; });
-
-    if (!answerData.length) {
-
-      Answer.bulkCreate(answers).then(function() {
-        Reviewed.create({
-          sessionId: answers[0].reviewSessionId,
+  authHandler(
+    req.user.id.toString() === answers[0].reviewerId,
+    function() {
+      Answer.findAll({
+        where: {
+          reviewSessionId: answers[0].reviewSessionId,
           reviewerId: answers[0].reviewerId,
-          reviewedId: answers[0].peerId,
-        }).then(function(r) {
-          res.send(r.dataValues);
-        });
-      });
+        },
+      }).then(function(prevAnswers) {
+        const answerData = prevAnswers.map(function(a) { return a.dataValues; });
 
-    }
-    else {
-      const answersToUpdate = answers.filter(function(a) {
-        return !!answerData.find(function(otherA) {
-          return a.questionId === otherA.questionId;
-        });
-      });
-      let updated = [];
-      answersToUpdate.forEach(function(ans) {
+        if (!answerData.length) {
 
-        Answer.update(
-          ans,
-         {
-          where: {
-            questionId: ans.questionId
-          },
-        }).then(function() {
-          updated.push(true);
-          if (updated.length === answersToUpdate.length) {
-            //get reviewed
-            Reviewed.findOne({
-              where: {
-                sessionId: answers[0].reviewSessionId,
-                reviewerId: answers[0].reviewerId,
-                reviewedId: answers[0].peerId,
-              },
+          Answer.bulkCreate(answers).then(function() {
+            Reviewed.create({
+              sessionId: answers[0].reviewSessionId,
+              reviewerId: answers[0].reviewerId,
+              reviewedId: answers[0].peerId,
             }).then(function(r) {
               res.send(r.dataValues);
             });
+          });
 
-          }
-        });
+        }
+        else {
+          const answersToUpdate = answers.filter(function(a) {
+            return !!answerData.find(function(otherA) {
+              return a.questionId === otherA.questionId;
+            });
+          });
+          let updated = [];
+          answersToUpdate.forEach(function(ans) {
 
+            Answer.update(
+              ans,
+             {
+              where: {
+                questionId: ans.questionId
+              },
+            }).then(function() {
+              updated.push(true);
+              if (updated.length === answersToUpdate.length) {
+                //get reviewed
+                Reviewed.findOne({
+                  where: {
+                    sessionId: answers[0].reviewSessionId,
+                    reviewerId: answers[0].reviewerId,
+                    reviewedId: answers[0].peerId,
+                  },
+                }).then(function(r) {
+                  res.send(r.dataValues);
+                });
+
+              }
+            });
+
+          });
+
+        }
       });
+    });
 
-    }
-  });
 });
 
 router.get('/questions/:sessionId/', function(req, res) {
@@ -175,39 +237,70 @@ router.get('/peers/all/:userId', function(req, res) {
 });
 
 router.get('/reviewers/:userId/:sessionId/', function(req, res) {
+  /*
+    get reviewable peers
+    user is either part of the peers in the review session or is the admin
+  */
+
   const userId = req.params.userId;
   const sessionId = req.params.sessionId;
 
-  Reviewer.findAll({
+  Reviewer.findOne({
     where: {
-      userId: {
-        $ne: userId,
-      },
+      userId: userId,
       reviewSessionId: sessionId,
     },
-  }).then(function(reviewers) {
-    const userIds = reviewers.map(r => r.dataValues.userId);
+  }).then(function(r) {
+    authHandler(
+      (!req.user.admin && r && r.dataValues.reviewSessionId === sessionId) || req.user.admin,
+      function() {
+        ReviewSession.findOne({
+          where: {
+            createdBy: userId,
+          },
+        }).then(function(rs) {
 
-    User.findAll({
-      where: {
-        id: {
-          $in: userIds,
-        },
-      },
-    }).then(function(users) {
-      Reviewed.findAll({
-        where: {
-          sessionId: sessionId,
-        },
-      }).then(function(rs) {
+          authHandler(
+            !req.user.admin || req.user.admin && rs,
+            function() {
+              Reviewer.findAll({
+                where: {
+                  userId: {
+                    $ne: userId,
+                  },
+                  reviewSessionId: sessionId,
+                },
+              }).then(function(reviewers) {
+                const userIds = reviewers.map(r => r.dataValues.userId);
 
-        res.send({
-          reviewers: users.map(u => u.dataValues),
-          reviewed: rs.map(r => r.dataValues),
+                User.findAll({
+                  where: {
+                    id: {
+                      $in: userIds,
+                    },
+                  },
+                }).then(function(users) {
+                  Reviewed.findAll({
+                    where: {
+                      sessionId: sessionId,
+                    },
+                  }).then(function(rs) {
+
+                    res.send({
+                      reviewers: users.map(u => u.dataValues),
+                      reviewed: rs.map(r => r.dataValues),
+                    });
+
+                  });
+                });
+              });
+
+            }
+          );
+
         });
-
-      });
-    });
+      }
+    );
   });
 
 });
@@ -218,13 +311,18 @@ router.get('/reviewsession/createdby/:userId/', function(req, res) {
    */
   const userId = req.params.userId;
 
-  ReviewSession.findAll({
-    where: {
-      createdBy: userId,
-    },
-  }).then(function(rs) {
-    res.send(rs.map(r => r.dataValues));
-  });
+  if (req.user.id.toString() === userId) {
+    ReviewSession.findAll({
+      where: {
+        createdBy: userId,
+      },
+    }).then(function(rs) {
+      res.send(rs.map(r => r.dataValues));
+    });
+  }
+  else {
+    throw new Error(NO_ACCESS_ERROR);
+  }
 
 });
 
@@ -235,24 +333,29 @@ router.get('/reviewsession/includes/:userId/', function(req, res) {
 
   const userId = req.params.userId;
 
-  Reviewer.findAll({
-    attributes: [[sequelize.fn('DISTINCT', sequelize.col('reviewsessionid')), 'reviewSessionId']],
-    where: {
-      userId: userId,
-    },
-  }).then(function(rs) {
-    const reviewSessionIds = rs.map(r => r.dataValues.reviewSessionId);
-
-    ReviewSession.findAll({
-      where: {
-        id: {
-          $in: reviewSessionIds,
+  authHandler(
+    req.user.id.toString() === userId,
+    function() {
+      Reviewer.findAll({
+        attributes: [[sequelize.fn('DISTINCT', sequelize.col('reviewsessionid')), 'reviewSessionId']],
+        where: {
+          userId: userId,
         },
-      },
-    }).then(function(reviewSessions) {
-      res.send(reviewSessions.map(r => r.dataValues));
-    });
-  });
+      }).then(function(rs) {
+        const reviewSessionIds = rs.map(r => r.dataValues.reviewSessionId);
+
+        ReviewSession.findAll({
+          where: {
+            id: {
+              $in: reviewSessionIds,
+            },
+          },
+        }).then(function(reviewSessions) {
+          res.send(reviewSessions.map(r => r.dataValues));
+        });
+      });
+    }
+  );
 
 });
 
@@ -271,91 +374,90 @@ router.post('/reviewsession/create/', function(req, res) {
   const questions = body.questions;
   const name = body.currentSessionName;
 
-  ReviewSession.create({
-    createdBy: creatorId,
-    deadline,
-    name,
-  }).then(function(s) {
-    const session = s.dataValues;
-    const newQuestions = questions.map(function(q) {
-      return {
-        questionType: q.questionType,
-        reviewSessionId: session.id,
-        content: q.content,
-      };
-    });
+  authHandler(
+    req.user.admin && req.user.id.toString() === creatorId,
+    function() {
+      ReviewSession.create({
+        createdBy: creatorId,
+        deadline,
+        name,
+      }).then(function(s) {
+        const session = s.dataValues;
+        const newQuestions = questions.map(function(q) {
+          return {
+            questionType: q.questionType,
+            reviewSessionId: session.id,
+            content: q.content,
+          };
+        });
 
-    Question.bulkCreate(newQuestions).then(function() {
-      let allCreated = [];
+        Question.bulkCreate(newQuestions).then(function() {
+          let allCreated = [];
 
-      reviewers.forEach(function(r) {
-        User.findOne({
-          where: {
-            email: r.email,
-            admin: false,
-          },
-        }).then(function(user) {
-          if (!user) {
-
-            User.create({
-              name: r.email,
-              email: r.email,
-              admin: false,
-            }).then(function(newUser) {
-              const userData = newUser.dataValues;
-
-              Reviewer.create({
+          reviewers.forEach(function(r) {
+            User.findOne({
+              where: {
                 email: r.email,
-                reviewSessionId: session.id,
-                userId: userData.id,
-              }).then(function() {
-                allCreated.push(true);
-                if (allCreated.length === reviewers.length) {
-                  res.send(true);
-                }
-              });
-            });
+                admin: false,
+              },
+            }).then(function(user) {
+              if (!user) {
 
-          }
-          else {
-            //just create reviewer
-            const userData = user.dataValues;
+                User.create({
+                  name: r.email,
+                  email: r.email,
+                  admin: false,
+                }).then(function(newUser) {
+                  const userData = newUser.dataValues;
 
-            Reviewer.create({
-              email: r.email,
-              reviewSessionId: session.id,
-              userId: userData.id,
-            }).then(function() {
-              allCreated.push(true);
-              if (allCreated.length === reviewers.length) {
-                res.send(true);
+                  Reviewer.create({
+                    email: r.email,
+                    reviewSessionId: session.id,
+                    userId: userData.id,
+                  }).then(function() {
+                    allCreated.push(true);
+                    if (allCreated.length === reviewers.length) {
+                      res.send(true);
+                    }
+                  });
+                });
+
+              }
+              else {
+                //just create reviewer
+                const userData = user.dataValues;
+
+                Reviewer.create({
+                  email: r.email,
+                  reviewSessionId: session.id,
+                  userId: userData.id,
+                }).then(function() {
+                  allCreated.push(true);
+                  if (allCreated.length === reviewers.length) {
+                    res.send(true);
+                  }
+                });
+
               }
             });
 
-          }
+          });
+
         });
 
       });
-
-    });
-
-  });
+    }
+  );
 
 });
 
-router.get('/user/:email', function(req, res) {
-  User.findOne({
-    where: {
-      email: req.params.email,
-    },
-  }).then(function(user) {
-    if (user) {
-      res.send(user.dataValues);
-    }
-    else {
-      res.send(new Error("There is no user with that email."));
-    }
-  });
+router.get('/user/', function(req, res) {
+  if (req.user) {
+    res.send(req.user);
+  }
+  else {
+    throw new Error("There is no user in this session.");
+  }
 });
 
 module.exports = router;
