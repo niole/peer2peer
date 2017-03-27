@@ -91,6 +91,15 @@ s.app.use(passport.initialize());
 
 s.app.use(passport.session());
 
+s.app.get("/", function(req, res) {
+  if (!req.user) {
+    res.redirect('/login');
+  }
+  else {
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
+  }
+});
+
 s.app.use("/routes", routes);
 
 s.app.use(express.static('dist'));
@@ -121,16 +130,6 @@ s.app.get('/logout', function(req, res){
 s.app.get('/login', function(req, res) {
   res.sendFile(path.join(__dirname, 'dist/login.html'));
 });
-
-s.app.get("/", function(req, res) {
-  if (!req.user) {
-    res.redirect('/login');
-  }
-  else {
-    res.sendFile(path.join(__dirname, 'dist/index.html'));
-  }
-});
-
 
 s.server.listen(3000, function() {
   console.log('listening to port 3000');
