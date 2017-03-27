@@ -70,12 +70,12 @@ class CreateReviewSession extends MUIBaseTheme {
 
     return sessionPeers.map((p, i) => {
         return (
-          <li
+          <div
             className="peer-to-pick in-session"
             key={ p.email }
             onClick={ () => removePeer(p.email) }>
               { p.email }
-          </li>
+          </div>
         );
       }
     );
@@ -148,7 +148,9 @@ class CreateReviewSession extends MUIBaseTheme {
     return (
       <div>
         <div>
-          <h2 className="create-session-header">{ NAME_SESSION_LABEL }</h2>
+          <h3 className="create-session-header">
+            { NAME_SESSION_LABEL }
+          </h3>
           <div className="centered-input">
             <DebouncedInput
               className="answer-input"
@@ -157,59 +159,77 @@ class CreateReviewSession extends MUIBaseTheme {
               placeholder="name your session"
             />
           </div>
-          <h2 className="create-session-header">{ DATEPICKER_PLACEHOLDER }</h2>
-          <div>{ this.renderDeadline() }</div>
-          <h2 className="create-session-header">pick peers</h2>
+          <h3 className="create-session-header">
+            { DATEPICKER_PLACEHOLDER }
+          </h3>
+          <div id="date-picker">
+            { this.renderDeadline() }
+          </div>
+          <h3 className="create-session-header">
+            pick peers
+          </h3>
 
-          <ul>{ this.renderPeers() }</ul>
+          <div className="peers-container">
+            { this.renderPeers() }
+            <div>
+              <input
+                ref={(ref) => this.peerinput = ref }
+                placeholder="type a peer's email"/>
+              <button
+                onClick={ this.addPeer }
+              >
+                Save
+              </button>
+            </div>
+          </div>
 
-           <input
-             ref={(ref) => this.peerinput = ref }
-             placeholder="type a peer's email"/>
-           <button
-             onClick={ this.addPeer }
-           >
-             Save
-           </button>
-
-          <h2 className="create-session-header">
-            create questions (optional)
-          </h2>
+          <h3 className="create-session-header">
+            create questions
+          </h3>
           <div className="create-questions-container">
-            Default Questions to Include:
-            <input
-              ref={ ref => this.startStopContinue = ref }
-              type="checkbox"
-              onChange={ () => this.addDefaultQuestion("scc") }
-              value="ssc"/>
 
-              <label htmlFor="ssc">{ START_STOP_CONTINUE_LABEL }</label>
-
-            <input
-              ref={ ref => this.emf = ref }
-              type="checkbox"
-              onChange={ () => this.addDefaultQuestion("emf") }
-              value="emf"/>
-
-              <label htmlFor="emf">{ EMF_QUESTION_LABEL }</label>
+            <div className="default-questions-box">
+              <strong>Default Questions to Include</strong>
+              <div className="default-questions">
+                <div>
+                  <input
+                    ref={ ref => this.startStopContinue = ref }
+                    type="checkbox"
+                    onChange={ () => this.addDefaultQuestion("scc") }
+                    value="ssc"/>
+                  <label htmlFor="ssc">{ START_STOP_CONTINUE_LABEL }</label>
+                </div>
+                <div>
+                  <input
+                    ref={ ref => this.emf = ref }
+                    type="checkbox"
+                    onChange={ () => this.addDefaultQuestion("emf") }
+                    value="emf"/>
+                  <label htmlFor="emf">{ EMF_QUESTION_LABEL }</label>
+                </div>
+              </div>
+            </div>
 
             <div>
+
               { this.renderQuestions() }
+              <input
+                ref={(ref) => this.questioninput = ref }
+                placeholder="add a question"/>
+              <button
+                onClick={ () => {
+                  const question = this.questioninput.value;
+                  if (question !== "") {
+                    this.questioninput.value = "";
+                    this.saveQuestion(question, "open");
+                  }
+                }}
+              >
+                Save
+              </button>
+
             </div>
-            <input
-              ref={(ref) => this.questioninput = ref }
-              placeholder="add a question"/>
-            <button
-              onClick={ () => {
-                const question = this.questioninput.value;
-                if (question !== "") {
-                  this.questioninput.value = "";
-                  this.saveQuestion(question, "open");
-                }
-              }}
-            >
-              Save
-            </button>
+
           </div>
         </div>
       </div>

@@ -460,13 +460,13 @@ class ReviewSessions extends MUIBaseTheme {
     }
 
     return (
-      <span key={ label }>
+      <div key={ label }>
         { checkbox }
         <label
           htmlFor={ label }>
           { label }
         </label>
-      </span>
+      </div>
     );
   }
 

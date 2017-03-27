@@ -37,29 +37,30 @@ header
   top: 0
   height: 80px
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2)
-  background: $secondary-background
+  background: $main-color
 
 footer
   width: 100%
   height: 100px
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2)
   text-align: center
+  background: $main-color
 
 button, a
   color: $white
-  border: 1px solid
-  padding: 5px
+  border: none
   border-radius: 3px
+  padding: .7rem 1.75rem
   background: $main-link-background
   touch-action: manipulation
   border-bottom: 1px solid $main-link-background
+  outline: none
 
   &:hover
     background: $main-link-background-hover
 
   &:link
     text-decoration: none
-
 
   &:visited
     text-decoration: none
@@ -179,13 +180,13 @@ button, a
   font-size: 3em
 
 .centered-input
-  margin: auto
-  width: 170px
+  margin-left: 1em
 
 .create-session
   &.questions
     @extend .clickable-element
     @extend .sec-interaction
+    margin-left: 0px!important
 
 .main-view-tab
   @extend .sec-interaction
@@ -197,22 +198,32 @@ button, a
   margin-top: 1em
 
   &.focused
-    color: white
+    color: $white
     background: $secondary-click-background
 
 .create-session-header
-  background: $secondary-background
-  text-align: center
   padding: 1em
-  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2)
+  margin: 1em
+  border-bottom: 1px solid $main-border-color
+
+.peers-container
+  margin-left: 1em
 
 #date-picker
-  width: 255px
-  margin: auto
+  margin-left: 1em
+
+  input
+    margin: 0
 
 .create-questions-container
-  width: 75%
-  margin: auto
+  margin-left: 2em
+
+.default-questions-box
+  height: 60px
+
+.default-questions
+  display: inline-block
+  float: right
 
 .clickable-element
   padding: .5em 1em

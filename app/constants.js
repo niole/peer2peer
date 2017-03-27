@@ -1,6 +1,5 @@
-/* patterns */
 /* button labels */
-export const CREATE_SESSION_BTN_LABEL = "Create Peer2Peer Session";
+export const CREATE_SESSION_BTN_LABEL = "Submit Peer2Peer Session";
 
 /* main view enum */
 export const VIEW_ANSWERS_VIEW = "viewAnswersView";
@@ -19,7 +18,7 @@ export const PICK_PEER_LABEL = "Pick Peer";
 export const EDITABLE_QS_LABEL = "Answer Questions";
 export const VIEW_ONLY_QS_LABEL = "View Answers";
 export const READ_PEERS_REVIEWS_LABEL = "Read Peer's Reviews";
-export const CREATE_SESSION_LABEL = "Create a Review Session";
+export const CREATE_SESSION_LABEL = "Create Peer2Peer Session";
 export const SUBMIT_ANSWERS_LABEL = "Submit Answers";
 export const READ_REVIEWS_ABOUT_LABEL = "Read Reviews By";
 export const REVIEW_SESSIONS_SUB_HEADER = "review sessions";
@@ -27,7 +26,7 @@ export const QUESTIONS_SUB_HEADER = "questions";
 export const ANSWERS_SUB_HEADER = "answers";
 export const REVIEW_DEADLINE_SUB_HEADER = "deadline";
 export const PICK_PEERS_SUB_HEADER = "peers";
-export const EMF_QUESTION_LABEL = "Where expectations exceeded, met, or failed to be fullfilled?";
+export const EMF_QUESTION_LABEL = "Was performance above, at, or below expectations?";
 export const START_STOP_CONTINUE_LABEL = "Start, stop, continue?";
 
 /* review session views */
