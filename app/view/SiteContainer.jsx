@@ -134,6 +134,7 @@ class SiteContainer extends MUIBaseTheme {
         />
         { this.getCurrentView(mainView) }
         <footer>
+          <a href="/logout">logout</a>
           { this.getSubmitButton(mainView) }
         </footer>
       </div>
