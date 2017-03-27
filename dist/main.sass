@@ -192,14 +192,19 @@ button, a
   @extend .sec-interaction
   border-radius: 3px
   display: inline-block
-  width: 33%
+  width: 45%
   text-align: center
   padding: 1em 0
-  margin-top: 1em
+  margin: 1em
+  background: $secondary-background
+  color: whitesmoke
 
   &.focused
     color: $white
     background: $secondary-click-background
+
+  &.one
+    margin: auto
 
 .create-session-header
   padding: 1em
@@ -225,13 +230,6 @@ button, a
   display: inline-block
   float: right
 
-.clickable-element
-  padding: .5em 1em
-  color: white
-  border-radius: 3px
-  background: $secondary-background
-  margin: 10px
-
 .peer-to-pick
   @extend .sec-interaction
   @extend .clickable-element
@@ -251,10 +249,18 @@ button, a
   margin: 3em
 
 .non-clickable-header
+  color: whitesmoke
   padding: 1em
   background: $secondary-background
   margin: 10px
   border-radius: 3px
+
+.clickable-element
+  padding: .5em 1em
+  color: white
+  border-radius: 3px
+  background: $secondary-background
+  margin: 10px
 
 .qa-header
   margin-left: 10px
@@ -279,6 +285,7 @@ button, a
   display: inline-block
 
   &.focused
+    color: white
     background: $secondary-hover-background
 
 .sec-interaction
