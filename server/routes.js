@@ -251,6 +251,7 @@ router.get('/reviewers/:userId/:sessionId/', function(req, res) {
       reviewSessionId: sessionId,
     },
   }).then(function(r) {
+
     authHandler(
       (!req.user.admin && r && r.dataValues.reviewSessionId === sessionId) || req.user.admin,
       function() {

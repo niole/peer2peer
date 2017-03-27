@@ -1,11 +1,11 @@
 $main-shadow: rgba(0, 0, 0, .2)
 $main-link-background: #4094ed
 $main-link-background-hover: #238be8
-
 $secondary-hover-background: #67e091
 $secondary-click-background: #6ded99
 $white: #fff
-$main-color: #244f32
+$main-color: #333647
+$main-border-color: #d0dadd
 
 $main-background: $white
 $secondary-color: rgba(255, 255, 255, 0.298039)
@@ -32,25 +32,6 @@ input
   &:focus
     outline: none
 
-button
-  @extend .sec-interaction
-  font-family: $main-font
-  padding: 1em 2em
-  border-radius: 3px
-  border: none
-  color: white
-  background: $secondary-background
-
-  &:focus
-    outline: none
-
-  &:disabled
-    &:hover
-      background: $secondary-background
-
-    &:focus
-      background: $secondary-background
-
 header
   width: 100%
   top: 0
@@ -64,15 +45,70 @@ footer
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .2)
   text-align: center
 
+button, a
+  color: $white
+  border: 1px solid
+  padding: 5px
+  border-radius: 3px
+  background: $main-link-background
+  touch-action: manipulation
+  border-bottom: 1px solid $main-link-background
+
+  &:hover
+    background: $main-link-background-hover
+
+  &:link
+    text-decoration: none
+
+
+  &:visited
+    text-decoration: none
+
+  &:active
+    background: $main-link-background-hover
+    text-decoration: none
+
+  &:disabled
+    &:hover
+      background: $main-link-background
+
+    &:focus
+      background: $main-link-background
+
+.login-header
+  background: $main-color
+  height: 100%
+  width: 100%
+  position: absolute
+
+
+#login-container
+  padding: 5em
+  margin-top: 100px
+  border-top: 1px solid $main-border-color
+  border-bottom: 1px solid $main-border-color
+  background: $main-background
+
+#login-text
+  text-align: center
+  width: 256px
+  margin: auto
+
 #login-link
   width: 158px
   display: block
   margin: auto
 
+  &:hover
+    letter-spacing: .05rem
+    font-weight: bold
+
+  &:active
+    letter-spacing: .05rem
+    font-weight: bold
+
 .button
   letter-spacing: .015rem
-  display: inline-block
-  font-weight: 400
   line-height: 1.25
   text-align: center
   white-space: nowrap
@@ -87,27 +123,6 @@ footer
   &.animated
     transition: background-color .25s, border-color .25s
 
-a
-  color: $white
-  border: 1px solid
-  padding: 5px
-  border-radius: 3px
-  background: $main-link-background
-  touch-action: manipulation
-
-  &:hover
-    background: $main-link-background-hover
-
-  &:link
-    text-decoration: none
-
-  &:visited
-    text-decoration: none
-
-  &:active
-    background: $main-link-background-hover
-    text-decoration: none
-
 #logout-link
   top: 10px
   position: absolute
@@ -119,11 +134,6 @@ a
   &:hover
     background: midnightblue
 
-#login-container
-  padding: 15%
-  width: 310px
-  margin: auto
-  border-radius: 3px
 
 #q-container
   width: 307px
