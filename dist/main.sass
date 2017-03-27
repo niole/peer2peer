@@ -205,6 +205,9 @@ button, a
 
   &.one
     margin: auto
+    display: block
+    position: relative
+    top: 1em
 
 .create-session-header
   padding: 1em
@@ -257,7 +260,7 @@ button, a
 
 .clickable-element
   padding: .5em 1em
-  color: white
+  color: $white
   border-radius: 3px
   background: $secondary-background
   margin: 10px
@@ -266,17 +269,18 @@ button, a
   margin-left: 10px
 
 .subview-content
-  @extend .non-clickable-header
   @extend .sec-interaction
+  @extend .non-clickable-header
   display: inline-block
 
   &.reviewed-peer, &.question
+    color: $white
     &:hover
-      color: $main-color
+      color: $white
       @extend .non-clickable-header
 
     &:active
-      color: $main-color
+      color: $white
       @extend .non-clickable-header
 
 .bc-header
@@ -301,3 +305,4 @@ button, a
   display: inline-block
   width: 50%
   padding: 1em 0
+  vertical-align: middle

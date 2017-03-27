@@ -8,7 +8,7 @@ export const ANSWER_QUESTIONS_VIEW = "answerQuestionsView";
 
 /* header labels */
 export const MET_EXPECTATIONS_LABEL = "met";
-export const FAILED_EXPECTATIONS_LABEL = "failed";
+export const FAILED_EXPECTATIONS_LABEL = "below";
 export const EXCEEDED_EXPECTATIONS_LABEL = "exceeded";
 export const NAME_SESSION_LABEL = "Name Session";
 export const DATEPICKER_PLACEHOLDER = "set a deadline";
