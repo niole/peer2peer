@@ -139,8 +139,8 @@ class ReviewSessions extends MUIBaseTheme {
 
     //get reviewable peers
     const url = this.ifCreatorElseReviewer(
-      `routes/reviewers/${userId}/${sessionId}/`,
-      `routes/reviewees/${userId}/${sessionId}/`
+      () => `routes/reviewers/${userId}/${sessionId}/`,
+      () => `routes/reviewees/${userId}/${sessionId}/`
     );
 
     $.ajax({
