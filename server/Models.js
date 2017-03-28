@@ -148,6 +148,33 @@ const Answer = sequelize.define(
 
 Answer.sync({force: true});
 
+const Reviewee = sequelize.define(
+  'reviewee',
+  {
+    reviewedBy: {
+      type: Sequelize.STRING,
+      field: 'reviewedby'
+    },
+    email: {
+      type: Sequelize.STRING,
+      field: 'email'
+    },
+    reviewSessionId: {
+      type: Sequelize.STRING,
+      field: 'reviewsessionid'
+    },
+    userId: {
+      type: Sequelize.STRING,
+      field: 'userid'
+    }
+  },
+  {
+    freezeTableName: true
+  }
+);
+
+Reviewee.sync({force: true});
+
 const Reviewed = sequelize.define(
   'reviewed',
   {
@@ -179,4 +206,5 @@ module.exports = {
   sequelize: sequelize,
   Reviewer: Reviewer,
   Reviewed: Reviewed,
+  Reviewee: Reviewee,
 };

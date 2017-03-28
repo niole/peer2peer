@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const models = require('./Models.js');
 
+const Reviewee = models.Reviewee;
 const Reviewed = models.Reviewed;
 const Reviewer = models.Reviewer;
 const Answer = models.Answer;
@@ -236,11 +237,34 @@ router.get('/peers/all/:userId', function(req, res) {
   });
 });
 
+router.get('/reviewees/:reviewerId/:sessionId', function(req, res) {
+  /**
+   * gets all reviewees associated with a Reviewer instance
+   * and a ReviewSession instance
+   * TODO implement auth
+   */
+
+  const reviewerId = req.params.reviewerId;
+  const sessionId = req.params.sessionId;
+
+  Reviewee.findAll({
+    where: {
+      reviewedBy: reviewerId,
+      reviewSessionId: sessionId,
+    },
+  }).then(function(rs) {
+    const reviewees = rs.map(r => r.dataValues);
+    res.send(reviewees);
+  });
+});
+
 router.get('/reviewers/:userId/:sessionId/', function(req, res) {
   /*
-    get reviewable peers
-    user is either part of the peers in the review session or is the admin
-  */
+   * TODO for non admins, reviewable peers are now the Reviewees associated with a Reviewer
+   * this endpoint is now only for admins
+   * get reviewable peers
+   * user is either part of the peers in the review session or is the admin
+   */
 
   const userId = req.params.userId;
   const sessionId = req.params.sessionId;
