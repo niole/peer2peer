@@ -398,6 +398,7 @@ router.post('/reviewsession/create/', function(req, res) {
   const creatorId = body.creatorId;
   const questions = body.questions;
   const name = body.currentSessionName;
+  const sessionReviewees = body.sessionReviewees;
 
   authHandler(
     req.user.admin && req.user.id.toString() === creatorId,
@@ -417,7 +418,7 @@ router.post('/reviewsession/create/', function(req, res) {
         });
 
         Question.bulkCreate(newQuestions).then(function() {
-          let allCreated = [];
+          let allCreated = 0;
 
           reviewers.forEach(function(r) {
             User.findOne({
@@ -439,11 +440,23 @@ router.post('/reviewsession/create/', function(req, res) {
                     email: r.email,
                     reviewSessionId: session.id,
                     userId: userData.id,
-                  }).then(function() {
-                    allCreated.push(true);
-                    if (allCreated.length === reviewers.length) {
-                      res.send(true);
-                    }
+                  }).then(function(reviewer) {
+
+                    const newReviewees = sessionReviewees[r.email].map(reviewee => {
+                      return {
+                        reviewedBy: reviewer.dataValues.id,
+                        email: reviewee.email,
+                        reviewSessionId: session.id,
+                      };
+                    });
+
+                    Reviewee.bulkCreate(newReviewees).then(function() {
+                      allCreated += newReviewees.length;
+                      if (allCreated === reviewers.length + sessionReviewees[r.email].length) {
+                        res.send(true);
+                      }
+                    });
+
                   });
                 });
 
@@ -456,11 +469,23 @@ router.post('/reviewsession/create/', function(req, res) {
                   email: r.email,
                   reviewSessionId: session.id,
                   userId: userData.id,
-                }).then(function() {
-                  allCreated.push(true);
-                  if (allCreated.length === reviewers.length) {
-                    res.send(true);
-                  }
+                }).then(function(reviewer) {
+
+                  const newReviewees = sessionReviewees[r.email].map(reviewee => {
+                    return {
+                      reviewedBy: reviewer.dataValues.id,
+                      email: reviewee.email,
+                      reviewSessionId: session.id,
+                    };
+                  });
+
+                  Reviewee.bulkCreate(newReviewees).then(function() {
+                    allCreated += newReviewees.length;
+                    if (allCreated === reviewers.length + sessionReviewees[r.email].length) {
+                      res.send(true);
+                    }
+                  });
+
                 });
 
               }

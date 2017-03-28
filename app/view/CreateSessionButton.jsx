@@ -24,6 +24,7 @@ class CreateSessionButton extends MUIBaseTheme {
       userId,
       submitNewSession,
       currentSessionName,
+      sessionReviewees,
     } = this.props;
 
     const url = 'routes/reviewsession/create/';
@@ -36,6 +37,7 @@ class CreateSessionButton extends MUIBaseTheme {
         creatorId: userId,
         questions,
         currentSessionName,
+        sessionReviewees,
       },
       success: () => {
         submitNewSession();
@@ -79,9 +81,11 @@ const mapStateToProps = state => {
     currentSessionDeadline,
     userId,
     currentSessionName,
+    sessionReviewees,
   } = state;
 
   return {
+    sessionReviewees,
     currentSessionName,
     userId,
     questions,

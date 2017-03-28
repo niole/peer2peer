@@ -162,10 +162,6 @@ const Reviewee = sequelize.define(
     reviewSessionId: {
       type: Sequelize.STRING,
       field: 'reviewsessionid'
-    },
-    userId: {
-      type: Sequelize.STRING,
-      field: 'userid'
     }
   },
   {

@@ -34,7 +34,6 @@ const initialState = {
   sessionReviewees: {}, //hashMap where keys are emails sessionPeers, values are reviewees
   sessionPeers: [],
   peers: [],
-  reviewees: [],
   userId: "",
   reviewerId: "",
   reviewedId: "",
@@ -111,6 +110,7 @@ export default function appReducer(state = initialState, action) {
         questions: [],
         sessionPeers: [],
         currentSessionDeadline: new Date(),
+        sessionReviewees: {},
       });
 
     case REMOVE_QUESTION:
