@@ -54,7 +54,6 @@ export default function appReducer(state = initialState, action) {
     case ADD_SESSION_REVIEWEE:
       return Object.assign({}, state, {
         sessionReviewees: [action.data.reviewerEmail].reduce((newReviewees, reviewerEmail) => {
-
           if (newReviewees[reviewerEmail]) {
             newReviewees[reviewerEmail].push(action.data.reviewee);
           }
@@ -201,10 +200,10 @@ export default function appReducer(state = initialState, action) {
       }
       return Object.assign({}, state, {
         sessionPeers: [action.data].concat(state.sessionPeers),
-        sessionReviewees: action.data.reduce((sessionReviewees, nextPeer) => {
+        sessionReviewees: [action.data].reduce((sessionReviewees, nextPeer) => {
             sessionReviewees[nextPeer.email] = [];
             return sessionReviewees;
-          }, Object.assign({}, state.sessionPeers)),
+          }, Object.assign({}, state.sessionReviewees)),
       });
 
 

@@ -1,8 +1,9 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import DatePicker from 'material-ui/DatePicker';
 import {
+  addSessionReviewee,
   removePeer,
   addQuestions,
   updateSessionPeers,
@@ -18,6 +19,7 @@ import {
 } from '../constants.js';
 import MUIBaseTheme from './MUIBaseTheme.jsx';
 import DebouncedInput from './DebouncedInput.jsx';
+import ReviewerGroup from './ReviewerGroup.jsx';
 
 
 class CreateReviewSession extends MUIBaseTheme {
@@ -46,40 +48,60 @@ class CreateReviewSession extends MUIBaseTheme {
     }]);
   }
 
+  /**
+   * adds peer object to sessionPeers in client state
+   * also updates sessionReviewees with mapping from email to empty array
+   */
   addPeer() {
     const {
       updateSessionPeers,
     }= this.props;
 
     const peerEmail = this.peerinput.value;
-    const reviewer = {
-      email: peerEmail,
-      reviewSessionId: "",
-      userId: "",
-    };
+    const reviewer = this.getPeerObject(peerEmail);
 
     updateSessionPeers(reviewer);
   }
 
+  /**
+   * Gets formatted peer object
+   * Works for sessionPeers and sessionReviewees
+   */
+  getPeerObject(email) {
+    return {
+      email,
+    };
+  }
+
+  /**
+   * renders currently selected sessionPeer and sessionReviewees, each group of
+   * which belongs to a sessionPeer
+   */
   renderPeers() {
     const {
       removePeer,
       sessionPeers,
+      sessionReviewees,
     } = this.props;
 
-    return sessionPeers.map((p, i) => {
-        return (
-          <div
-            className="peer-to-pick in-session"
-            key={ p.email }
-            onClick={ () => removePeer(p.email) }>
-              { p.email }
-          </div>
-        );
-      }
-    );
+    return sessionPeers.map((p, i) => (
+      <ReviewerGroup
+        key={ `reviewergroup-${i}` }
+        peer={ p }
+        addRevieweeHander={ addSessionReviewee }
+        removeReviewerHander={ removePeer }
+        reviewees={ sessionReviewees[p.email] }
+        remainingPeers={ sessionPeers.filter(sp => (
+          sp.email !== p.email &&
+          sessionReviewees[p.email].every(reviewee => sp.email !== reviewee.email
+        ))) }
+      />
+    ));
   }
 
+  /**
+   * Renders currently selected questions for the ReviewSession in progress
+   */
   renderQuestions() {
     const {
       questions,
@@ -139,7 +161,6 @@ class CreateReviewSession extends MUIBaseTheme {
   }
 
   render() {
-    const c = this;
     const {
       setSessionName,
     } = this.props;
@@ -243,9 +264,11 @@ const mapStateToProps = state => {
     peers,
     userId,
     sessionPeers,
+    sessionReviewees,
   } = state;
 
   return {
+    sessionReviewees,
     currentSessionDeadline,
     sessionPeers,
     questions,
@@ -263,6 +286,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     addQuestions: qs => dispatch(addQuestions(qs)),
     updateSessionPeers: peers => dispatch(updateSessionPeers(peers)),
     updateSessionDeadline: deadline => dispatch(updateSessionDeadline(deadline)),
+    addSessionReviewee: (reviewee, reviewerEmail) => dispatch(addSessionReviewee(reviewee, reviewerEmail)),
   };
 }
 
