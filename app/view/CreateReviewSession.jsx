@@ -7,7 +7,6 @@ import {
   addQuestions,
   updateSessionPeers,
   updateSessionDeadline,
-  updateAvailablePeers,
   removeQuestion,
   setSessionName,
 } from '../actions.js';
@@ -261,7 +260,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setSessionName: name => dispatch(setSessionName(name)),
     removeQuestion: qId => dispatch(removeQuestion(qId)),
     removePeer: peerId => dispatch(removePeer(peerId)),
-    updateAvailablePeers: peers => dispatch(updateAvailablePeers(peers)),
     addQuestions: qs => dispatch(addQuestions(qs)),
     updateSessionPeers: peers => dispatch(updateSessionPeers(peers)),
     updateSessionDeadline: deadline => dispatch(updateSessionDeadline(deadline)),

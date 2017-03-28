@@ -11,7 +11,6 @@ export const UPDATE_SESSION_DEADLINE = "updateSessionDeadline";
 export const SWITCH_MAIN_VIEW = "switchMainView";
 export const SET_CURRENT_SESSION = "setCurrentSession";
 export const SET_SESSION_SUB_VIEW = "setSessionSubView";
-export const UPDATE_AVAILABLE_PEERS = "updateAvailablePeers";
 export const REMOVE_PEER_FROM_SESSION = "removePeerFromSession";
 export const REMOVE_QUESTION = "removeQuestion";
 export const SUBMIT_NEW_SESSION = "submitNewSession";
@@ -20,7 +19,18 @@ export const SET_QS_SUBVIEW = "setQuestionsSubview";
 export const SUBMIT_ANSWERS = "submitAnswers";
 export const SET_REVIEWER = "setReviewer";
 export const SET_SESSION_NAME = "setSessionName";
+export const ADD_SESSION_REVIEWEE = "addSessionReviewee";
 
+
+export function addSessionReviewee(reviewee, reviewerEmail) {
+  return {
+    type: ADD_SESSION_REVIEWEE,
+    data: {
+      reviewee,
+      reviewerEmail,
+    },
+  };
+}
 
 export function setSessionName(name) {
   return {
@@ -92,13 +102,6 @@ export function removePeer(email) {
   return {
     type: REMOVE_PEER_FROM_SESSION,
     data: email,
-  };
-}
-
-export function updateAvailablePeers(peers) {
-  return {
-    type: UPDATE_AVAILABLE_PEERS,
-    data: peers,
   };
 }
 

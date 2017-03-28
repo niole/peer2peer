@@ -1,4 +1,5 @@
 import {
+  ADD_SESSION_REVIEWEE,
   SET_SESSION_NAME,
   SET_REVIEWER,
   SUBMIT_ANSWERS,
@@ -30,11 +31,13 @@ const initialState = {
   isAdmin: false,
   reviewer: {},
   reviewed: [],
+  sessionReviewees: {}, //hashMap where keys are emails sessionPeers, values are reviewees
+  sessionPeers: [],
+  peers: [],
+  reviewees: [],
   userId: "",
   reviewerId: "",
   reviewedId: "",
-  peers: [],
-  sessionPeers: [],
   sessions: [],
   currentSessionDeadline: new Date(),
   currentSessionId: "",
@@ -49,6 +52,20 @@ const initialState = {
 
 export default function appReducer(state = initialState, action) {
   switch (action.type) {
+    case ADD_SESSION_REVIEWEE:
+      return Object.assign({}, state, {
+        sessionReviewees: [action.data.reviewerEmail].reduce((newReviewees, reviewerEmail) => {
+
+          if (newReviewees[reviewerEmail]) {
+            newReviewees[reviewerEmail].push(action.data.reviewee);
+          }
+          else {
+            newReviewees[reviewerEmail] = [action.data.reviewee];
+          }
+          return newReviewees;
+        }, Object.assign({}, state.sessionReviewees)),
+      });
+
     case SET_SESSION_NAME:
       return Object.assign({}, state, {
         currentSessionName: action.data,
@@ -99,11 +116,6 @@ export default function appReducer(state = initialState, action) {
     case REMOVE_QUESTION:
       return Object.assign({}, state, {
         questions: state.questions.filter(q => q.id !== action.data),
-      });
-
-    case UPDATE_AVAILABLE_PEERS:
-      return Object.assign({}, state, {
-        peers: action.data.concat(state.peers),
       });
 
     case SET_SESSION_SUB_VIEW:
@@ -172,14 +184,29 @@ export default function appReducer(state = initialState, action) {
     case REMOVE_PEER_FROM_SESSION:
       return Object.assign({}, state, {
         sessionPeers: state.sessionPeers.filter(sp => sp.email !==  action.data),
+        sessionReviewees: Object.keys(state.sessionReviewees).reduce((sessionReviewees, reviewerEmail) => {
+          if (reviewerEmail === action.data) {
+            delete sessionReviewees[reviewerEmail];
+          }
+          else {
+            sessionReviewees[reviewerEmail] = sessionReviewees[reviewerEmail].filter(sr => sr.email !== action.data);
+          }
+          return sessionReviewees;
+          }, Object.assign({}, state.sessionReviewees)),
       });
 
     case UPDATE_PEERS_IN_SESSION:
+      if (state.sessionPeers.find(p => p.email === action.data.email)) {
+        return state;
+      }
       return Object.assign({}, state, {
-        sessionPeers: state.sessionPeers.find(p => p.email === action.data.email) ?
-          state.sessionPeers :
-          [action.data].concat(state.sessionPeers),
+        sessionPeers: [action.data].concat(state.sessionPeers),
+        sessionReviewees: action.data.reduce((sessionReviewees, nextPeer) => {
+            sessionReviewees[nextPeer.email] = [];
+            return sessionReviewees;
+          }, Object.assign({}, state.sessionPeers)),
       });
+
 
     default:
       return state;
