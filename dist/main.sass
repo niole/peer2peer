@@ -249,10 +249,24 @@ button, a
   display: inline-block
   float: right
 
+.reviewer-group
+  display: inline-block
+  position: relative
+
+.peer-dropdown
+  position: absolute
+  background: $white
+  margin: 10px
+  width: 90%
+  border-radius: 3px
+  border: 1px solid $main-border-color
+
+  div
+    padding: .5em
+
 .peer-to-pick
   @extend .sec-interaction
   @extend .clickable-element
-  display: inline-block
 
   &.in-session
     color: $secondary-background
@@ -280,6 +294,15 @@ button, a
   border-radius: 3px
   background: $secondary-background
   margin: 10px
+
+.hover-reviewee-button
+  @extend .clickable-element
+  background: $white
+  color: $main-border-color
+  border: 1px solid whitesmoke
+
+  &:hover
+    background: whitesmoke
 
 .qa-header
   margin-left: 10px
