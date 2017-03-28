@@ -151,6 +151,10 @@ Answer.sync({force: true});
 const Reviewee = sequelize.define(
   'reviewee',
   {
+    userId: {
+      type: Sequelize.STRING,
+      field: 'userid'
+    },
     reviewedBy: {
       type: Sequelize.STRING,
       field: 'reviewedby'

@@ -54,11 +54,13 @@ class CreateSessionButton extends MUIBaseTheme {
       currentSessionDeadline,
       questions,
       sessionPeers,
+      sessionReviewees,
     } = this.props;
 
     return !currentSessionDeadline ||
       !questions.length ||
-      sessionPeers.length < 2 ||
+      !sessionPeers.length ||
+      !sessionPeers.every(peer => sessionReviewees[peer.email] && sessionReviewees[peer.email].length) ||
       !currentSessionName;
   }
 
