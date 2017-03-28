@@ -436,103 +436,85 @@ router.post('/reviewsession/create/', function(req, res) {
 
         Question.bulkCreate(newQuestions).then(function() {
           let allCreated = 0;
+          let reviewerEmails = reviewers.map(r => r.email);
 
-          reviewers.forEach(function(r) {
-            User.findOne({
-              where: {
-                email: r.email,
-                admin: false,
+          User.findAll({
+            where: {
+              email: {
+                $in: reviewerEmails,
               },
-            }).then(function(user) {
-              if (!user) {
-
-                User.create({
-                  name: r.email,
-                  email: r.email,
-                  admin: false,
-                }).then(function(newUser) {
-                  const userData = newUser.dataValues;
-
-                  Reviewer.create({
-                    email: r.email,
-                    reviewSessionId: session.id,
-                    userId: userData.id,
-                  }).then(function(reviewer) {
-
-                    User.findAll({
-                      where: {
-                        email: {
-                          $in: sessionReviewees[r.email].map(sr => sr.email)
-                        },
-                      },
-                    }).then(function(users) {
-                      const newReviewees = users.map(user => {
-                        const reviewee = user.dataValues;
-                        return {
-                          reviewedBy: reviewer.dataValues.id,
-                          email: reviewee.email,
-                          reviewSessionId: session.id,
-                        };
-                      });
-
-                      Reviewee.bulkCreate(newReviewees).then(function() {
-                        allCreated += newReviewees.length;
-                        if (allCreated === reviewers.length + sessionReviewees[r.email].length) {
-                          res.send(true);
-                        }
-                      });
-                    });
-
-                  });
+            },
+          }).then(function(foundUsers) {
+            if (foundUsers.length !== reviewerEmails.length) {
+              //create users
+              const usersToCreate = reviewerEmails
+                .filter(email => !foundUsers.find(found => found.dataValues.email === email))
+                .map(email => {
+                  return {
+                    admin: false,
+                    name: email,
+                    email: email,
+                  };
                 });
 
-              }
-              else {
-                //just create reviewer
-                const userData = user.dataValues;
-
-                Reviewer.create({
-                  email: r.email,
-                  reviewSessionId: session.id,
-                  userId: userData.id,
-                }).then(function(reviewer) {
-
-                  User.findAll({
-                    where: {
-                      email: {
-                        $in: sessionReviewees[r.email].map(sr => sr.email)
-                      },
+              User.bulkCreate(usersToCreate).then(function(users) {
+                /**
+                   a peculiarity of MySQL makes it so that returned records just made with bulkCreate
+                   have ID = NULL. Must findAll
+                 */
+                User.findAll({
+                  where: {
+                    email: {
+                      $in: users.map(u => u.dataValues.email),
                     },
-                  }).then(function(users) {
-                    const newReviewees = users.map(user => {
-                      const reviewee = user.dataValues;
-                      return {
-                        reviewedBy: reviewer.dataValues.id,
-                        email: reviewee.email,
-                        reviewSessionId: session.id,
-                      };
-                    });
-
-                    Reviewee.bulkCreate(newReviewees).then(function() {
-                      allCreated += newReviewees.length;
-                      if (allCreated === reviewers.length + sessionReviewees[r.email].length) {
-                        res.send(true);
-                      }
-                    });
-                  });
-
+                  },
+                }).then(function(users) {
+                  reviewerRevieweeCreatorHelper(foundUsers.concat(users), session);
                 });
-
-              }
-            });
-
+              });
+            }
+            else {
+              //create reviewers and then reviewees
+              reviewerRevieweeCreatorHelper(foundUsers, session);
+            }
           });
-
         });
-
       });
     }
   );
+
+  function reviewerRevieweeCreatorHelper(foundUsers, session) {
+    let emailToUserIdMap = {};
+
+    const newReviewers = foundUsers.map(fu => {
+      emailToUserIdMap[fu.dataValues.email] = fu.dataValues.id;
+      return {
+        email: fu.dataValues.email,
+        reviewSessionId: session.id,
+        userId: fu.dataValues.id,
+      };
+    });
+
+    Reviewer.bulkCreate(newReviewers).then(function(reviewers) {
+      const reviewees = reviewers.reduce((reviewees, nextReviewer) => {
+        const formattedReviewees = sessionReviewees[nextReviewer.dataValues.email].map(sr => {
+          return {
+            email: sr.email,
+            reviewSessionId: session.id,
+            userId: emailToUserIdMap[sr.email],
+            reviewedBy: nextReviewer.dataValues.userid,
+          };
+        });
+
+        reviewees = reviewees.concat(formattedReviewees);
+        return reviewees;
+      }, []);
+
+      Reviewee.bulkCreate(reviewees).then(function() {
+        res.send(true);
+      });
+    });
+  }
 
 });
 
