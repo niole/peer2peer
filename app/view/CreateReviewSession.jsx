@@ -82,6 +82,7 @@ class CreateReviewSession extends MUIBaseTheme {
       removePeer,
       sessionPeers,
       sessionReviewees,
+      addSessionReviewee,
     } = this.props;
 
     return sessionPeers.map((p, i) => (
