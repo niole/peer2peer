@@ -3,6 +3,7 @@ import $ from 'jquery';
 import { connect } from 'react-redux';
 import DatePicker from 'material-ui/DatePicker';
 import {
+  removeSessionReviewee,
   addSessionReviewee,
   removePeer,
   addQuestions,
@@ -83,6 +84,7 @@ class CreateReviewSession extends MUIBaseTheme {
       sessionPeers,
       sessionReviewees,
       addSessionReviewee,
+      removeSessionReviewee,
     } = this.props;
 
     return sessionPeers.map((p, i) => (
@@ -90,6 +92,7 @@ class CreateReviewSession extends MUIBaseTheme {
         key={ `reviewergroup-${i}` }
         peer={ p }
         addRevieweeHander={ addSessionReviewee }
+        removeRevieweeHandler={ removeSessionReviewee }
         removeReviewerHander={ removePeer }
         reviewees={ sessionReviewees[p.email] }
         remainingPeers={ sessionPeers.filter(sp => (
@@ -288,6 +291,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     updateSessionPeers: peers => dispatch(updateSessionPeers(peers)),
     updateSessionDeadline: deadline => dispatch(updateSessionDeadline(deadline)),
     addSessionReviewee: (reviewee, reviewerEmail) => dispatch(addSessionReviewee(reviewee, reviewerEmail)),
+    removeSessionReviewee: (emailToRemove, reviewerEmail) => dispatch(removeSessionReviewee(emailToRemove, reviewerEmail)),
   };
 }
 

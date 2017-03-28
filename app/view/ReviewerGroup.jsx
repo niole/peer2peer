@@ -8,6 +8,7 @@ const propTypes = {
   }).isRequired,
   addRevieweeHander: func.isRequired,
   removeReviewerHander: func.isRequired,
+  removeRevieweeHandler: func.isRequired,
   reviewees: arrayOf(shape({ email: string.isRequired }).isRequired).isRequired,
   remainingPeers: arrayOf(shape({ email: string.isRequired }).isRequired).isRequired,
 };
@@ -22,15 +23,16 @@ class ReviewerGroup extends Component {
 
   renderReviewees() {
     const {
+      peer,
       reviewees,
-      removeReviewerHander,
+      removeRevieweeHandler,
     } = this.props;
 
     return reviewees.map(r => (
       <div
         className="peer-to-pick"
         key={ `${r.email}-reviewee` }
-        onClick={ () => removeReviewerHander(r.email) }>
+        onClick={ () => removeRevieweeHandler(r.email, peer.email) }>
         { r.email }
       </div>
     ));

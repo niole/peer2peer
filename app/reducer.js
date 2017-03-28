@@ -1,4 +1,5 @@
 import {
+  REMOVE_SESSION_REVIEWEE,
   ADD_SESSION_REVIEWEE,
   SET_SESSION_NAME,
   SET_REVIEWER,
@@ -51,6 +52,14 @@ const initialState = {
 
 export default function appReducer(state = initialState, action) {
   switch (action.type) {
+    case REMOVE_SESSION_REVIEWEE:
+      return Object.assign({}, state, {
+        sessionReviewees: [action.data.reviewerEmail].reduce((reviewees, reviewerEmail) => {
+          reviewees[reviewerEmail] = reviewees[reviewerEmail].filter(r => r.email !== action.data.emailToRemove);
+          return reviewees;
+        }, Object.assign({}, state.sessionReviewees)),
+      });
+
     case ADD_SESSION_REVIEWEE:
       return Object.assign({}, state, {
         sessionReviewees: [action.data.reviewerEmail].reduce((newReviewees, reviewerEmail) => {

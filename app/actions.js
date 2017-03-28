@@ -20,7 +20,18 @@ export const SUBMIT_ANSWERS = "submitAnswers";
 export const SET_REVIEWER = "setReviewer";
 export const SET_SESSION_NAME = "setSessionName";
 export const ADD_SESSION_REVIEWEE = "addSessionReviewee";
+export const REMOVE_SESSION_REVIEWEE = "removeSessionReviewee";
 
+
+export function removeSessionReviewee(emailToRemove, reviewerEmail) {
+  return {
+    type: REMOVE_SESSION_REVIEWEE,
+    data: {
+      emailToRemove,
+      reviewerEmail,
+    },
+  };
+}
 
 export function addSessionReviewee(reviewee, reviewerEmail) {
   return {
