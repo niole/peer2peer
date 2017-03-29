@@ -8,13 +8,13 @@ This application runs with:
 * bundler 1.10.6
 
 
-to install:
+* to install:
 
 ```
-git clone git@github.com:niole/peer2peer.git; cd peer2peer; bundle; npm install;
+git clone git@github.com:niole/peer2peer.git; cd peer2peer; docker pull mysql; bundle; npm install;
 ```
 
-initialize application's config by running:
+* initialize application's config by running:
 
 ```
 npm run init
@@ -22,7 +22,19 @@ npm run init
 
 and then follow prompts to create an admin and create reviewers (reviewer creation at the command line is optional).
 
-to start:
+* make sure to set the following variables in the application's .env file located in the root directory (which you will create):
+
+```
+GOOGLE_CLIENT_ID= -get from google dev console-
+GOOGLE_CLIENT_SECRET= -get from google dev console-
+EXPRESS_SESSION_SECRET= -string of your choice-
+GOOGLE_AUTH_ROUTE= -get from google dev console-
+GOOGLE_AUTH_CALLBACK= -get from google dev console-
+```
+
+* make sure to set a password for your data base in `docker-compose.yml`
+
+* to start:
 ```
  npm run docker-compose; npm start;
  ```
