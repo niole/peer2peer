@@ -11,7 +11,7 @@ const config = {
   },
   module: {
     rules: [
-      { // regular css files
+      {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract({
           loader: 'css-loader?importLoaders=1',

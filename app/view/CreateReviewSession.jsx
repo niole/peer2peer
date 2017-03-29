@@ -96,7 +96,6 @@ class CreateReviewSession extends MUIBaseTheme {
         removeReviewerHander={ removePeer }
         reviewees={ sessionReviewees[p.email] }
         remainingPeers={ sessionPeers.filter(sp => (
-          sp.email !== p.email &&
           sessionReviewees[p.email].every(reviewee => sp.email !== reviewee.email
         ))) }
       />
