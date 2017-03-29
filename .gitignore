@@ -2,4 +2,3 @@ node_modules/
 .env
 npm-debug.log
 *.css
-p2pConfig.json
