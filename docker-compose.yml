@@ -1,6 +1,12 @@
-db:
-  image: mysql
-  environment:
-    MYSQL_ROOT_PASSWORD: ""
-  ports:
-    - "3306:3306"
+version: '2'
+
+services:
+  db:
+    restart: always
+    image: mysql
+    volumes:
+      - '/var/lib/mysql'
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+    ports:
+      - "3306:3306"
