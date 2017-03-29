@@ -131,6 +131,7 @@ s.app.get('/login', function(req, res) {
   res.sendFile(path.join(__dirname, 'dist/login.html'));
 });
 
-s.server.listen(3000, function() {
-  console.log('listening to port 3000');
+const app_port = process.env.PORT || 3000;
+s.server.listen(app_port, function() {
+  console.log('listening to port ' + app_port);
 });
