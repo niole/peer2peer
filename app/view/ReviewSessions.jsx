@@ -440,29 +440,17 @@ class ReviewSessions extends MUIBaseTheme {
   }
 
   getCheckbox(changeHandler, label, questionIndex, defaultValue, groupName) {
-    let checkbox = (
+
+    const checkbox = (
         <input
           name={ groupName }
           key={ label }
           onChange={ () => changeHandler(label) }
           type="radio"
+          checked={ defaultValue === label ? "checked" : "" }
           value={ label }
-          />
+        />
     );
-
-    if (defaultValue === label) {
-      checkbox = (
-          <input
-            name={ groupName }
-            key={ label }
-            onChange={ () => changeHandler(label) }
-            type="radio"
-            checked={ "checked" }
-            value={ label }
-          />
-      );
-
-    }
 
     return (
       <div key={ label }>
