@@ -1,1 +1,40 @@
-{"admin":{"name":"feynman","email":"feynman@gigster.com"},"reviewers":[{"name":"emin","email":"emin@gigster.com"},{"name":"cody","email":"cody@gigster.com"},{"name":"dan","email":"dan@gigster.com"},{"name":"simon","email":"fridiculous@gigster.com"},{"name":"alice","email":"alice@gigster.com"},{"name":"chase","email":"chase.s@gigster.com"},{"name":"artem","email":"artem@gigster.com"},{"name":"jerome","email":"jerome@gigster.com"}]}
+{
+   "admin":{
+      "name":"feynman",
+      "email":"feynman@gigster.com"
+   },
+   "reviewers":[
+      {
+         "name":"emin",
+         "email":"emin@gigster.com"
+      },
+      {
+         "name":"cody",
+         "email":"cody@gigster.com"
+      },
+      {
+         "name":"dan",
+         "email":"dan@gigster.com"
+      },
+      {
+         "name":"simon",
+         "email":"fridiculous@gigster.com"
+      },
+      {
+         "name":"alice",
+         "email":"alice@gigster.com"
+      },
+      {
+         "name":"chase",
+         "email":"chase.s@gigster.com"
+      },
+      {
+         "name":"artem",
+         "email":"artem@gigster.com"
+      },
+      {
+         "name":"jerome",
+         "email":"jerome@gigster.com"
+      }
+   ]
+}
