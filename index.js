@@ -105,7 +105,7 @@ s.app.use("/routes", routes);
 s.app.use(express.static('dist'));
 
 s.app.get(
-  '/auth/google',
+  process.env.GOOGLE_AUTH_ROUTE,
   passport.authenticate(
     'google',
     {
@@ -115,7 +115,7 @@ s.app.get(
 );
 
 s.app.get(
-  '/auth/google/callback',
+  process.env.GOOGLE_AUTH_CALLBACK,
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     res.redirect('/');
