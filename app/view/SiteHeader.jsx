@@ -6,6 +6,12 @@ import {
 } from '../constants.js';
 
 
+const totalHeadersMap = {
+  1: " one",
+  2: " two",
+  3: " three",
+};
+
 const { arrayOf, func, string } = PropTypes;
 const propTypes = {
   headerHandler: func.isRequired,
@@ -28,12 +34,13 @@ class SiteHeader extends MUIBaseTheme {
       focused,
     } = this.props;
 
+    const totalHeadersClass = totalHeadersMap[headers.length] || "";
     return headers.map((header, i) => {
       const focusedClass = header === focused ? " focused" : "";
-      const oneHeaderClass = header === ANSWER_QUESTIONS_VIEW ? " one" : "";
+
       return (
         <div
-          className={ `main-view-tab${focusedClass}${oneHeaderClass}` }
+          className={ `main-view-tab${focusedClass}${totalHeadersClass}` }
           onClick={ () => headerHandler(header) }
           key={ header }
           >

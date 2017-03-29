@@ -40,6 +40,7 @@ passport.use(new GoogleStrategy({
         User.create({
           email: email,
           admin: false,
+          reviewer: true,
           name: name,
         }).then(function(user) {
           if (user) {

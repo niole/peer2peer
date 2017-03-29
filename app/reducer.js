@@ -30,6 +30,7 @@ import {
 
 const initialState = {
   isAdmin: false,
+  isReviewer: false,
   reviewer: {},
   reviewed: [],
   sessionReviewees: {}, //hashMap where keys are emails sessionPeers, values are reviewees
@@ -186,6 +187,7 @@ export default function appReducer(state = initialState, action) {
       return Object.assign({}, state, {
         userId: action.data.user.id.toString(),
         isAdmin: action.data.user.admin,
+        isReviewer: action.data.user.reviewer,
         mainView: action.data.view,
       });
 

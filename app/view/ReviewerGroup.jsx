@@ -14,13 +14,6 @@ const propTypes = {
 };
 
 class ReviewerGroup extends Component {
-  constructor() {
-    super();
-    this.state = {
-      show: false,
-    };
-  }
-
   renderReviewees() {
     const {
       peer,
@@ -61,10 +54,9 @@ class ReviewerGroup extends Component {
     );
   }
 
-  renderAddRevieesButton(email, canShowDropDown) {
+  renderAddRevieesButton(email) {
     return (
       <div
-        onMouseEnter={ canShowDropDown ? () => this.setState({ show: !this.state.show }) : () => {} }
         className="hover-reviewee-button">
         pick reviewees for { email }
       </div>
@@ -79,9 +71,6 @@ class ReviewerGroup extends Component {
       remainingPeers,
     } = this.props;
     const {
-      show,
-    } = this.state;
-    const {
       email,
     } = peer;
     const canShowDropDown = !!remainingPeers.length;
@@ -95,9 +84,8 @@ class ReviewerGroup extends Component {
           onClick={ () => removeReviewerHander(email) }>
             { email }
         </div>
-        { canShowButton &&
-          this.renderAddRevieesButton(email, canShowDropDown) }
-        { show && canShowDropDown && this.renderRemainingRevieweeDropDown() }
+        { canShowButton && this.renderAddRevieesButton(email) }
+        { canShowDropDown && this.renderRemainingRevieweeDropDown() }
         { this.renderReviewees() }
       </div>
     );

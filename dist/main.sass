@@ -12,6 +12,9 @@ $secondary-color: rgba(255, 255, 255, 0.298039)
 $secondary-background: #60d187
 $main-font: Colfax Regular,Roboto,Helvetica Neue,Arial,sans-serif
 
+@mixin main-tab-header-width($total-tabs)
+  width: (100%/$total-tabs)-5%
+
 body
   background: $main-background
   margin: 0
@@ -226,6 +229,13 @@ button, a
     position: relative
     top: 1em
 
+  &.two
+    @include main-tab-header-width(2)
+
+  &.three
+    @include main-tab-header-width(3)
+
+
 .create-session-header
   padding: 1em
   margin: 1em
@@ -257,12 +267,18 @@ button, a
   vertical-align: top
 
 .peer-dropdown
+  display: none
   position: absolute
   background: $white
-  margin: 10px
   width: 90%
+  z-index: 100
   border-radius: 3px
   border: 1px solid $main-border-color
+  top: 89px
+  margin-left: 10px
+
+  &:hover
+    display: block
 
   div
     padding: .5em
@@ -310,6 +326,9 @@ textarea
 
   &:hover
     background: whitesmoke
+
+    + .peer-dropdown
+      display: block
 
 .qa-header
   margin-left: 10px

@@ -116,20 +116,34 @@ class SiteContainer extends MUIBaseTheme {
     }
   }
 
+  getPossibleViews(isAdmin, isReviewer) {
+    if (isAdmin && isReviewer) {
+      return allSubViews;
+    }
+    else if (isReviewer) {
+      return [ANSWER_QUESTIONS_VIEW];
+    }
+    else if (isAdmin) {
+      return allSubViews.filter(view => view !== ANSWER_QUESTIONS_VIEW);
+    }
+    else {
+      return [];
+    }
+  }
+
   render() {
     const {
       switchMainView,
       mainView,
       isAdmin,
+      isReviewer,
     } = this.props;
 
     return (
       <div>
         <SiteHeader
           headerHandler={ switchMainView }
-          headers={
-            allSubViews.filter(view => isAdmin ? view !== ANSWER_QUESTIONS_VIEW : view === ANSWER_QUESTIONS_VIEW)
-          }
+          headers={ this.getPossibleViews(isAdmin, isReviewer) }
           focused={ mainView }
         />
         <div id="site-container">
@@ -149,9 +163,11 @@ const mapStateToProps = state => {
   const {
     isAdmin,
     mainView,
+    isReviewer,
   } = state;
 
   return {
+    isReviewer,
     isAdmin,
     mainView,
   };

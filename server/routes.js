@@ -457,7 +457,8 @@ router.post('/reviewsession/create/', function(req, res) {
                 .filter(email => !foundUsers.find(found => found.dataValues.email === email))
                 .map(email => {
                   return {
-                    admin: false,
+                    admin: email === req.user.email,
+                    reviewer: true,
                     name: email,
                     email: email,
                   };

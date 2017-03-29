@@ -79,6 +79,10 @@ const User = sequelize.define(
       type: Sequelize.BOOLEAN,
       field: 'admin'
     },
+    reviewer: {
+      type: Sequelize.BOOLEAN,
+      field: 'reviewer'
+    },
     name: {
       type: Sequelize.STRING,
       field: 'name'
