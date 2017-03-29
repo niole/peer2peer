@@ -95,10 +95,10 @@ export function setAvailableSessions(sessions, peers = [], reviewerId = "", revi
   };
 }
 
-export function submitNewSession() {
+export function submitNewSession(updatedUser) {
   return {
     type: SUBMIT_NEW_SESSION,
-    data: null,
+    data: updatedUser,
   };
 }
 

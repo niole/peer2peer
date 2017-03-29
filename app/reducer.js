@@ -120,6 +120,8 @@ export default function appReducer(state = initialState, action) {
         sessionPeers: [],
         currentSessionDeadline: new Date(),
         sessionReviewees: {},
+        isReviewer: action.data.reviewer,
+        isAdmin: action.data.admin,
       });
 
     case REMOVE_QUESTION:
@@ -188,7 +190,7 @@ export default function appReducer(state = initialState, action) {
         userId: action.data.user.id.toString(),
         isAdmin: action.data.user.admin,
         isReviewer: action.data.user.reviewer,
-        mainView: action.data.view,
+        mainView: action.data.view || state.mainView,
       });
 
     case REMOVE_PEER_FROM_SESSION:

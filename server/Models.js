@@ -100,6 +100,7 @@ const User = sequelize.define(
 User.sync({force: true}).then(function() {
   return p2pConfig.reviewers.map(function(r) {
     return User.create({
+      reviewer: true,
       admin: false,
       email: r.email,
       name: r.name,
@@ -109,6 +110,7 @@ User.sync({force: true}).then(function() {
       name: p2pConfig.admin.name,
       email: p2pConfig.admin.email,
       admin: true,
+      reviewer: false,
     })
   ]);
 });

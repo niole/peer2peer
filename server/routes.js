@@ -476,13 +476,13 @@ router.post('/reviewsession/create/', function(req, res) {
                     },
                   },
                 }).then(function(users) {
-                  reviewerRevieweeCreatorHelper(foundUsers.concat(users), session);
+                  reviewerRevieweeCreatorHelper(foundUsers.concat(users), session, creatorId);
                 });
               });
             }
             else {
               //create reviewers and then reviewees
-              reviewerRevieweeCreatorHelper(foundUsers, session);
+              reviewerRevieweeCreatorHelper(foundUsers, session, creatorId);
             }
           });
         });
@@ -490,7 +490,7 @@ router.post('/reviewsession/create/', function(req, res) {
     }
   );
 
-  function reviewerRevieweeCreatorHelper(foundUsers, session) {
+  function reviewerRevieweeCreatorHelper(foundUsers, session, creatorUserId) {
     let emailToUserIdMap = {};
 
     const newReviewers = foundUsers.map(fu => {
@@ -518,7 +518,39 @@ router.post('/reviewsession/create/', function(req, res) {
       }, []);
 
       Reviewee.bulkCreate(reviewees).then(function() {
-        res.send(true);
+        Reviewer.findOne({
+          where: {
+            userId: creatorUserId,
+          },
+        }).then(function(adminReviewer) {
+          if (adminReviewer) {
+            User.update({
+              reviewer: true,
+            }, {
+              where: {
+                id: creatorUserId,
+              },
+            }).then(function() {
+                User.findOne({
+                  where: {
+                    id: creatorUserId,
+                  },
+                }).then(function(user) {
+                  res.send(user.dataValues);
+                });
+            });
+
+          }
+          else {
+            User.findOne({
+              where: {
+                id: creatorUserId,
+              },
+            }).then(function(user) {
+              res.send(user.dataValues);
+            });
+          }
+        });
       });
     });
   }

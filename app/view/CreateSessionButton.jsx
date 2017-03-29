@@ -39,8 +39,8 @@ class CreateSessionButton extends MUIBaseTheme {
         currentSessionName,
         sessionReviewees,
       },
-      success: () => {
-        submitNewSession();
+      success: updatedUser => {
+        submitNewSession(updatedUser);
       },
       error: err => {
         console.error(err);
@@ -99,7 +99,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    submitNewSession: () => dispatch(submitNewSession()),
+    submitNewSession: user => dispatch(submitNewSession(user)),
   };
 }
 
