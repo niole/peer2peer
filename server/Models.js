@@ -1,11 +1,7 @@
 const Sequelize = require('sequelize');
 const p2pConfig = require('../p2pConfig.json');
 
-const sequelize = new Sequelize('mysql', 'root', 'root', {
-  host: "127.0.0.1",
-  port: 3306
-});
-
+const sequelize = new Sequelize(process.env.DATABASE_URL || 'postgres://postgres@localhost:5432/postgres')
 
 const ReviewSession = sequelize.define(
   'reviewsession',
