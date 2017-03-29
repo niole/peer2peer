@@ -11,7 +11,7 @@ This application runs with:
 to install:
 
 ```
-git clone git@github.com:niole/peer2peer.git; cd peer2peer; bundle; npm install;
+git clone git@github.com:niole/peer2peer.git; cd peer2peer; docker pull mysql; bundle; npm install;
 ```
 
 initialize application's config by running:
