@@ -359,7 +359,13 @@ router.get('/reviewsession/createdby/:userId/', function(req, res) {
         createdBy: userId,
       },
     }).then(function(rs) {
-      res.send(rs.map(r => r.dataValues));
+      res.send(rs.map(r => {
+        let data = r.dataValues;
+        if (typeof data.deadline === "string") {
+          data.deadline = new Date(data.deadline);
+        }
+        return data;
+      }));
     });
   }
   else {

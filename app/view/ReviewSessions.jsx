@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import {
   setReviewer,
   setSessionSubView,
@@ -298,7 +299,9 @@ class ReviewSessions extends MUIBaseTheme {
                   { d.name }
                 </div>
               </div>
-              <div className="qa-section">{ d.deadline }</div>
+              <div className="qa-section">
+                { moment(d.deadline).format("MMM Do YY") }
+              </div>
             </li>
           )) :
           NO_SESSIONS_TO_REVIEW_HEADER
@@ -327,9 +330,7 @@ class ReviewSessions extends MUIBaseTheme {
       currentSession,
     } = this.props;
 
-    const currDeadline = typeof currentSession.deadline === "string" ?
-      new Date(currentSession.deadline) :
-      currentSession.deadline;
+    const currDeadline = currentSession.deadline;
 
     if (mainView === ANSWER_QUESTIONS_VIEW) {
       return (
