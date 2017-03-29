@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 
 
-const { number, string, func } = PropTypes;
+const { bool, number, string, func } = PropTypes;
 const propTypes = {
+  isTextarea: bool,
   className: string.isRequired,
   boundFunction: func.isRequired,
   activeClass: string,
@@ -12,6 +13,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+  isTextarea: false,
   defaultValue: "",
   placeholder: "",
   activeClass: "",
@@ -76,8 +78,19 @@ class DebouncedInput extends React.Component {
     const {
       defaultValue,
       placeholder,
+      isTextarea,
     } = this.props;
 
+    if (isTextarea) {
+      return (
+        <textarea
+          className={ this.getInputClass() }
+          onChange={ this.keyPressHandler }
+          defaultValue={ defaultValue }
+          ref={ ref => this.input = ref }
+          placeholder={ placeholder }/>
+      );
+    }
     return (
       <input
         className={ this.getInputClass() }
@@ -86,8 +99,11 @@ class DebouncedInput extends React.Component {
         ref={ ref => this.input = ref }
         placeholder={ placeholder }/>
     );
+
   }
 }
 
 DebouncedInput.propTypes = propTypes;
+DebouncedInput.defaultProps = defaultProps;
+
 export default DebouncedInput;

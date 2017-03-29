@@ -486,9 +486,10 @@ class ReviewSessions extends MUIBaseTheme {
               "emf"
             )
           );
-      case "ssc":
+      case "scc":
         return (
           <DebouncedInput
+            isTextarea={ true }
             className="answer-input"
             boundFunction={ (inputData) => this.addAnswer(questionIndex, inputData) }
             activeClass="active"
@@ -499,6 +500,7 @@ class ReviewSessions extends MUIBaseTheme {
       case "open":
         return (
           <DebouncedInput
+            isTextarea={ true }
             className="answer-input"
             boundFunction={ (inputData) => this.addAnswer(questionIndex, inputData) }
             activeClass="active"
