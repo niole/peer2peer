@@ -58,11 +58,50 @@ function getReviewerEmail() {
             console.log("peer2peerConfig.json added to root directory.");
         });
         return;
+
       }
 
       return getReviewerName(email);
 
   });
+}
+
+function getDBPassword() {
+  _prompt.get({
+      properties: {
+          // setup the dialog
+          confirm: {
+              pattern: /.+/gi,
+              description: 'Next you will set the password for your database. Please type the password you wish to use: ',
+              message: 'Set password for database',
+              required: true,
+              default: "done",
+          }
+      }
+  }, function (err, result){
+      var pw = result.confirm;
+
+      if (pw === "done") {
+        console.log('you must pick a password');
+        return getDBPassword();
+      }
+
+
+      var config = 'db:\n\timage: mysql\n\tenvironment:\n\t\tMYSQL_ROOT_PASSWORD: '+pw+'\n\tports:\n\t\t- "3306:3306"'
+
+      fs.writeFile("docker-compose.yml", config, function(err) {
+          if(err) {
+              return console.log(err);
+          }
+
+          console.log("You successfully created your docker compose settings.");
+      });
+
+      return;
+
+  });
+
+
 }
 
 function getAdminEmail(name) {
