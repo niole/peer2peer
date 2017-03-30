@@ -29,6 +29,7 @@ import {
 
 
 const initialState = {
+  user: {},
   isAdmin: false,
   isReviewer: false,
   reviewer: {},
@@ -90,6 +91,7 @@ export default function appReducer(state = initialState, action) {
 
     case SUBMIT_ANSWERS:
       return Object.assign({}, state, {
+        reviewer: state.user,
         reviewedId: "",
         sessionView: PICK_PEER_TO_REVIEW_VIEW,
         answers: [],
@@ -197,6 +199,7 @@ export default function appReducer(state = initialState, action) {
     case UPDATE_USER:
       return Object.assign({}, state, {
         userId: action.data.user.id.toString(),
+        user: action.data.user,
         isAdmin: action.data.user.admin,
         isReviewer: action.data.user.reviewer,
         mainView: action.data.view || state.mainView,

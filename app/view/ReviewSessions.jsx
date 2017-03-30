@@ -68,8 +68,8 @@ class ReviewSessions extends MUIBaseTheme {
       [PICK_PEER_TO_REVIEW_VIEW]: this.toSession,
       [PICK_PEER_TO_READ_VIEW]: this.toSession,
       [READ_PEERS_REVIEWS_VIEW]: this.toReviewed,
-      [EDITABLE_QS_VIEW]: e => { e.preventDefault() },
-      [READ_ONLY_QS_VIEW]: e => { e.preventDefault() },
+      [EDITABLE_QS_VIEW]: () => {},
+      [READ_ONLY_QS_VIEW]: () => {},
     };
 
   }

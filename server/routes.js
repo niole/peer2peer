@@ -166,6 +166,7 @@ router.post('/answers/submit/', function(req, res) {
         const answerData = prevAnswers.map(function(a) { return a.dataValues; });
 
         if (!answerData.length) {
+          //if no previous answers
 
           Answer.bulkCreate(answers).then(function() {
             Reviewed.create({
@@ -181,37 +182,52 @@ router.post('/answers/submit/', function(req, res) {
         else {
           const answersToUpdate = answers.filter(function(a) {
             return !!answerData.find(function(otherA) {
-              return a.questionId === otherA.questionId;
+              return a.questionId === otherA.questionId && a.content !== otherA.questionId;
             });
           });
-          let updated = [];
-          answersToUpdate.forEach(function(ans) {
 
-            Answer.update(
-              ans,
-             {
+          if (answersToUpdate.length) {
+            let updated = 0;
+
+            answersToUpdate.forEach(function(ans) {
+              delete ans.id;
+              Answer.update(
+                ans,
+               {
+                where: {
+                  questionId: ans.questionId
+                },
+              }).then(function() {
+                updated += 1;
+                if (updated === answersToUpdate.length) {
+                  //get reviewed
+                  Reviewed.findOne({
+                    where: {
+                      sessionId: answers[0].reviewSessionId,
+                      reviewerId: answers[0].reviewerId,
+                      reviewedId: answers[0].peerId,
+                    },
+                  }).then(function(r) {
+                    res.send(r.dataValues);
+                  });
+
+                }
+              });
+
+            });
+
+          }
+          else {
+            Reviewed.findOne({
               where: {
-                questionId: ans.questionId
+                sessionId: answers[0].reviewSessionId,
+                reviewerId: answers[0].reviewerId,
+                reviewedId: answers[0].peerId,
               },
-            }).then(function() {
-              updated.push(true);
-              if (updated.length === answersToUpdate.length) {
-                //get reviewed
-                Reviewed.findOne({
-                  where: {
-                    sessionId: answers[0].reviewSessionId,
-                    reviewerId: answers[0].reviewerId,
-                    reviewedId: answers[0].peerId,
-                  },
-                }).then(function(r) {
-                  res.send(r.dataValues);
-                });
-
-              }
+            }).then(function(r) {
+              res.send(r.dataValues);
             });
-
-          });
-
+          }
         }
       });
     });
