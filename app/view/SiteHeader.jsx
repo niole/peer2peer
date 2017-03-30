@@ -34,7 +34,7 @@ class SiteHeader extends MUIBaseTheme {
       focused,
     } = this.props;
     const totalHeadersClass = totalHeadersMap[headers.length] || "";
-    console.log(totalHeadersClass);
+
     return headers.map((header, i) => {
       const focusedClass = header === focused ? " focused" : "";
 

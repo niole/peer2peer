@@ -33,6 +33,7 @@ const initialState = {
   isReviewer: false,
   reviewer: {},
   reviewed: [],
+  reviewee: {},
   sessionReviewees: {}, //hashMap where keys are emails sessionPeers, values are reviewees
   sessionPeers: [],
   peers: [],
@@ -103,7 +104,9 @@ export default function appReducer(state = initialState, action) {
         questions: action.data.questions,
         reviewedId: action.data.peerId,
         answers: action.data.answers,
-      });
+      },
+        action.data.target
+      );
 
     case SET_AVAILABLE_SESSIONS:
       return Object.assign({}, state, {

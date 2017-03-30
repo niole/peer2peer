@@ -7,6 +7,7 @@ export const CREATE_SESSION_VIEW = "createReviewSessionView";
 export const ANSWER_QUESTIONS_VIEW = "answerQuestionsView";
 
 /* header labels */
+export const SELF_REVIEW_LABEL = "Self";
 export const MET_EXPECTATIONS_LABEL = "met";
 export const FAILED_EXPECTATIONS_LABEL = "below";
 export const EXCEEDED_EXPECTATIONS_LABEL = "exceeded";
@@ -15,8 +16,9 @@ export const DATEPICKER_PLACEHOLDER = "set a deadline";
 export const PICK_SESSION_LABEL = "Pick a Session";
 export const PICK_PEER_TO_REVIEW_LABEL = "Pick Peer To Review";
 export const PICK_PEER_LABEL = "Pick Peer";
-export const EDITABLE_QS_LABEL = "Answer Questions";
-export const VIEW_ONLY_QS_LABEL = "View Answers";
+export const ANSWER_QUESTIONS_LABEL = "Answer Questions";
+export const EDITABLE_QS_LABEL = "Answer Questions About";
+export const VIEW_ONLY_QS_LABEL = "View Answers About";
 export const READ_PEERS_REVIEWS_LABEL = "Read Peer's Reviews";
 export const CREATE_SESSION_LABEL = "Create Peer2Peer Session";
 export const SUBMIT_ANSWERS_LABEL = "Submit Answers";
@@ -28,6 +30,7 @@ export const REVIEW_DEADLINE_SUB_HEADER = "deadline";
 export const PICK_PEERS_SUB_HEADER = "peers";
 export const EMF_QUESTION_LABEL = "Was performance above, at, or below expectations?";
 export const START_STOP_CONTINUE_LABEL = "Start, stop, continue?";
+export const VIEW_ANSWERS_LABEL = "View Answers";
 
 /* review session views */
 export const PICK_SESSION_VIEW = "pickSession";
@@ -48,9 +51,9 @@ export const HEADER_TO_VIEW_MAP = {
 
 export const VIEW_TO_HEADER_MAP = (function() {
   let base = {
-    [VIEW_ANSWERS_VIEW]: VIEW_ONLY_QS_LABEL,
+    [VIEW_ANSWERS_VIEW]: VIEW_ANSWERS_LABEL,
     [CREATE_SESSION_VIEW]: CREATE_SESSION_LABEL,
-    [ANSWER_QUESTIONS_VIEW]: EDITABLE_QS_LABEL,
+    [ANSWER_QUESTIONS_VIEW]: ANSWER_QUESTIONS_LABEL,
   };
 
   let key;

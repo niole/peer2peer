@@ -70,7 +70,7 @@ export function submitAnswers(reviewed) {
   };
 }
 
-export function setQuestionSubview(questionType, qA, peerId) {
+export function setQuestionSubview(questionType, qA, peerId, target) {
   return {
     type: SET_QS_SUBVIEW,
     data: {
@@ -78,6 +78,7 @@ export function setQuestionSubview(questionType, qA, peerId) {
       questionType,
       questions: qA.questions,
       answers: qA.answers || [],
+      target,
     },
   };
 }

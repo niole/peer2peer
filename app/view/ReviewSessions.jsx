@@ -11,6 +11,9 @@ import {
   addAnswer,
 } from '../actions.js';
 import {
+  VIEW_ONLY_QS_LABEL,
+  EDITABLE_QS_LABEL,
+  SELF_REVIEW_LABEL,
   MET_EXPECTATIONS_LABEL,
   FAILED_EXPECTATIONS_LABEL,
   EXCEEDED_EXPECTATIONS_LABEL,
@@ -97,6 +100,12 @@ class ReviewSessions extends MUIBaseTheme {
     $.ajax({
       url,
       success: d => {
+        const withDateDeadlines = d.map(reviewSession => {
+          if (typeof reviewSession.deadline === "string") {
+            reviewSession.deadline = new Date(reviewSession.deadline);
+          }
+          return reviewSession;
+        });
         setAvailableSessions(d);
       },
       error: err => {
@@ -203,7 +212,7 @@ class ReviewSessions extends MUIBaseTheme {
    * editable if user is not session creator
    * and are not editable if user is session creator
    */
-  toQuestions(peerId) {
+  toQuestions(peerId, peer) {
     const {
       reviewerId,
       setQuestionSubview,
@@ -217,8 +226,8 @@ class ReviewSessions extends MUIBaseTheme {
       url,
       success: data => {
         this.ifCreatorElseReviewer(
-          () => setQuestionSubview(READ_ONLY_QS_VIEW, data, peerId),
-          () => setQuestionSubview(EDITABLE_QS_VIEW, data, peerId)
+          () => setQuestionSubview(READ_ONLY_QS_VIEW, data, peerId, { reviewee: peer }),
+          () => setQuestionSubview(EDITABLE_QS_VIEW, data, peerId, { reviewer: peer })
         );
       },
       error: err => {
@@ -227,14 +236,29 @@ class ReviewSessions extends MUIBaseTheme {
     });
   }
 
-  formatHeaderWithReviewerName(header) {
+  formatHeaderWithName(header, name, shouldUseSelf) {
+    if (shouldUseSelf) {
+      return `${header} ${SELF_REVIEW_LABEL}`;
+    }
+    return `${header} ${name}`;
+  }
+
+  getBreadcrumbTitle(header) {
     const {
+      userId,
       reviewer,
+      reviewee,
     } = this.props;
 
-    if (reviewer) {
-      return `${header} ${reviewer.name}`;
+    if (READ_REVIEWS_ABOUT_LABEL === header || EDITABLE_QS_LABEL === header) {
+      //use reviewer object
+      return this.formatHeaderWithName(header, reviewer.name, reviewer.id.toString() === userId);
     }
+
+    if (VIEW_ONLY_QS_LABEL === header) {
+      return this.formatHeaderWithName(header, reviewee.name, reviewee.id.toString() === userId);
+    }
+
     return header;
   }
 
@@ -252,9 +276,7 @@ class ReviewSessions extends MUIBaseTheme {
     return usedHeaders.map((header, i) => {
       const isFocused = i === headerIndex;
       const focusedClass = isFocused ? " focused" : "";
-      const title = READ_REVIEWS_ABOUT_LABEL === header ?
-        this.formatHeaderWithReviewerName(header) :
-        header;
+      const title = this.getBreadcrumbTitle(header);
 
       return (
         <div
@@ -318,7 +340,7 @@ class ReviewSessions extends MUIBaseTheme {
   }
 
   /**
-   * renders peers that can be reviewable
+   * renders peers that are reviewable
    */
   renderReviewablePeers() {
     const {
@@ -330,7 +352,10 @@ class ReviewSessions extends MUIBaseTheme {
       currentSession,
     } = this.props;
 
-    const currDeadline = currentSession.deadline;
+    const currDeadline =
+      typeof currentSession.deadline === "string" ?
+      new Date(currentSession.deadline) :
+      currentSession.deadline;
 
     if (mainView === ANSWER_QUESTIONS_VIEW) {
       return (
@@ -339,19 +364,21 @@ class ReviewSessions extends MUIBaseTheme {
             { peers.map(d => {
               const canStillReview = this.hasBeenReviewed(reviewed, d) || currDeadline.getTime() > new Date().getTime();
               const reviewedClass = !canStillReview ? " reviewed-peer" : "";
+              const name = d.id.toString() === userId ? SELF_REVIEW_LABEL : d.name;
+
               return (
                 <div
                   title={ !canStillReview ? `${d.name} can no longer be reviewed` : `click to review ${d.name}` }
                   onClick={ e => {
                     e.preventDefault();
                     if (canStillReview) {
-                      this.toQuestions(d.id)
+                      this.toQuestions(d.id, d)
                     }
                   }}
                   key={ d.id }>
                   <div className="qa-header">
                     <div className={ `subview-content${reviewedClass}` }>
-                      { d.name }
+                      { name }
                     </div>
                   </div>
                 </div>
@@ -372,7 +399,11 @@ class ReviewSessions extends MUIBaseTheme {
             key={ d.id }>
             <div className="qa-header">
               <div className="subview-content">
-                { d.name }
+                {
+                  d.id.toString() === userId ?
+                  SELF_REVIEW_LABEL :
+                  d.name
+                }
               </div>
             </div>
           </li>
@@ -629,9 +660,11 @@ const mapStateToProps = state => {
     currentSessionId,
     reviewedId,
     reviewed,
+    reviewee,
   } = state;
 
   return {
+    reviewee,
     reviewer,
     reviewed,
     reviewedId,
@@ -653,7 +686,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     setReviewer: (reviewer, reviewedUsers, view) => dispatch(setReviewer(reviewer, reviewedUsers, view)),
     addAnswer: ans => dispatch(addAnswer(ans)),
-    setQuestionSubview: (viewType, qs, peerId) => dispatch(setQuestionSubview(viewType, qs, peerId)),
+    setQuestionSubview: (viewType, qs, peerId, peer) => dispatch(setQuestionSubview(viewType, qs, peerId, peer)),
     setAvailableSessions: ss => dispatch(setAvailableSessions(ss)),
     setCurrentSession: (sessionId, session, reviewers, view) => dispatch(setCurrentSession(sessionId, session, reviewers, view)),
     setSessionSubView: view => dispatch(setSessionSubView(view)),

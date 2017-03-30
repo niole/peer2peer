@@ -3,8 +3,8 @@ version: '2'
 services:
   db:
     restart: always
-    image: postgres
+    image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: "root"
     ports:
-      - "5432:5432"
+      - "3306:3306"

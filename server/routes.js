@@ -160,6 +160,7 @@ router.post('/answers/submit/', function(req, res) {
         where: {
           reviewSessionId: answers[0].reviewSessionId,
           reviewerId: answers[0].reviewerId,
+          peerId: answers[0].peerId,
         },
       }).then(function(prevAnswers) {
         const answerData = prevAnswers.map(function(a) { return a.dataValues; });
@@ -266,6 +267,7 @@ router.get('/reviewees/:userId/:sessionId', function(req, res) {
         reviewSessionId: sessionId,
       },
     }).then(function(rs) {
+
       const userIds = rs.map(r => r.dataValues.userId);
       User.findAll({
         where: {
@@ -274,11 +276,13 @@ router.get('/reviewees/:userId/:sessionId', function(req, res) {
           },
         },
       }).then(function(users) {
+
         Reviewed.findAll({
           where: {
             sessionId: sessionId,
           },
         }).then(function(rs) {
+
           res.send({
             reviewers: users.map(u => u.dataValues),
             reviewed: rs.map(r => r.dataValues),
@@ -311,9 +315,6 @@ router.get('/reviewers/:userId/:sessionId/', function(req, res) {
       function() {
         Reviewer.findAll({
           where: {
-            userId: {
-              $ne: userId,
-            },
             reviewSessionId: sessionId,
           },
         }).then(function(reviewers) {
@@ -359,13 +360,7 @@ router.get('/reviewsession/createdby/:userId/', function(req, res) {
         createdBy: userId,
       },
     }).then(function(rs) {
-      res.send(rs.map(r => {
-        let data = r.dataValues;
-        if (typeof data.deadline === "string") {
-          data.deadline = new Date(data.deadline);
-        }
-        return data;
-      }));
+      res.send(rs.map(r => r.dataValues));
     });
   }
   else {
@@ -503,53 +498,62 @@ router.post('/reviewsession/create/', function(req, res) {
     });
 
     Reviewer.bulkCreate(newReviewers).then(function(reviewers) {
-      const reviewees = reviewers.reduce((reviewees, nextReviewer) => {
-        const formattedReviewees = sessionReviewees[nextReviewer.dataValues.email].map(sr => {
-          return {
-            email: sr.email,
-            reviewSessionId: session.id,
-            userId: emailToUserIdMap[sr.email],
-            reviewedBy: nextReviewer.dataValues.userid,
-          };
-        });
-
-        reviewees = reviewees.concat(formattedReviewees);
-        return reviewees;
-      }, []);
-
-      Reviewee.bulkCreate(reviewees).then(function() {
-        Reviewer.findOne({
-          where: {
-            userId: creatorUserId,
+      Reviewer.findAll({
+        where: {
+          reviewSessionId: session.id,
+          email: {
+            $in: reviewers.map(r => r.dataValues.email),
           },
-        }).then(function(adminReviewer) {
-          if (adminReviewer) {
-            User.update({
-              reviewer: true,
-            }, {
-              where: {
-                id: creatorUserId,
-              },
-            }).then(function() {
-                User.findOne({
-                  where: {
-                    id: creatorUserId,
-                  },
-                }).then(function(user) {
-                  res.send(user.dataValues);
-                });
-            });
+        },
+      }).then(function(reviewers) {
+        const reviewees = reviewers.reduce((reviewees, nextReviewer) => {
+          const formattedReviewees = sessionReviewees[nextReviewer.dataValues.email].map(sr => {
+            return {
+              email: sr.email,
+              reviewSessionId: session.id,
+              userId: emailToUserIdMap[sr.email],
+              reviewedBy: nextReviewer.dataValues.id,
+            };
+          });
 
-          }
-          else {
-            User.findOne({
-              where: {
-                id: creatorUserId,
-              },
-            }).then(function(user) {
-              res.send(user.dataValues);
-            });
-          }
+          reviewees = reviewees.concat(formattedReviewees);
+          return reviewees;
+        }, []);
+
+        Reviewee.bulkCreate(reviewees).then(function() {
+          Reviewer.findOne({
+            where: {
+              userId: creatorUserId,
+            },
+          }).then(function(adminReviewer) {
+            if (adminReviewer) {
+              User.update({
+                reviewer: true,
+              }, {
+                where: {
+                  id: creatorUserId,
+                },
+              }).then(function() {
+                  User.findOne({
+                    where: {
+                      id: creatorUserId,
+                    },
+                  }).then(function(user) {
+                    res.send(user.dataValues);
+                  });
+              });
+
+            }
+            else {
+              User.findOne({
+                where: {
+                  id: creatorUserId,
+                },
+              }).then(function(user) {
+                res.send(user.dataValues);
+              });
+            }
+          });
         });
       });
     });
