@@ -39,7 +39,6 @@ const initialState = {
   sessionPeers: [],
   peers: [],
   userId: "",
-  reviewerId: "",
   reviewedId: "",
   sessions: [],
   currentSessionDeadline: new Date(),
@@ -83,7 +82,6 @@ export default function appReducer(state = initialState, action) {
 
     case SET_REVIEWER:
       return Object.assign({}, state, {
-        reviewerId: action.data.reviewer.id,
         reviewer: action.data.reviewer,
         peers: action.data.reviewedUsers,
         sessionView: action.data.view,
@@ -112,11 +110,10 @@ export default function appReducer(state = initialState, action) {
 
     case SET_AVAILABLE_SESSIONS:
       return Object.assign({}, state, {
-        sessionView: action.data.subView,
+        sessionView: PICK_SESSION_VIEW,
         sessions: action.data.sessions,
-        reviewedId: action.data.reviewedId,
-        reviewerId: action.data.reviewerId,
-        peers: action.data.peers,
+        reviewedId: "",
+        peers: [],
       });
 
     case SUBMIT_NEW_SESSION:
@@ -160,7 +157,6 @@ export default function appReducer(state = initialState, action) {
         reviewed: [],
         mainView: action.data,
         peers: [],
-        reviewerId: "",
         reviewedId: "",
         questions: [],
         answers: [],

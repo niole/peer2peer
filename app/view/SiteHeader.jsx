@@ -36,12 +36,13 @@ class SiteHeader extends MUIBaseTheme {
     const totalHeadersClass = totalHeadersMap[headers.length] || "";
 
     return headers.map((header, i) => {
-      const focusedClass = header === focused ? " focused" : "";
+      const isFocused = header === focused;
+      const focusedClass = isFocused ? " focused" : "";
 
       return (
         <div
           className={ `main-view-tab${focusedClass}${totalHeadersClass}` }
-          onClick={ () => headerHandler(header) }
+          onClick={ isFocused ? () => {} : () => headerHandler(header) }
           key={ header }
           >
           { VIEW_TO_HEADER_MAP[header] }

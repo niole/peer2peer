@@ -83,15 +83,11 @@ export function setQuestionSubview(questionType, qA, peerId, target) {
   };
 }
 
-export function setAvailableSessions(sessions, peers = [], reviewerId = "", reviewedId = "", subView = PICK_SESSION_VIEW) {
+export function setAvailableSessions(sessions) {
   return {
     type: SET_AVAILABLE_SESSIONS,
     data: {
-      subView,
       sessions,
-      reviewedId,
-      reviewerId,
-      peers,
     },
   };
 }

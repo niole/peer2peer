@@ -171,7 +171,7 @@ class ReviewSessions extends MUIBaseTheme {
    * review session creator can look at peers reviewed by
    * selected peer
    */
-  toReviewed(peerId = this.props.reviewerId, peer = this.props.reviewer) {
+  toReviewed(peerId = this.props.reviewer.id, peer = this.props.reviewer) {
     const {
       currentSessionId,
       setReviewer,
@@ -214,13 +214,13 @@ class ReviewSessions extends MUIBaseTheme {
    */
   toQuestions(peerId, peer) {
     const {
-      reviewerId,
+      reviewer,
       setQuestionSubview,
       currentSessionId,
       userId,
     } = this.props;
-    const reviewer = reviewerId || userId;
-    const url = `routes/questions/answers/${reviewer}/${peerId}/${currentSessionId}`;
+    const reviewerId = reviewer.id || userId;
+    const url = `routes/questions/answers/${reviewerId}/${peerId}/${currentSessionId}`;
 
     $.ajax({
       url,
@@ -695,7 +695,6 @@ const mapStateToProps = state => {
     answers,
     peers,
     userId,
-    reviewerId,
     sessions,
     mainView,
     currentSessionId,
@@ -711,7 +710,6 @@ const mapStateToProps = state => {
     reviewedId,
     currentSessionId,
     mainView,
-    reviewerId,
     sessionView,
     questions,
     answers,
