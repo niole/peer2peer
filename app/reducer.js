@@ -136,10 +136,14 @@ export default function appReducer(state = initialState, action) {
       return Object.assign({}, state, {
         reviewed: [],
         sessionView: action.data,
+        reviewer: {},
+        reviewee: {},
       });
 
     case SET_CURRENT_SESSION:
       return Object.assign({}, state, {
+        reviewer: {},
+        reviewee: {},
         currentSession: action.data.session,
         reviewed: action.data.reviewed,
         peers: action.data.reviewers,
@@ -149,6 +153,8 @@ export default function appReducer(state = initialState, action) {
 
     case SWITCH_MAIN_VIEW:
       return Object.assign({}, state, {
+        reviewer: {},
+        reviewee: {},
         reviewed: [],
         mainView: action.data,
         peers: [],

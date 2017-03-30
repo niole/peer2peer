@@ -335,8 +335,23 @@ class ReviewSessions extends MUIBaseTheme {
   /**
    * indicator function determining if this peer has been reviewed yet
    */
-  hasBeenReviewed(reviewed, peer) {
-    return !!reviewed.find(r => r.reviewedId === peer.id.toString());
+  hasBeenReviewed(peer) {
+    const {
+      reviewed,
+      reviewer,
+      userId,
+      mainView,
+    } = this.props;
+    const peerId = peer.id.toString();
+    let reviewerId = reviewer.id ? reviewer.id.toString() : userId;
+
+    if (mainView === VIEW_ANSWERS_VIEW) {
+      reviewerId = reviewer.id && reviewer.id.toString();
+    }
+
+    return !!reviewed.find(r => {
+      return r.reviewedId === peerId && reviewerId === r.reviewerId;
+    });
   }
 
   /**
@@ -357,13 +372,26 @@ class ReviewSessions extends MUIBaseTheme {
       new Date(currentSession.deadline) :
       currentSession.deadline;
 
+    const sessionOverClass = " session-over";
+    const allreviewedClass = " reviewed-peer";
+
     if (mainView === ANSWER_QUESTIONS_VIEW) {
       return (
         <div>
           { this.renderSubviewHeaders(PICK_PEERS_SUB_HEADER) }
             { peers.map(d => {
-              const canStillReview = this.hasBeenReviewed(reviewed, d) || currDeadline.getTime() > new Date().getTime();
-              const reviewedClass = !canStillReview ? " reviewed-peer" : "";
+              const hasBeenReviewed = this.hasBeenReviewed(d);
+              const canStillReview = hasBeenReviewed || currDeadline.getTime() > new Date().getTime();
+              let reviewedClass = "";
+
+              if (hasBeenReviewed) {
+                reviewedClass = allreviewedClass;
+              }
+
+              if (!canStillReview) {
+                reviewedClass = sessionOverClass
+              }
+
               const name = d.id.toString() === userId ? SELF_REVIEW_LABEL : d.name;
 
               return (
@@ -389,7 +417,14 @@ class ReviewSessions extends MUIBaseTheme {
     }
 
     if (mainView === VIEW_ANSWERS_VIEW) {
-      return peers.map(d => (
+      return peers.map(d => {
+        const name = d.id.toString() === userId ?
+          SELF_REVIEW_LABEL :
+          d.name;
+        const hasBeenReviewed = this.hasBeenReviewed(d);
+        const reviewedClass = hasBeenReviewed ? allreviewedClass : "";
+
+        return (
           <li
             title={ READ_PEERS_REVIEWS_TITLES }
             onClick={ e => {
@@ -398,17 +433,13 @@ class ReviewSessions extends MUIBaseTheme {
             }}
             key={ d.id }>
             <div className="qa-header">
-              <div className="subview-content">
-                {
-                  d.id.toString() === userId ?
-                  SELF_REVIEW_LABEL :
-                  d.name
-                }
+              <div className={ `subview-content${reviewedClass}` }>
+                { name }
               </div>
             </div>
           </li>
-        )
-      );
+        );
+      });
     }
 
   }

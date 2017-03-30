@@ -338,7 +338,10 @@ textarea
   @extend .non-clickable-header
   display: inline-block
 
-  &.reviewed-peer, &.question
+  &.reviewed-peer
+    background: $main-color
+
+  &.session-over, &.question
     color: $white
     &:hover
       color: $white
