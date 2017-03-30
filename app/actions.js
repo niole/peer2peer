@@ -70,15 +70,14 @@ export function submitAnswers(reviewed) {
   };
 }
 
-export function setQuestionSubview(questionType, qA, peerId, target) {
+export function setQuestionSubview(questionType, qA, reviewee) {
   return {
     type: SET_QS_SUBVIEW,
     data: {
-      peerId,
+      reviewee,
       questionType,
       questions: qA.questions,
       answers: qA.answers || [],
-      target,
     },
   };
 }

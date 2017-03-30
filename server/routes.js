@@ -195,7 +195,10 @@ router.post('/answers/submit/', function(req, res) {
                 ans,
                {
                 where: {
-                  questionId: ans.questionId
+                  questionId: ans.questionId,
+                  reviewSessionId: ans.reviewSessionId,
+                  reviewerId: ans.reviewerId,
+                  peerId: ans.peerId,
                 },
               }).then(function() {
                 updated += 1;

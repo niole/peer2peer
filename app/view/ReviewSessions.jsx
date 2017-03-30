@@ -37,7 +37,7 @@ import {
   READ_PEERS_REVIEWS_VIEW,
   REVISIT_SECTION_TITLE,
   REVIEW_PEERS_TITLE,
-  READ_REVIEWS_ABOUT_LABEL,
+  READ_REVIEWS_BY_LABEL,
 } from '../constants.js';
 import {
   VIEW_TO_HEADER_MAP,
@@ -226,8 +226,8 @@ class ReviewSessions extends MUIBaseTheme {
       url,
       success: data => {
         this.ifCreatorElseReviewer(
-          () => setQuestionSubview(READ_ONLY_QS_VIEW, data, peerId, { reviewee: peer }),
-          () => setQuestionSubview(EDITABLE_QS_VIEW, data, peerId, { reviewer: peer })
+          () => setQuestionSubview(READ_ONLY_QS_VIEW, data, peer),
+          () => setQuestionSubview(EDITABLE_QS_VIEW, data, peer)
         );
       },
       error: err => {
@@ -250,12 +250,12 @@ class ReviewSessions extends MUIBaseTheme {
       reviewee,
     } = this.props;
 
-    if (READ_REVIEWS_ABOUT_LABEL === header || EDITABLE_QS_LABEL === header) {
+    if (READ_REVIEWS_BY_LABEL === header) {
       //use reviewer object
       return this.formatHeaderWithName(header, reviewer.name, reviewer.id.toString() === userId);
     }
 
-    if (VIEW_ONLY_QS_LABEL === header) {
+    if (VIEW_ONLY_QS_LABEL === header || EDITABLE_QS_LABEL === header) {
       return this.formatHeaderWithName(header, reviewee.name, reviewee.id.toString() === userId);
     }
 
@@ -474,7 +474,7 @@ class ReviewSessions extends MUIBaseTheme {
       questions,
       addAnswer,
       userId,
-      reviewedId,
+      reviewee,
       currentSessionId,
     } = this.props;
 
@@ -484,7 +484,7 @@ class ReviewSessions extends MUIBaseTheme {
       reviewSessionId: currentSessionId.toString(),
       content,
       reviewerId: userId,
-      peerId: reviewedId.toString(),
+      peerId: reviewee.id.toString(),
     };
 
     addAnswer(answer);
@@ -698,7 +698,6 @@ const mapStateToProps = state => {
     sessions,
     mainView,
     currentSessionId,
-    reviewedId,
     reviewed,
     reviewee,
   } = state;
@@ -707,7 +706,6 @@ const mapStateToProps = state => {
     reviewee,
     reviewer,
     reviewed,
-    reviewedId,
     currentSessionId,
     mainView,
     sessionView,
@@ -725,7 +723,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     setReviewer: (reviewer, reviewedUsers, view) => dispatch(setReviewer(reviewer, reviewedUsers, view)),
     addAnswer: ans => dispatch(addAnswer(ans)),
-    setQuestionSubview: (viewType, qs, peerId, peer) => dispatch(setQuestionSubview(viewType, qs, peerId, peer)),
+    setQuestionSubview: (viewType, qs, reviewee) => dispatch(setQuestionSubview(viewType, qs, reviewee)),
     setAvailableSessions: ss => dispatch(setAvailableSessions(ss)),
     setCurrentSession: (sessionId, session, reviewers, view) => dispatch(setCurrentSession(sessionId, session, reviewers, view)),
     setSessionSubView: view => dispatch(setSessionSubView(view)),

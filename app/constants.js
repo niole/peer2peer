@@ -22,7 +22,7 @@ export const VIEW_ONLY_QS_LABEL = "View Answers About";
 export const READ_PEERS_REVIEWS_LABEL = "Read Peer's Reviews";
 export const CREATE_SESSION_LABEL = "Create Peer2Peer Session";
 export const SUBMIT_ANSWERS_LABEL = "Submit Answers";
-export const READ_REVIEWS_ABOUT_LABEL = "Read Reviews By";
+export const READ_REVIEWS_BY_LABEL = "Read Reviews By";
 export const REVIEW_SESSIONS_SUB_HEADER = "review sessions";
 export const QUESTIONS_SUB_HEADER = "questions";
 export const ANSWERS_SUB_HEADER = "answers";
@@ -44,7 +44,7 @@ export const HEADER_TO_VIEW_MAP = {
   [PICK_SESSION_LABEL]: PICK_SESSION_VIEW,
   [PICK_PEER_LABEL]: PICK_PEER_TO_REVIEW_VIEW,
   [READ_PEERS_REVIEWS_LABEL]: PICK_PEER_TO_READ_VIEW,
-  [READ_REVIEWS_ABOUT_LABEL]: READ_PEERS_REVIEWS_VIEW,
+  [READ_REVIEWS_BY_LABEL]: READ_PEERS_REVIEWS_VIEW,
   [VIEW_ONLY_QS_LABEL]: READ_ONLY_QS_VIEW,
   [EDITABLE_QS_LABEL]: EDITABLE_QS_VIEW,
 };

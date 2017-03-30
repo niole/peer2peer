@@ -33,13 +33,12 @@ const initialState = {
   isAdmin: false,
   isReviewer: false,
   reviewer: {},
-  reviewed: [],
   reviewee: {},
+  reviewed: [],
   sessionReviewees: {}, //hashMap where keys are emails sessionPeers, values are reviewees
   sessionPeers: [],
   peers: [],
   userId: "",
-  reviewedId: "",
   sessions: [],
   currentSessionDeadline: new Date(),
   currentSessionId: "",
@@ -89,8 +88,7 @@ export default function appReducer(state = initialState, action) {
 
     case SUBMIT_ANSWERS:
       return Object.assign({}, state, {
-        reviewer: state.user,
-        reviewedId: "",
+        reviewee: {},
         sessionView: PICK_PEER_TO_REVIEW_VIEW,
         answers: [],
         reviewed: state.reviewed.find(r => r.id.toString() === action.data.reviewed.id.toString()) ?
@@ -102,17 +100,15 @@ export default function appReducer(state = initialState, action) {
       return Object.assign({}, state, {
         sessionView: action.data.questionType,
         questions: action.data.questions,
-        reviewedId: action.data.peerId,
+        reviewee: action.data.reviewee,
         answers: action.data.answers,
-      },
-        action.data.target
-      );
+      });
 
     case SET_AVAILABLE_SESSIONS:
       return Object.assign({}, state, {
         sessionView: PICK_SESSION_VIEW,
         sessions: action.data.sessions,
-        reviewedId: "",
+        reviewee: {},
         peers: [],
       });
 
@@ -157,7 +153,7 @@ export default function appReducer(state = initialState, action) {
         reviewed: [],
         mainView: action.data,
         peers: [],
-        reviewedId: "",
+        reviewee: {},
         questions: [],
         answers: [],
         sessionView: PICK_SESSION_VIEW,

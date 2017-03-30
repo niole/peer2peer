@@ -22,7 +22,7 @@ import {
   CREATE_SESSION_VIEW,
   ANSWER_QUESTIONS_VIEW,
 
-  READ_REVIEWS_ABOUT_LABEL,
+  READ_REVIEWS_BY_LABEL,
   PICK_SESSION_LABEL,
   PICK_PEER_LABEL,
   EDITABLE_QS_LABEL,
@@ -72,7 +72,7 @@ class SiteContainer extends MUIBaseTheme {
         headers={[
           PICK_SESSION_LABEL,
           READ_PEERS_REVIEWS_LABEL,
-          READ_REVIEWS_ABOUT_LABEL,
+          READ_REVIEWS_BY_LABEL,
           VIEW_ONLY_QS_LABEL,
         ]}
       />
