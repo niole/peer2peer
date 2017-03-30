@@ -38,7 +38,6 @@ const initialState = {
   sessionReviewees: {}, //hashMap where keys are emails sessionPeers, values are reviewees
   sessionPeers: [],
   peers: [],
-  userId: "",
   sessions: [],
   currentSessionDeadline: new Date(),
   currentSessionId: "",
@@ -190,7 +189,6 @@ export default function appReducer(state = initialState, action) {
 
     case UPDATE_USER:
       return Object.assign({}, state, {
-        userId: action.data.user.id.toString(),
         user: action.data.user,
         isAdmin: action.data.user.admin,
         isReviewer: action.data.user.reviewer,

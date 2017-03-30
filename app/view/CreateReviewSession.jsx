@@ -265,7 +265,6 @@ const mapStateToProps = state => {
     currentSessionDeadline,
     questions,
     peers,
-    userId,
     sessionPeers,
     sessionReviewees,
   } = state;
@@ -276,7 +275,6 @@ const mapStateToProps = state => {
     sessionPeers,
     questions,
     peers,
-    userId,
   };
 };
 

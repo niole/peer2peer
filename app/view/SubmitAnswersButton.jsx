@@ -57,19 +57,13 @@ class CreateSessionButton extends MUIBaseTheme {
 
 const mapStateToProps = state => {
   const {
-    currentSessionId,
     answers,
-    reviewedId,
-    userId,
     questions,
   } = state;
 
   return {
-    currentSessionId,
     answeredAll: answers.length === questions.length && questions.length > 0,
     answers,
-    reviewedId,
-    userId,
   };
 };
 

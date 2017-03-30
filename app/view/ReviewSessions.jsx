@@ -694,7 +694,7 @@ const mapStateToProps = state => {
     questions,
     answers,
     peers,
-    userId,
+    user,
     sessions,
     mainView,
     currentSessionId,
@@ -712,7 +712,7 @@ const mapStateToProps = state => {
     questions,
     answers,
     peers,
-    userId,
+    userId: user.id.toString(),
     sessions,
     currentSession,
   };

@@ -81,7 +81,7 @@ const mapStateToProps = state => {
     questions,
     sessionPeers,
     currentSessionDeadline,
-    userId,
+    user,
     currentSessionName,
     sessionReviewees,
   } = state;
@@ -89,7 +89,7 @@ const mapStateToProps = state => {
   return {
     sessionReviewees,
     currentSessionName,
-    userId,
+    userId: user.id.toString(),
     questions,
     sessionPeers,
     currentSessionDeadline,
