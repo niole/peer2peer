@@ -67,5 +67,5 @@ export const REVISIT_SECTION_TITLE = "click to revisit this section";
 export const REVIEW_PEERS_TITLE = "click to start reviewing your peers";
 export const ANSWER_Q_PLACEHOLDER = "answer the question";
 export const READ_PEERS_REVIEWS_TITLES = "click to read peer's completed reviews";
-export const NOT_COMPLETED_REVIEW_HEADER = "This user has not completed this review";
-export const NO_SESSIONS_TO_REVIEW_HEADER = "You have no sessions to review";
+export const NOT_COMPLETED_REVIEW_HEADER = "This user has not completed this review.";
+export const NO_SESSIONS_TO_REVIEW_HEADER = "You have no sessions to review.";

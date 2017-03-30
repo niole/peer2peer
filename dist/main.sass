@@ -6,6 +6,7 @@ $secondary-click-background: #6ded99
 $white: #fff
 $main-color: #333647
 $main-border-color: #d0dadd
+$main-border-radius: 3px
 
 $main-background: $white
 $secondary-color: rgba(255, 255, 255, 0.298039)
@@ -45,7 +46,7 @@ li
 
 input, textarea
   padding: 1em
-  border-radius: 3px
+  border-radius: $main-border-radius
   border: 1px solid whitesmoke
   margin: 1em
 
@@ -80,7 +81,7 @@ button, a
   font-size: 12px
   color: $white
   border: none
-  border-radius: 3px
+  border-radius: $main-border-radius
   padding: .7rem 1.75rem
   background: $main-link-background
   touch-action: manipulation
@@ -106,6 +107,18 @@ button, a
 
     &:focus
       background: $main-link-background
+
+#unreviewed-message
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  position: absolute
+  background: $white
+  padding: 50px
+  border-radius: $main-border-radius
+  background: $main-border-color
+  letter-spacing: .05rem
+  color: $white
 
 #site-container
   margin: 110px 0px
@@ -169,7 +182,7 @@ button, a
 
 .main-view-tab
   @extend .sec-interaction
-  border-radius: 3px
+  border-radius: $main-border-radius
   display: inline-block
   width: 45%
   text-align: center
@@ -231,7 +244,7 @@ button, a
   background: $white
   width: 90%
   z-index: 100
-  border-radius: 3px
+  border-radius: $main-border-radius
   border: 1px solid $main-border-color
   top: 89px
   margin-left: 10px
@@ -277,7 +290,7 @@ textarea
 .clickable-header
   padding: .5em 1em
   color: $white
-  border-radius: 3px
+  border-radius: $main-border-radius
   background: $secondary-background
   margin: 10px
   @extend .sec-interaction

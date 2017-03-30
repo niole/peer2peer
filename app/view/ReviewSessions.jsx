@@ -328,7 +328,7 @@ class ReviewSessions extends MUIBaseTheme {
               </div>
             </li>
           )) :
-          NO_SESSIONS_TO_REVIEW_HEADER
+          this.getNoContentMessage(NO_SESSIONS_TO_REVIEW_HEADER)
         }
       </div>
     );
@@ -634,7 +634,15 @@ class ReviewSessions extends MUIBaseTheme {
         </div>
       );
     }
-    return NOT_COMPLETED_REVIEW_HEADER;
+    return this.getNoContentMessage(NOT_COMPLETED_REVIEW_HEADER);
+  }
+
+  getNoContentMessage(content) {
+    return (
+      <div id="unreviewed-message">
+        { content }
+      </div>
+    );
   }
 
   /**
@@ -668,7 +676,7 @@ class ReviewSessions extends MUIBaseTheme {
     return (
       <div>
         { this.getHeaders() }
-        <div id="subview-content">
+        <div>
           { this.getContents() }
         </div>
       </div>
