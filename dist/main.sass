@@ -15,6 +15,20 @@ $main-font: Colfax Regular,Roboto,Helvetica Neue,Arial,sans-serif
 @mixin main-tab-header-width($total-tabs)
   width: (100%/$total-tabs)-5%
 
+@mixin non-clickable-header($background)
+  @extend .clickable-header
+  background: $background
+
+  &:active
+    background: $background
+
+  &:focus
+    background: $background
+
+  &:hover
+    background: $background
+
+
 body
   background: $main-background
   margin: 0
@@ -143,69 +157,12 @@ button, a
   &.animated
     transition: background-color .25s, border-color .25s
 
-#logout-link
-  top: 10px
-  position: absolute
-  z-index: 2
-  right: 10px
-  background: white
-  font-size: .9em
-
-  &:hover
-    background: midnightblue
-
-
-#q-container
-  width: 307px
-  margin: auto
-  padding-top: 65px
-
-.dot
-  background: red
-  border-radius: 10px
-  width: 20px
-  height: 20px
-  margin: 5px
-  display: inline-block
-  position: relative
-  -webkit-animation: mymove 5s infinite /* Safari 4.0 - 8.0 */
-  animation: mymove 5s infinite
-
-#one
-  -webkit-animation: one 3s infinite
-  animation: one 3s infinite
-
-#two
-  -webkit-animation: two 2s infinite
-  animation: two 2s infinite
-  -webkit-animation-delay: 1s /* Safari 4.0 - 8.0 */
-  animation-delay: 1s
-  background: lightblue
-
-/* Safari 4.0 - 8.0 */
-@-webkit-keyframes one
-  from
-    left: 50px
-  to
-    left: 300px
-
-@keyframes two
-  from
-    left: 0px
-  to
-    left: 250px
-
-#login-header
-  width: 307px
-  font-size: 3em
-
 .centered-input
   margin-left: 1em
 
 .create-session
   &.questions
-    @extend .clickable-element
-    @extend .sec-interaction
+    @extend .clickable-header
     margin-left: 0px!important
 
 .main-view-tab
@@ -284,8 +241,7 @@ button, a
     padding: .5em
 
 .peer-to-pick
-  @extend .sec-interaction
-  @extend .clickable-element
+  @extend .clickable-header
 
   &.in-session
     color: $secondary-background
@@ -305,21 +261,27 @@ textarea
   margin: 2.5em
 
 .non-clickable-header
-  color: whitesmoke
-  padding: 1em
-  background: $secondary-background
-  margin: 10px
-  border-radius: 3px
+  @extend .clickable-header
 
-.clickable-element
+  &:active
+    background: $secondary-background
+
+  &:focus
+    background: $secondary-background
+
+  &:hover
+    background: $secondary-background
+
+.clickable-header
   padding: .5em 1em
   color: $white
   border-radius: 3px
   background: $secondary-background
   margin: 10px
+  @extend .sec-interaction
 
 .hover-reviewee-button
-  @extend .clickable-element
+  @extend .clickable-header
   background: $white
   color: $main-border-color
   border: 1px solid whitesmoke
@@ -334,8 +296,7 @@ textarea
   margin-left: 10px
 
 .subview-content
-  @extend .sec-interaction
-  @extend .non-clickable-header
+  @extend .clickable-header
   display: inline-block
 
   &.reviewed-peer
@@ -343,22 +304,15 @@ textarea
 
   &.session-over, &.question
     color: $white
-    &:hover
-      color: $white
-      @extend .non-clickable-header
-
-    &:active
-      color: $white
-      @extend .non-clickable-header
+    @extend .non-clickable-header
 
 .bc-header
-  @extend .sec-interaction
-  @extend .non-clickable-header
+  @extend .clickable-header
   display: inline-block
 
   &.focused
-    color: white
-    background: $secondary-hover-background
+    @include non-clickable-header($secondary-hover-background)
+    color: $white
 
 .sec-interaction
   &:hover

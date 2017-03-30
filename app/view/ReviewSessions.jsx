@@ -285,7 +285,9 @@ class ReviewSessions extends MUIBaseTheme {
           title={ REVISIT_SECTION_TITLE }
           onClick={ e => {
             e.preventDefault();
-            this.breadcrumbClickHandlers[HEADER_TO_VIEW_MAP[header]]();
+            if (!isFocused) {
+              this.breadcrumbClickHandlers[HEADER_TO_VIEW_MAP[header]]();
+            }
           }}
         >
           { title }
