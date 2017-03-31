@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
+import MUIBaseTheme from './MUIBaseTheme.jsx';
 import DatePicker from 'material-ui/DatePicker';
 import {
   removeSessionReviewee,
@@ -13,6 +14,9 @@ import {
   setSessionName,
 } from '../actions.js';
 import {
+  OPEN_Q,
+  START_STOP_CONTINUE_Q,
+  EXCEED_MEET_BELOW_Q,
   START_STOP_CONTINUE_LABEL,
   DATEPICKER_PLACEHOLDER,
   EMF_QUESTION_LABEL,
@@ -22,7 +26,7 @@ import DebouncedInput from './DebouncedInput.jsx';
 import ReviewerGroup from './ReviewerGroup.jsx';
 
 
-class CreateReviewSession extends Component {
+class CreateReviewSession extends MUIBaseTheme {
   constructor() {
     super();
 
@@ -114,7 +118,7 @@ class CreateReviewSession extends Component {
       <div
         className="create-session questions"
         onClick={ () => {
-          if (q.questionType !== "emf" && q.questionType !== "scc") {
+          if (q.questionType !== EXCEED_MEET_BELOW_Q && q.questionType !== START_STOP_CONTINUE_Q) {
             removeQuestion(q.id)
           }
         }}
@@ -150,8 +154,8 @@ class CreateReviewSession extends Component {
     const {
       removeQuestion,
     } = this.props;
-    const inputRef = type === "scc" ? this.startStopContinue : this.emf;
-    const question = type === "scc" ? START_STOP_CONTINUE_LABEL : EMF_QUESTION_LABEL;
+    const inputRef = type === START_STOP_CONTINUE_Q ? this.startStopContinue : this.emf;
+    const question = type === START_STOP_CONTINUE_Q ? START_STOP_CONTINUE_LABEL : EMF_QUESTION_LABEL;
 
     if (inputRef.checked) {
       this.saveQuestion(question, type, type);
@@ -217,17 +221,19 @@ class CreateReviewSession extends Component {
                   <input
                     ref={ ref => this.startStopContinue = ref }
                     type="checkbox"
-                    onChange={ () => this.addDefaultQuestion("scc") }
-                    value="ssc"/>
-                  <label htmlFor="ssc">{ START_STOP_CONTINUE_LABEL }</label>
+                    onChange={ () => this.addDefaultQuestion(START_STOP_CONTINUE_Q) }
+                    value={ START_STOP_CONTINUE_Q }/>
+                  <label htmlFor={ START_STOP_CONTINUE_Q }>
+                    { START_STOP_CONTINUE_LABEL }
+                  </label>
                 </div>
                 <div>
                   <input
                     ref={ ref => this.emf = ref }
                     type="checkbox"
-                    onChange={ () => this.addDefaultQuestion("emf") }
-                    value="emf"/>
-                  <label htmlFor="emf">{ EMF_QUESTION_LABEL }</label>
+                    onChange={ () => this.addDefaultQuestion(EXCEED_MEET_BELOW_Q) }
+                    value={ EXCEED_MEET_BELOW_Q }/>
+                  <label htmlFor={ EXCEED_MEET_BELOW_Q }>{ EMF_QUESTION_LABEL }</label>
                 </div>
               </div>
             </div>
@@ -243,7 +249,7 @@ class CreateReviewSession extends Component {
                   const question = this.questioninput.value;
                   if (question !== "") {
                     this.questioninput.value = "";
-                    this.saveQuestion(question, "open");
+                    this.saveQuestion(question, OPEN_Q);
                   }
                 }}
               >

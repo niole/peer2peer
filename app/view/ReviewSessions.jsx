@@ -11,6 +11,9 @@ import {
   addAnswer,
 } from '../actions.js';
 import {
+  START_STOP_CONTINUE_Q,
+  EXCEED_MEET_BELOW_Q,
+  OPEN_Q,
   VIEW_ONLY_QS_LABEL,
   EDITABLE_QS_LABEL,
   SELF_REVIEW_LABEL,
@@ -528,17 +531,17 @@ class ReviewSessions extends Component {
 
   getEditableQInput(questionType, questionIndex, oldAnswer) {
     switch(questionType) {
-      case "emf":
+      case EXCEED_MEET_BELOW_Q:
         return [MET_EXPECTATIONS_LABEL, EXCEEDED_EXPECTATIONS_LABEL, FAILED_EXPECTATIONS_LABEL]
           .map(label => this.getCheckbox(
               (inputData) => this.addAnswer(questionIndex, inputData),
               label,
               questionIndex,
               oldAnswer ? oldAnswer.content : null,
-              "emf"
+              EXCEED_MEET_BELOW_Q
             )
           );
-      case "scc":
+      case START_STOP_CONTINUE_Q:
         return (
           <DebouncedInput
             isTextarea={ true }

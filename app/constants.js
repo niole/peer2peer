@@ -1,3 +1,8 @@
+/* question type */
+export const START_STOP_CONTINUE_Q = "ssc";
+export const EXCEED_MEET_BELOW_Q = "emf";
+export const OPEN_Q = "open";
+
 /* button labels */
 export const CREATE_SESSION_BTN_LABEL = "Submit Peer2Peer Session";
 
