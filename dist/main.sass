@@ -47,8 +47,8 @@ li
 input, textarea
   padding: 1em
   border-radius: $main-border-radius
-  border: 1px solid whitesmoke
-  margin: 1em
+  border: 1px solid $main-border-color
+  margin: 10px
 
   &:focus
     outline: none
@@ -172,9 +172,6 @@ button, a
   &.animated
     transition: background-color .25s, border-color .25s
 
-.centered-input
-  margin-left: 1em
-
 .create-session
   &.questions
     @extend .clickable-header
@@ -213,25 +210,24 @@ button, a
   &.three
     @include main-tab-header-width(3)
 
+#default-questions-header
+  display: inline-block
+  font-weight: bold
+  margin: 10px 20px
 
 .create-session-header
+  margin: 0px 10px
   padding: 1em
-  margin: .5vw
   border-bottom: 1px solid $main-border-color
 
-.peers-container
-  margin-left: 1em
-
 #date-picker
-  margin-left: 1em
+  margin-left: .5em
 
   input
     margin: 0
 
-.create-questions-container
-  margin-left: 1.5em
-
 .default-questions-box
+  margin-left: 10px
   height: 80px
   max-width: 800px
 
@@ -244,14 +240,20 @@ button, a
     display: none
     + label
       display: block
-      color: $main-color
+      color: grey
       background: $white
+      border: 1px solid $main-border-color
       padding: .5em 1em
       border-radius: $main-border-radius
       margin: 5px
 
+      &:hover
+        background: $main-border-color
+        color: $white
+
     &:checked + label
       @extend .clickable-header
+      border: 1px solid transparent
       margin: 5px!important
 
 .reviewer-group

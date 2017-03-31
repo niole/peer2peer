@@ -26,6 +26,9 @@ import DebouncedInput from './DebouncedInput.jsx';
 import ReviewerGroup from './ReviewerGroup.jsx';
 
 
+const CAN_TOGGLE_TITLE = "Click to include";
+
+
 class CreateReviewSession extends MUIBaseTheme {
   constructor() {
     super();
@@ -38,6 +41,13 @@ class CreateReviewSession extends MUIBaseTheme {
     this.saveQuestion = this.saveQuestion.bind(this);
     this.addPeer = this.addPeer.bind(this);
     this.addDefaultQuestion = this.addDefaultQuestion.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!newProps.questions.length) {
+      this.emf.checked = "";
+      this.startStopContinue.checked = "";
+    }
   }
 
   saveQuestion(question, questionType, id = Math.random()) {
@@ -175,14 +185,12 @@ class CreateReviewSession extends MUIBaseTheme {
           <h3 className="create-session-header">
             { NAME_SESSION_LABEL }
           </h3>
-          <div className="centered-input">
-            <DebouncedInput
-              className="answer-input"
-              boundFunction={ setSessionName }
-              activeClass="active"
-              placeholder="name your session"
-            />
-          </div>
+          <DebouncedInput
+            className="answer-input"
+            boundFunction={ setSessionName }
+            activeClass="active"
+            placeholder="name your session"
+          />
           <h3 className="create-session-header">
             { DATEPICKER_PLACEHOLDER }
           </h3>
@@ -213,7 +221,9 @@ class CreateReviewSession extends MUIBaseTheme {
           <div className="create-questions-container">
 
             <div className="default-questions-box">
-              <strong>Default Questions to Include</strong>
+              <div id="default-questions-header">
+                Default Questions to Include
+              </div>
               <div className="default-questions">
                 <input
                   ref={ ref => this.startStopContinue = ref }
@@ -221,7 +231,9 @@ class CreateReviewSession extends MUIBaseTheme {
                   onChange={ () => this.addDefaultQuestion(START_STOP_CONTINUE_Q) }
                   id={ START_STOP_CONTINUE_Q }
                   value={ START_STOP_CONTINUE_Q }/>
-                <label htmlFor={ START_STOP_CONTINUE_Q }>
+                <label
+                  title={ CAN_TOGGLE_TITLE }
+                  htmlFor={ START_STOP_CONTINUE_Q }>
                   { START_STOP_CONTINUE_LABEL }
                 </label>
                 <input
@@ -230,7 +242,9 @@ class CreateReviewSession extends MUIBaseTheme {
                   onChange={ () => this.addDefaultQuestion(EXCEED_MEET_BELOW_Q) }
                   id={ EXCEED_MEET_BELOW_Q }
                   value={ EXCEED_MEET_BELOW_Q }/>
-                <label htmlFor={ EXCEED_MEET_BELOW_Q }>
+                <label
+                  title={ CAN_TOGGLE_TITLE }
+                  htmlFor={ EXCEED_MEET_BELOW_Q }>
                   { EMF_QUESTION_LABEL }
                 </label>
               </div>
