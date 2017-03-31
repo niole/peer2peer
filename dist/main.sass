@@ -232,12 +232,27 @@ button, a
   margin-left: 1.5em
 
 .default-questions-box
-  height: 60px
+  height: 80px
   max-width: 800px
 
 .default-questions
   display: inline-block
-  float: right
+  position: absolute
+  right: 5px
+
+  input
+    display: none
+    + label
+      display: block
+      color: $main-color
+      background: $white
+      padding: .5em 1em
+      border-radius: $main-border-radius
+      margin: 5px
+
+    &:checked + label
+      @extend .clickable-header
+      margin: 5px!important
 
 .reviewer-group
   display: inline-block

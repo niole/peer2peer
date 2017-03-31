@@ -114,20 +114,18 @@ class CreateReviewSession extends MUIBaseTheme {
       removeQuestion,
     } = this.props;
 
-    return questions.map((q, i) => (
-      <div
-        className="create-session questions"
-        onClick={ () => {
-          if (q.questionType !== EXCEED_MEET_BELOW_Q && q.questionType !== START_STOP_CONTINUE_Q) {
-            removeQuestion(q.id)
-          }
-        }}
-        title="click to remove"
-        key={ i } >
-        { q.content }
-      </div>
-      )
-    );
+    return questions
+      .filter(q => q.questionType !== EXCEED_MEET_BELOW_Q && q.questionType !== START_STOP_CONTINUE_Q)
+      .map((q, i) => (
+        <div
+          className="create-session questions"
+          onClick={ () => removeQuestion(q.id) }
+          title="click to remove"
+          key={ i } >
+          { q.content }
+        </div>
+        )
+      );
   }
 
   renderDeadline() {
@@ -217,24 +215,24 @@ class CreateReviewSession extends MUIBaseTheme {
             <div className="default-questions-box">
               <strong>Default Questions to Include</strong>
               <div className="default-questions">
-                <div>
-                  <input
-                    ref={ ref => this.startStopContinue = ref }
-                    type="checkbox"
-                    onChange={ () => this.addDefaultQuestion(START_STOP_CONTINUE_Q) }
-                    value={ START_STOP_CONTINUE_Q }/>
-                  <label htmlFor={ START_STOP_CONTINUE_Q }>
-                    { START_STOP_CONTINUE_LABEL }
-                  </label>
-                </div>
-                <div>
-                  <input
-                    ref={ ref => this.emf = ref }
-                    type="checkbox"
-                    onChange={ () => this.addDefaultQuestion(EXCEED_MEET_BELOW_Q) }
-                    value={ EXCEED_MEET_BELOW_Q }/>
-                  <label htmlFor={ EXCEED_MEET_BELOW_Q }>{ EMF_QUESTION_LABEL }</label>
-                </div>
+                <input
+                  ref={ ref => this.startStopContinue = ref }
+                  type="checkbox"
+                  onChange={ () => this.addDefaultQuestion(START_STOP_CONTINUE_Q) }
+                  id={ START_STOP_CONTINUE_Q }
+                  value={ START_STOP_CONTINUE_Q }/>
+                <label htmlFor={ START_STOP_CONTINUE_Q }>
+                  { START_STOP_CONTINUE_LABEL }
+                </label>
+                <input
+                  ref={ ref => this.emf = ref }
+                  type="checkbox"
+                  onChange={ () => this.addDefaultQuestion(EXCEED_MEET_BELOW_Q) }
+                  id={ EXCEED_MEET_BELOW_Q }
+                  value={ EXCEED_MEET_BELOW_Q }/>
+                <label htmlFor={ EXCEED_MEET_BELOW_Q }>
+                  { EMF_QUESTION_LABEL }
+                </label>
               </div>
             </div>
 
