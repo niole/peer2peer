@@ -17,7 +17,7 @@ export const MET_EXPECTATIONS_LABEL = "met";
 export const FAILED_EXPECTATIONS_LABEL = "below";
 export const EXCEEDED_EXPECTATIONS_LABEL = "exceeded";
 export const NAME_SESSION_LABEL = "Name Session";
-export const DATEPICKER_PLACEHOLDER = "set a deadline";
+export const DATEPICKER_PLACEHOLDER = "Set Deadline";
 export const PICK_SESSION_LABEL = "Pick a Session";
 export const PICK_PEER_TO_REVIEW_LABEL = "Pick Peer To Review";
 export const PICK_PEER_LABEL = "Pick Peer";
@@ -68,6 +68,9 @@ export const VIEW_TO_HEADER_MAP = (function() {
   return base;
 })();
 
+export const PICK_PEERS_FORM_HEADER = "Pick Peers";
+export const CREATE_QUESTIONS_HEADER = "Create Questions";
+export const DEFAULT_QUESTIONS_HEADER = "Default Questions to Include";
 export const REVISIT_SECTION_TITLE = "click to revisit this section";
 export const REVIEW_PEERS_TITLE = "click to start reviewing your peers";
 export const ANSWER_Q_PLACEHOLDER = "answer the question";

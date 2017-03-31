@@ -14,6 +14,9 @@ import {
   setSessionName,
 } from '../actions.js';
 import {
+  PICK_PEERS_FORM_HEADER,
+  CREATE_QUESTIONS_HEADER,
+  DEFAULT_QUESTIONS_HEADER,
   OPEN_Q,
   START_STOP_CONTINUE_Q,
   EXCEED_MEET_BELOW_Q,
@@ -198,7 +201,7 @@ class CreateReviewSession extends MUIBaseTheme {
             { this.renderDeadline() }
           </div>
           <h3 className="create-session-header">
-            pick peers
+            { PICK_PEERS_FORM_HEADER }
           </h3>
 
           <div className="peers-container">
@@ -216,13 +219,12 @@ class CreateReviewSession extends MUIBaseTheme {
           </div>
 
           <h3 className="create-session-header">
-            create questions
+            { CREATE_QUESTIONS_HEADER }
           </h3>
           <div className="create-questions-container">
-
             <div className="default-questions-box">
               <div id="default-questions-header">
-                Default Questions to Include
+                { DEFAULT_QUESTIONS_HEADER }
               </div>
               <div className="default-questions">
                 <input
