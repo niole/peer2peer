@@ -73,7 +73,7 @@ footer
   background: $main-color
 
 a[href="/logout"]
-  left: .5vw
+  left: 1vw
   position: absolute
   top: 2.5em
 
@@ -195,6 +195,12 @@ button, a
     color: $white
     background: $secondary-click-background
 
+    &:hover
+      background: $secondary-click-background
+
+    &:active
+      background: $secondary-click-background
+
   &.one
     margin: auto
     display: block
@@ -240,6 +246,8 @@ button, a
 
 .peer-dropdown
   display: none
+  max-height: 260px
+  overflow: auto
   position: absolute
   background: $white
   width: 90%
