@@ -1,5 +1,4 @@
-import React, { PropTypes } from 'react';
-import MUIBaseTheme from './MUIBaseTheme.jsx';
+import React, { Component, PropTypes } from 'react';
 import {
   ANSWER_QUESTIONS_VIEW,
   VIEW_TO_HEADER_MAP,
@@ -22,7 +21,7 @@ const propTypes = {
 /**
  * A controlled component that indicates the currently viewed page
  */
-class SiteHeader extends MUIBaseTheme {
+class SiteHeader extends Component {
   constructor() {
     super();
   }

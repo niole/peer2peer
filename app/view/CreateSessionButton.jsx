@@ -1,7 +1,6 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
-import MUIBaseTheme from './MUIBaseTheme.jsx';
 import {
   submitNewSession,
 } from '../actions.js';
@@ -10,7 +9,7 @@ import {
 } from '../constants.js';
 
 
-class CreateSessionButton extends MUIBaseTheme {
+class CreateSessionButton extends Component {
   constructor() {
     super();
     this.submitSessionData = this.submitSessionData.bind(this);

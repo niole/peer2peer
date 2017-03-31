@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -43,7 +43,6 @@ import {
   VIEW_TO_HEADER_MAP,
   HEADER_TO_VIEW_MAP,
 } from '../constants.js';
-import MUIBaseTheme from './MUIBaseTheme.jsx';
 import DebouncedInput from './DebouncedInput.jsx';
 
 
@@ -52,7 +51,7 @@ const propTypes = {
   headers: arrayOf(string.isRequired).isRequired,
 };
 
-class ReviewSessions extends MUIBaseTheme {
+class ReviewSessions extends Component {
   constructor() {
     super();
 

@@ -1,7 +1,6 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import $ from 'jquery';
-import MUIBaseTheme from './MUIBaseTheme.jsx';
 import CreateSessionButton from './CreateSessionButton.jsx';
 import SubmitAnswersButton from './SubmitAnswersButton.jsx';
 import SiteHeader from './SiteHeader.jsx';
@@ -38,7 +37,7 @@ const allSubViews = [
   ANSWER_QUESTIONS_VIEW,
 ];
 
-class SiteContainer extends MUIBaseTheme {
+class SiteContainer extends Component {
   constructor(props) {
     super(props);
 

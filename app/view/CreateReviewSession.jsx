@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import DatePicker from 'material-ui/DatePicker';
@@ -18,12 +18,11 @@ import {
   EMF_QUESTION_LABEL,
   NAME_SESSION_LABEL,
 } from '../constants.js';
-import MUIBaseTheme from './MUIBaseTheme.jsx';
 import DebouncedInput from './DebouncedInput.jsx';
 import ReviewerGroup from './ReviewerGroup.jsx';
 
 
-class CreateReviewSession extends MUIBaseTheme {
+class CreateReviewSession extends Component {
   constructor() {
     super();
 
