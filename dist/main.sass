@@ -14,8 +14,8 @@ $secondary-background: #60d187
 $main-font: Colfax Regular,Roboto,Helvetica Neue,Arial,sans-serif
 
 @mixin main-tab-header-width($total-tabs)
-  width: ((100vw-$total-tabs)/$total-tabs)
-  margin: 0vh .5vw
+  width: ((100vw-(2*$total-tabs))/$total-tabs) - 1vw
+  margin: 0vh 1vw
   margin-top: 1em
 
 
